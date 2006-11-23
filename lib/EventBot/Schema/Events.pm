@@ -16,12 +16,12 @@ sub add_people {
         $self->result_source->schema->resultset('People')
             ->find_or_create( { name => $name }
         );
-        $self->result_source->schema->resultset('Attendees')
-            ->create({
+        my $a = $self->result_source->schema->resultset('Attendees')
+            ->find_or_create({
                 person => $person->id,
-                event => $self->id,
-                status => $statusmap{$people{$name}},
+                event => $self->id
             });
+        $a->status($statusmap{$people{$name}});
     }
 }
 

@@ -9,5 +9,5 @@ requires	'DBIx::Class'		=> 0.02;
 requires	'DBIx::Class::Schema::Loader'	=>	0.03009;
 
 auto_install;
-WriteAl;
+WriteAll;
 
