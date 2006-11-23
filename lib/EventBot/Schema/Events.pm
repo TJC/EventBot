@@ -24,6 +24,7 @@ sub add_people {
                 event => $self->id
             });
         $a->status($statusmap{$people{$name}});
+        $a->update;
     }
 }
 
