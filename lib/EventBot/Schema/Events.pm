@@ -2,6 +2,8 @@ package EventBot::Schema::Events;
 use strict;
 use warnings;
 
+__PACKAGE__->has_many(attendees => 'EventBot::Schema::Attendees', 'event');
+
 our %statusmap = (
     '+' => 'Yes',
     '-' => 'No',

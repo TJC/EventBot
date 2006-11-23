@@ -12,7 +12,14 @@ our $VERSION = '0.01';
 sub new {
     my ($class, $args) = @_;
     my $self = {};
-    $self->{schema} = EventBot::Schema->connect('dbi:Pg:dbname=eventbot');
+    $self->{schema} = EventBot::Schema->connect(
+        'dbi:Pg:dbname=eventbot', undef, undef,
+        {
+            AutoCommit => 1,
+            pg_enable_utf8 => 1,
+            pg_server_prepare =>1
+        }
+    );
     return bless $self, $class;
 }
 
