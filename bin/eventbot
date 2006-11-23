@@ -1,0 +1,16 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use lib qw{/home/tjc/svn/EventBot/lib /home/tjc/svn/eventbot/lib};
+use EventBot;
+use Email::Simple;
+
+my $body = '';
+while (<>) {
+    $body .= $_;
+}
+my $email = Email::Simple->new($body);
+my $bot = EventBot->new;
+$bot->parse_email($email);
+
+exit(0);
