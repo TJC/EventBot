@@ -1,0 +1,11 @@
+[% INCLUDE header.tt %]
+Events:
+[% FOREACH event IN events.all %]
+<div class="event">
+    Date: [% event.startdate %]<br/>
+    Place: [% event.place %]<br/>
+    Link: <a href="[% event.url %]">[% event.url %]</a><br/>
+    Attendees: <a href="/event/view/[% event.id %]">Click to view</a>
+</div>
+[% END %]
+[% INCLUDE footer.tt %]

@@ -1,0 +1,47 @@
+body {
+    background-color: black;
+    color: white;
+}
+h1, h2, h3, h4 {
+    font-family: sans-serif;
+    text-align: center;
+}
+.slogan {
+    text-align: center;
+    font-size: 60%
+}
+#big {
+    font-size: 500%;
+    font-family: sans-serif;
+}
+img {
+    border: none;
+}
+a {
+    color: #88F;
+    font-family: sans-serif;
+    text-decoration: none;
+}
+a:hover {
+    border-bottom: 1px dashed blue;
+}
+.menubar {
+    text-align: center;
+    font-family: sans-serif;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+.footer {
+    font-size: 50%;
+    font-family: sans-serif;
+    text-align: center;
+}
+.event {
+    border: 1px solid gray;
+    background-color: #333;
+    position: relative;
+    left: 2em;
+    width: 50em;
+    padding: 8px;
+    -moz-border-radius: 12px;
+}

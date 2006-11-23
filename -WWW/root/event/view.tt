@@ -1,0 +1,15 @@
+[% INCLUDE header.tt %]
+<div class="event">
+    Time: [% event.starttime %]<br/>
+    Date: [% event.startdate %]<br/>
+    Place: [% event.place %]<br/>
+    Link: <a href="[% event.url %]">[% event.url %]</a><br/>
+    Attendees:
+    <ul class="attendees">
+        [% FOREACH attendee IN event.attendees %]
+        <li>[% attendee.person.name %] said [% attendee.status %].
+        </li>
+        [% END %]
+    </ul>
+</div>
+[% INCLUDE footer.tt %]

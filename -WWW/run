@@ -1,0 +1,3 @@
+#!/bin/bash
+export PERL5LIB=/home/tjc/svn/eventbot/lib
+script/eventbot_www_server.pl -r
