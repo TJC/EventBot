@@ -42,6 +42,7 @@ a:hover {
     position: relative;
     left: 2em;
     width: 50em;
+    margin: 5px;
     padding: 8px;
     -moz-border-radius: 12px;
 }
