@@ -4,13 +4,16 @@ use warnings;
 use lib qw{/home/tjc/svn/EventBot/lib /home/tjc/svn/eventbot/lib};
 use EventBot;
 use Email::Simple;
+use IO::File;
+
+my $log = IO::File->new('eventbot.log', 'a');
 
 my $body = '';
 while (<>) {
     $body .= $_;
 }
 my $email = Email::Simple->new($body);
-my $bot = EventBot->new;
+my $bot = EventBot->new({logfile => $log});
 $bot->parse_email($email);
 
 exit(0);

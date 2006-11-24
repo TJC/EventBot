@@ -5,6 +5,9 @@ use strict;
 use warnings;
 
 use Mail::Address;
+use Email::Simple;
+use Email::Simple::Creator;
+use Email::Send;
 use EventBot::Schema;
 
 our $VERSION = '0.01';
@@ -12,6 +15,7 @@ our $VERSION = '0.01';
 sub new {
     my ($class, $args) = @_;
     my $self = {};
+    $self->{logfile} = $args->{logfile};
     $self->{schema} = EventBot::Schema->connect(
         'dbi:Pg:dbname=eventbot', undef, undef,
         {
@@ -37,11 +41,13 @@ sub parse_email {
         ($sender) = Mail::Address->parse($email->header("From"));
     };
     if ($@ or not ref $sender) {
-        mylog("Error parsing From address: " . $email->header("From"));
+        $self->log("Error parsing From address: " . $email->header("From"));
         return;
     }
 
-    mylog("Parsing email from " . $sender->address);
+    $self->log("Parsing email from " . $sender->address);
+    $self->{sender} = $sender->address;
+    $self->{subject} = $email->header('Subject');
 
     my @lines = split("\n", $email->body);
     my (%vars, %attendees);
@@ -56,22 +62,22 @@ sub parse_email {
         }
     }
     unless ( $vars{date} and $vars{time} and $vars{place} ) {
-        mylog("Insufficient details to create/locate event");
+        $self->log("Insufficient details to create/locate event");
         return;
     }
     if (%attendees) {
-        mylog("Appending attendees to existing event..");
+        $self->log("Appending attendees to existing event..");
         # Don't try to add a new event, just add people
         my $event = $self->find_event(\%vars);
         if (not $event) {
-            mylog("Couldn't locate event!");
+            $self->log("Couldn't locate event!");
             return;
         }
         $event->add_people(%attendees);
     }
     else {
         # Create a new event:
-        mylog("Creating a new event..");
+        $self->log("Creating a new event..");
         $self->create_event(\%vars);
     }
 }
@@ -84,14 +90,19 @@ sub find_event {
             place     => $vars->{place}
         });
     if (not $event) {
-        mylog("Could not locate event based on these details.");
+        $self->log("Could not locate event based on these details.");
     }
     return $event;
 }
 
-sub mylog {
-    my $msg = shift;
-    print "Log: $msg\n";
+sub log {
+    my ($self, $msg) = @_;
+    if ($self->{logfile}) {
+        $self->{logfile}->print("$msg\n");
+    }
+    else {
+        print "Log: $msg\n";
+    }
 }
 
 our %keyconv = (
@@ -107,7 +118,7 @@ sub create_event {
     # Check if one already exists:
     my $event = $self->find_event($vars);
     if ($event) {
-        mylog("Event already exists..");
+        $self->log("Event already exists..");
         return $event;
     }
     my %new;
@@ -119,10 +130,46 @@ sub create_event {
     # Kludge for comment->URL
     if (not $new{url} and $new{comments} =~ /^(http:[^\s]+)/) {
         $new{url} = $1;
+        delete $new{comments};
     }
     $event = $self->schema->resultset('Events')->create(\%new);
-    mylog("Created new event, id " . $event->id);
+    $self->log("Created new event, id " . $event->id);
+    # At this point, I should email the list to say..
+    $self->mail_new_event($event);
     return $event;
+}
+
+sub mail_new_event {
+    my ($self, $event) = @_;
+    my ($date, $time, $place, $url, $id) = (
+        $event->startdate, $event->starttime,
+        $event->place, $event->url, $event->id
+    );
+    my $body = <<EOM;
+Date: $date
+Time: $time
+Place: $place
+Link: $url
+
+To indicate that you're attending this event, reply to this email and add a
+line with "+ Yourname" (without the quotes). You can indicate that you're not
+sure, or are not coming, by using the minus and question mark characters at the
+start instead. You can change your status later by sending a new message.
+
+To view the attendance record, visit http://eventbot.dryft.net/event/view/$id
+
+EOM
+    my $email = Email::Simple->create(
+        header => [
+            From => 'eventbot@dryft.net',
+            To   => $self->{sender},
+            Subject => 'Re: ' . $self->{subject}
+        ],
+        body => $body
+    );
+
+    Email::Send->new({mailer => 'Sendmail'})
+        ->send($email->as_string);
 }
 
 1;
