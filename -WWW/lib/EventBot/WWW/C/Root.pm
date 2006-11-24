@@ -40,6 +40,16 @@ Attempt to render a view, if needed.
 
 sub end : ActionClass('RenderView') {}
 
+=head2 about
+
+display about box..
+
+=cut
+
+sub about :Path('/about') {
+    my ($self, $c) = @_;
+}
+
 =head1 AUTHOR
 
 Toby Corkindale

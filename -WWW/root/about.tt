@@ -1,0 +1,15 @@
+[% INCLUDE header.tt %]
+<div class="event">
+<p><em>EventBot - Project for a New <strike>American</strike> EventBot
+Century</em> is the unwieldable full title for this application. Originally
+written on the 23rd of November, I will now probably forget about it and never
+update it again, like so many other of my mini-projects.</p>
+<p>EventBot's purpose is to scan the mailing list for events, and when found,
+log both the event and peoples' attendance messages. Currently it only supports
+a single mailing list at a time, but would be very easily extended to cover
+more.</p>
+<p>In case you're curious, it's written in not-many lines of Perl, using the <a
+href="http://www.catalystframework.org/">Catalyst framework</a>, with
+DBIx::Class and a <a href="http://postgresql.org/">PostgreSQL</a> backend.</p>
+</div>
+[% INCLUDE footer.tt %]
