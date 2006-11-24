@@ -155,14 +155,21 @@ To indicate that you're attending this event, reply to this email and add a
 line with "+ Yourname" (without the quotes). You can indicate that you're not
 sure, or are not coming, by using the minus and question mark characters at the
 start instead. You can change your status later by sending a new message.
+Note that the +, - or ? must be at the very start of the line.
+Put multiple attendees on individual lines.
 
 To view the attendance record, visit http://eventbot.dryft.net/event/view/$id
+
+-- 
+Yours faithfully,
+EventBot
+http://eventbot.dryft.net/
 
 EOM
     my $email = Email::Simple->create(
         header => [
             From => 'eventbot@dryft.net',
-            To   => $self->{sender},
+            To   => 'sluts@twisted.org.uk',
             Subject => 'Re: ' . $self->{subject}
         ],
         body => $body
