@@ -14,5 +14,7 @@
         |
         <a href="/event/list">Event list</a>
         |
+        <a href="/event/pastlist">Past events</a>
+        |
         <a href="/about">About</a>
       </p>

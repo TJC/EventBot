@@ -17,26 +17,37 @@ Catalyst Controller.
 =cut
 
 
-=head2 index 
-
-=cut
-
-#sub index : Private {
-#    my ( $self, $c ) = @_;
-#
-#    $c->response->body('Matched EventBot::WWW::C::Event in Event.');
-#}
-
 =head2 list
 
-list all events
+list upcoming events
 
 =cut
 
 sub list :Local {
     my ($self, $c) = @_;
 
-    my $events = $c->model('DB::Events')->search({}, { order_by => 'startdate' });
+    my $events = $c->model('DB::Events')->search(
+        {
+            startdate => {'>=', 'now()'}
+        },
+        { order_by => 'startdate' });
+    $c->stash->{events} = $events;
+}
+
+=head2 pastlist
+
+list past events
+
+=cut
+
+sub pastlist :Local {
+    my ($self, $c) = @_;
+
+    my $events = $c->model('DB::Events')->search(
+        {
+            startdate => {'<=', 'now()'}
+        },
+        { order_by => 'startdate DESC' });
     $c->stash->{events} = $events;
 }
 
