@@ -1,0 +1,41 @@
+[% INCLUDE header.tt %]
+<div class="event">
+Top attendees:
+<table>
+<tr><th>Count</th><th>Name</th></tr>
+[% FOREACH a IN attendees.all %]
+  <tr>
+    <td>[% a.get_column('count') %]</td>
+    <td>[% a.person.name %]</td>
+  </tr>
+[% END %]
+</table>
+</div>
+
+<div class="event">
+Top absentees:
+<table>
+<tr><th>Count</th><th>Name</th></tr>
+[% FOREACH a IN absentees.all %]
+  <tr>
+    <td>[% a.get_column('count') %]</td>
+    <td>[% a.person.name %]</td>
+  </tr>
+[% END %]
+</table>
+</div>
+
+<div class="event">
+Top fence-sitters:
+<table>
+<tr><th>Count</th><th>Name</th></tr>
+[% FOREACH a IN unknown.all %]
+  <tr>
+    <td>[% a.get_column('count') %]</td>
+    <td>[% a.person.name %]</td>
+  </tr>
+[% END %]
+</table>
+</div>
+
+[% INCLUDE footer.tt %]
