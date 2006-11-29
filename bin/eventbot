@@ -1,12 +1,13 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use lib qw{/home/tjc/svn/EventBot/lib /home/tjc/svn/eventbot/lib};
+use lib qw{/home/eventbot/EventBot/lib /home/tjc/svn/eventbot/lib};
 use EventBot;
 use Email::Simple;
 use IO::File;
 
-my $log = IO::File->new('eventbot.log', 'a');
+my $log = IO::File->new('/home/eventbot/eventbot.log', 'a')
+    or die("Unable to open logfile: $!");
 
 my $body = '';
 while (<>) {
@@ -15,5 +16,6 @@ while (<>) {
 my $email = Email::Simple->new($body);
 my $bot = EventBot->new({logfile => $log});
 $bot->parse_email($email);
+$log->close;
 
 exit(0);

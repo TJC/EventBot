@@ -97,7 +97,7 @@ sub find_event {
 
 sub log {
     my ($self, $msg) = @_;
-    if ($self->{logfile}) {
+    if (defined $self->{logfile}) {
         $self->{logfile}->print("$msg\n");
     }
     else {
@@ -146,6 +146,7 @@ sub mail_new_event {
         $event->place, $event->url, $event->id
     );
     my $body = <<EOM;
+New event added to database:
 Date: $date
 Time: $time
 Place: $place
