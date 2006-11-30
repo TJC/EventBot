@@ -10,7 +10,7 @@ use Email::Simple::Creator;
 use Email::Send;
 use EventBot::Schema;
 
-our $VERSION = '0.01';
+our $VERSION = '0.10';
 
 sub new {
     my ($class, $args) = @_;
@@ -57,8 +57,9 @@ sub parse_email {
             $vars{lc($2)} = $3;
         }
         # Detect attendance notices:
-        elsif ($line =~ /^([-\+\?])\s*([\w\d][[:print:]]+)$/) {
+        elsif ($line =~ /^\s*([-\+\?])\s*[`']?([\w\d][[:print:]]+?)[`']?\s*$/) {
             $attendees{$2} = $1;
+            $self->log("Located attendee: $2");
         }
     }
     unless ( $vars{date} and $vars{time} and $vars{place} ) {
