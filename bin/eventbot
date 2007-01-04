@@ -5,14 +5,12 @@ use lib qw{/home/eventbot/EventBot/lib /home/tjc/svn/eventbot/lib};
 use EventBot;
 use Email::Simple;
 use IO::File;
+use File::Slurp;
 
 my $log = IO::File->new('/home/eventbot/eventbot.log', 'a')
     or die("Unable to open logfile: $!");
 
-my $body = '';
-while (<>) {
-    $body .= $_;
-}
+my $body = read_file('-');
 my $email = Email::Simple->new($body);
 my $bot = EventBot->new({logfile => $log});
 $bot->parse_email($email);

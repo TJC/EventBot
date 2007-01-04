@@ -19,7 +19,8 @@ CREATE TABLE people (
 CREATE TABLE attendees (
     event INTEGER REFERENCES events(id) ON DELETE CASCADE,
     person INTEGER REFERENCES people(id) ON DELETE CASCADE,
-    status  VARCHAR(5) NOT NULL CHECK (status IN ('Yes', 'No', 'Maybe')),
+    status  VARCHAR(5) CHECK (status IN ('Yes', 'No', 'Maybe')),
+    -- status was NOT NULL.. long story..
     PRIMARY KEY (event,person)
 );
 

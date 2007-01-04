@@ -8,6 +8,7 @@ requires	'Email::Send'		=> 2.17;
 requires	'Mail::Address'		=> 1.67; # figure out correct one
 requires	'DBIx::Class'		=> 0.07003;
 requires	'DBIx::Class::Schema::Loader'	=>	0.03009;
+requires	'File::Slurp'		=> 9999.11;
 
 auto_install;
 WriteAll;
