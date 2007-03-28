@@ -7,7 +7,9 @@
     Attendees:
     <ul class="attendees">
         [% FOREACH attendee IN event.attendees %]
-        <li>[% attendee.person.name %] said <b>[% attendee.status %]</b>
+        <li>
+          <a href="/people/view/[% attendee.person.id %]">[%
+          attendee.person.name %]</a> said <b>[% attendee.status %]</b>
           [% IF attendee.comment %]
           <em>([% attendee.comment %])</em>
           [% END %]

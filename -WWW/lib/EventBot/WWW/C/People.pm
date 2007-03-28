@@ -48,15 +48,29 @@ sub top :Local {
     );
 }
 
+=head2 view
+
+View events a person has attended.
+
+=cut
+
+sub view :Local {
+    my ($self, $c, $id) = @_;
+    $c->stash->{person} = $c->model('DB::People')->find($id)
+        or do {
+        $c->error('Person not found');
+        return;
+    }
+}
+
 
 =head1 AUTHOR
 
-A clever guy
+Toby Corkindale
 
 =head1 LICENSE
 
-This library is free software, you can redistribute it and/or modify
-it under the same terms as Perl itself.
+Undecided.
 
 =cut
 

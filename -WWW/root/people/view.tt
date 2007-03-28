@@ -1,0 +1,15 @@
+[% INCLUDE header.tt %]
+<div class="event">
+Details for [% person.name %].<br/>
+They have been at the following events:
+<ul>
+  [% FOREACH event IN person.events %]
+  <li>[% event.place %] [% event.startdate %]
+    <a href="/event/view/[% event.id %]">view other attendees</a>
+  </li>
+  [% END %]
+</ul>
+</div>
+
+
+[% INCLUDE footer.tt %]
