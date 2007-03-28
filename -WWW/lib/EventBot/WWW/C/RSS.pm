@@ -40,13 +40,13 @@ sub upcoming :Local {
     );
 
     # Get events:
-    $c->forward('list/event');
+    $c->forward($c->controller('Event'), 'list');
 
     # Foreach upcoming event, do:
     foreach my $event ($c->stash->{events}->all) {
         $rss->add_item(
             title => $event->startdate . ':' . $event->place,
-            'link' => 'http://eventbot.dryft.net/event/' . $event->id
+            'link' => 'http://eventbot.dryft.net/event/view/' . $event->id
         );
     }
 
