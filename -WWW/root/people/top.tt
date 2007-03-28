@@ -4,10 +4,7 @@ Top attendees:
 <table>
 <tr><th>Count</th><th>Name</th></tr>
 [% FOREACH a IN attendees.all %]
-  <tr>
-    <td>[% a.get_column('count') %]</td>
-    <td>[% a.person.name %]</td>
-  </tr>
+[% INCLUDE people/person_row.tt %]
 [% END %]
 </table>
 </div>
@@ -17,10 +14,7 @@ Top absentees:
 <table>
 <tr><th>Count</th><th>Name</th></tr>
 [% FOREACH a IN absentees.all %]
-  <tr>
-    <td>[% a.get_column('count') %]</td>
-    <td>[% a.person.name %]</td>
-  </tr>
+[% INCLUDE people/person_row.tt %]
 [% END %]
 </table>
 </div>
@@ -30,10 +24,7 @@ Top fence-sitters:
 <table>
 <tr><th>Count</th><th>Name</th></tr>
 [% FOREACH a IN unknown.all %]
-  <tr>
-    <td>[% a.get_column('count') %]</td>
-    <td>[% a.person.name %]</td>
-  </tr>
+[% INCLUDE people/person_row.tt %]
 [% END %]
 </table>
 </div>
