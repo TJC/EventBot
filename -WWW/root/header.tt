@@ -13,6 +13,8 @@
         <a href="/">Home</a>
         |
         <a href="/event/list">Event list</a>
+        &amp;
+        <a href="/rss/upcoming">RSS feed</a>
         |
         <a href="/event/pastlist">Past events</a>
         |
