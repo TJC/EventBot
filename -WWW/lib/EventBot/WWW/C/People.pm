@@ -56,9 +56,17 @@ View events a person has attended.
 
 sub view :Local {
     my ($self, $c, $id) = @_;
-    $c->stash->{person} = $c->model('DB::People')->find($id)
-        or do {
-        $c->error('Person not found');
+    if ($id =~ /^(\d+)$/) {
+        $c->stash->{person} = $c->model('DB::People')->find($1);
+    }
+    elsif ($id =~ /([-_\w\d\'\" ]+)/) {
+        $c->stash->{person} = $c->model('DB::People')->search(
+            { name => $1 }
+        )->first;
+    }
+    if (not $c->stash->{person}) {
+        $c->log->error('Person not found');
+        $c->stash->{message} = 'Person not found';
         return;
     }
 }

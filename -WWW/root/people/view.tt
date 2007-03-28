@@ -1,4 +1,5 @@
 [% INCLUDE header.tt %]
+[% IF message %]<b>[% message %]</b>[% END %]
 <div class="event">
 Details for [% person.name %].<br/>
 They have been at the following events:
