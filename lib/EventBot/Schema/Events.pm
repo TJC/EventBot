@@ -13,7 +13,8 @@ our %statusmap = (
 sub add_people {
     my ($self, %people) = @_;
 
-    foreach my $name (keys %people) {
+    foreach my $line (keys %people) {
+        my ($name, $comment) = split_name_comment($line);
         my $person =
         $self->result_source->schema->resultset('People')
             ->find_or_create( { name => $name }
@@ -24,8 +25,23 @@ sub add_people {
                 event => $self->id
             });
         $a->status($statusmap{$people{$name}});
+        $a->comment($comment) unless not $comment;
         $a->update;
     }
 }
+
+sub split_name_comment {
+    my $name = shift;
+    if ($name =~ /^
+            ([[:print:]]+?)
+            \s*
+            \(([[:print:]]+)\)
+            \s*$
+            /x) {
+        return($1, $2);
+    }
+    return $name;
+}
+
 
 1;

@@ -53,12 +53,26 @@ sub parse_email {
     my (%vars, %attendees);
     foreach my $line (@lines) {
         # Detect events:
-        if ($line =~ /^(\s*>\s*)*(\w{2,8}):\s+([[:print:]]+)$/) {
-            $vars{lc($2)} = $3;
+        if ($line =~
+          /^
+          (\s*>\s*)*
+          (\w{2,8})
+          :\s+
+          ([[:print:]]+)
+          $/x) {
+          $vars{lc($2)} = $3;
         }
         # Detect attendance notices:
-        elsif ($line =~ /^\s*([-\+\?])\s*[`']?([\w\d][[:print:]]+?)[`']?\s*$/) {
-            $attendees{$2} = $1;
+        elsif (my($mode, $name) = $line =~
+          /^\s*
+          ([-\+\?])
+          \s*
+          [`']?
+          ([\w\d][[:print:]]+?)
+          [`']?
+          \s*$
+          /x) {
+            $attendees{$name} = $mode;
             $self->log("Located attendee: $2");
         }
     }
