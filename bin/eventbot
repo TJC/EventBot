@@ -10,7 +10,7 @@ use File::Slurp;
 my $log = IO::File->new('/home/eventbot/eventbot.log', 'a')
     or die("Unable to open logfile: $!");
 
-my $body = read_file('-');
+my $body = read_file(\*STDIN);
 my $email = Email::Simple->new($body);
 my $bot = EventBot->new({logfile => $log});
 $bot->parse_email($email);

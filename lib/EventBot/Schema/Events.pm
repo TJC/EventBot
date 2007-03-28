@@ -13,8 +13,10 @@ our %statusmap = (
 sub add_people {
     my ($self, %people) = @_;
 
-    foreach my $line (keys %people) {
+    while (my ($line, $statid) = each %people) {
+        my $status = $statusmap{$statid};
         my ($name, $comment) = split_name_comment($line);
+        warn "In add_people, adding $name/$comment=$status\n";
         my $person =
         $self->result_source->schema->resultset('People')
             ->find_or_create( { name => $name }
@@ -24,7 +26,7 @@ sub add_people {
                 person => $person->id,
                 event => $self->id
             });
-        $a->status($statusmap{$people{$name}});
+        $a->status($status);
         $a->comment($comment) unless not $comment;
         $a->update;
     }

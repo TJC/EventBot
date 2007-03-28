@@ -9,6 +9,7 @@ use Email::Simple;
 use Email::Simple::Creator;
 use Email::Send;
 use EventBot::Schema;
+#use Data::Dumper;
 
 our $VERSION = '0.10';
 
@@ -53,14 +54,16 @@ sub parse_email {
     my (%vars, %attendees);
     foreach my $line (@lines) {
         # Detect events:
-        if ($line =~
+        if (my (undef, $key, $val) = $line =~
           /^
           (\s*>\s*)*
           (\w{2,8})
           :\s+
           ([[:print:]]+)
           $/x) {
-          $vars{lc($2)} = $3;
+            $val =~ s/\s*$//;
+            $key = lc($key);
+            $vars{$key} = $val;
         }
         # Detect attendance notices:
         elsif (my($mode, $name) = $line =~
@@ -73,7 +76,7 @@ sub parse_email {
           \s*$
           /x) {
             $attendees{$name} = $mode;
-            $self->log("Located attendee: $2");
+            $self->log("Located attendee: $name");
         }
     }
     unless ( $vars{date} and $vars{time} and $vars{place} ) {
@@ -84,11 +87,10 @@ sub parse_email {
         $self->log("Appending attendees to existing event..");
         # Don't try to add a new event, just add people
         my $event = $self->find_event(\%vars);
-        if (not $event) {
-            $self->log("Couldn't locate event!");
-            return;
-        }
-        $event->add_people(%attendees);
+        return unless $event;
+        $self->schema->txn_do(sub {
+            $event->add_people(%attendees);
+        });
     }
     else {
         # Create a new event:
@@ -99,6 +101,7 @@ sub parse_email {
 
 sub find_event {
     my ($self, $vars) = @_;
+#    $self->log("Searching for event based on: " . Dumper($vars));
     my ($event) = $self->schema->resultset('Events')->search({
             startdate => $vars->{date},
             starttime => $vars->{time},
