@@ -1,13 +1,15 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use lib qw{/home/eventbot/EventBot/lib /home/tjc/svn/eventbot/lib};
+use lib qw{
+   /home/tjc/eventbot/EventBot/lib 
+};
 use EventBot;
 use Email::Simple;
 use IO::File;
 use File::Slurp;
 
-my $log = IO::File->new('/home/eventbot/eventbot.log', 'a')
+my $log = IO::File->new('/home/tjc/eventbot.log', 'a')
     or die("Unable to open logfile: $!");
 
 my $body = read_file(\*STDIN);

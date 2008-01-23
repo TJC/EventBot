@@ -34,7 +34,7 @@ sub schema {
 
 sub parse_email {
     my ($self, $email) = @_;
-    my $sender;
+    my ($sender, $event_id);
     die("need email object") 
         unless (ref $email and $email->isa('Email::Simple'));
 
@@ -49,6 +49,11 @@ sub parse_email {
     $self->log("Parsing email from " . $sender->address);
     $self->{sender} = $sender->address;
     $self->{subject} = $email->header('Subject');
+
+    if ($self->{subject} =~ /\[event (\d+)\]/i) {
+        $event_id = $1;
+        $self->log("Suspected event ID: $event_id");
+    }
 
     my @lines = split("\n", $email->body);
     my (%vars, %attendees);
@@ -79,15 +84,27 @@ sub parse_email {
             $self->log("Located attendee: $name");
         }
     }
-    unless ( $vars{date} and $vars{time} and $vars{place} ) {
+
+    # Attempt to locate event based on event id, or the date/time/place:
+    my $event;
+    if ($event_id) {
+        $event = $self->schema->resultset('Events')->find($event_id);
+    }
+    elsif ( $vars{date} and $vars{time} and $vars{place} ) {
+        $event = $self->find_event(\%vars);
+    }
+    else {
         $self->log("Insufficient details to create/locate event");
         return;
     }
+
     if (%attendees) {
+        if (not $event) {
+            $self->log("Can't add attendees as no existing event!");
+            return;
+        }
         $self->log("Appending attendees to existing event..");
         # Don't try to add a new event, just add people
-        my $event = $self->find_event(\%vars);
-        return unless $event;
         $self->schema->txn_do(sub {
             $event->add_people(%attendees);
         });
@@ -185,17 +202,24 @@ EventBot
 http://eventbot.dryft.net/
 
 EOM
+    my $subject = $self->{subject};
+    $subject =~ s/^re:\s+//i;
+    $subject =~ s/\s*\[event\s*\d*\s*\]\s*//i;
+    $subject =~ s/\s*\[sluts]\s*//;
+    $subject = "[EVENT $id] " . $subject;
     my $email = Email::Simple->create(
         header => [
             From => 'eventbot@dryft.net',
             To   => 'sluts@twisted.org.uk',
-            Subject => 'Re: ' . $self->{subject}
+            Subject => $subject
         ],
         body => $body
     );
 
-    Email::Send->new({mailer => 'Sendmail'})
-        ->send($email->as_string);
+    Email::Send->new({mailer => 'Sendmail'})->send($email->as_string);
+#    my $mailer = Email::Send->new({mailer => 'SMTP'});
+#    $mailer->mailer_args([ Host => 'localhost' ]);
+#    $mailer->send($email->as_string);
 }
 
 1;
