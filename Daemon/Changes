@@ -1,6 +1,0 @@
-Revision history for Perl extension EventBot.
-
-0.01  Thu Nov 23 12:55:40 2006
-	- original version; created by h2xs 1.23 with options
-		-n EventBot -b 5.8.1 --use-new-tests -A -X
-
