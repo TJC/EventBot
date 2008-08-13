@@ -1,6 +1,14 @@
 package EventBot::Schema::Events;
 use strict;
 use warnings;
+use base 'DBIx::Class';
+
+__PACKAGE__->load_components(qw(Core));
+__PACKAGE__->table('events');
+__PACKAGE__->add_columns(qw(
+    id startdate starttime place url lat_long comments
+));
+__PACKAGE__->set_primary_key('id');
 
 __PACKAGE__->has_many(attendees => 'EventBot::Schema::Attendees', 'event');
 
