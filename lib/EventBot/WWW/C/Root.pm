@@ -26,10 +26,16 @@ EventBot::WWW::C::Root - Root Controller for EventBot::WWW
 
 =cut
 
-sub default : Private {
+sub index : Private {
     my ( $self, $c ) = @_;
 
     $c->stash->{template} = 'frontpage.tt';
+}
+
+sub default : Private {
+    my ($self, $c) = @_;
+    $c->stash->{template} = '404.tt';
+    $c->response->status(404);
 }
 
 =head2 end
