@@ -3,4 +3,4 @@ name: EventBot::WWW
 
 db:
     dsn: dbi:Pg:dbname=eventbot
-    username: lighttpd
+    username:
