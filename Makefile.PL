@@ -10,6 +10,7 @@ requires    'DBIx::Class'       => 0.07003;
 requires    'DBIx::Class::Schema::Loader'   =>  0.03009;
 requires    'File::Slurp';
 requires 'Catalyst' => '5.7006';
+requires 'Catalyst::View::TT';
 requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Action::RenderView';
