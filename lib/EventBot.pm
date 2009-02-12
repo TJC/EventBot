@@ -156,6 +156,11 @@ sub create_event {
         $self->log("Event already exists..");
         return $event;
     }
+    # Check that these vars are populated!
+    unless ($vars->{'date'} and $vars->{'time'} and $vars->{place}) {
+        $self->log("Cowardly refusing to create empty event!");
+        return;
+    }
     my %new;
     foreach (keys %$vars) {
         if (exists $keyconv{$_}) {
