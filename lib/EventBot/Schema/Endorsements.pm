@@ -10,7 +10,11 @@ __PACKAGE__->add_columns(
     pub => { data_type => 'INTEGER', is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key(qw(person pub));
-__PACKAGE__->has_many(person => 'EventBot::Schema::People');
-__PACKAGE__->has_many(pub => 'EventBot::Schema::Pubs');
+__PACKAGE__->has_many(person => 'EventBot::Schema::People',
+    { 'foreign.id' => 'self.person' }
+);
+__PACKAGE__->has_many(pub => 'EventBot::Schema::Pubs',
+    { 'foreign.id' => 'self.pub' }
+);
 
 1;

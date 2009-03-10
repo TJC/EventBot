@@ -18,6 +18,9 @@ __PACKAGE__->add_columns(
     },
 );
 __PACKAGE__->set_primary_key('id');
-__PACKAGE__->has_many(nominees => 'EventBot::Schema::Nominees');
+__PACKAGE__->has_many(endorsements => 'EventBot::Schema::Endorsements', 'pub');
+__PACKAGE__->many_to_many(
+    nominees => 'endorsements', 'person'
+);
 
 1;
