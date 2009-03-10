@@ -1,13 +1,8 @@
 package EventBot::Schema;
 use warnings;
 use strict;
-use base 'DBIx::Class::Schema';
+use parent 'DBIx::Class::Schema';
 
-__PACKAGE__->load_classes(qw(
-    Attendees
-    Events
-    People
-    Venues
-));
+__PACKAGE__->load_classes;
 
 1;
