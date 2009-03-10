@@ -18,6 +18,7 @@ __PACKAGE__->add_columns(
     },
 );
 __PACKAGE__->set_primary_key('id');
+__PACKAGE__->add_unique_constraint([qw(name region)]);
 __PACKAGE__->has_many(endorsements => 'EventBot::Schema::Endorsements', 'pub');
 __PACKAGE__->many_to_many(
     nominees => 'endorsements', 'person'

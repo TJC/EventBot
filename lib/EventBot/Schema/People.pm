@@ -12,6 +12,7 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key('id');
 
+__PACKAGE__->add_unique_constraint([qw(email)]);
 
 __PACKAGE__->has_many(attends => 'EventBot::Schema::Attendees', 'person');
 __PACKAGE__->many_to_many(events => 'attends', 'event');
