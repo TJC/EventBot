@@ -2,6 +2,7 @@ package EventBot::Schema::Events;
 use strict;
 use warnings;
 use base 'DBIx::Class';
+use Digest::MD5 qw(md5_hex);
 
 __PACKAGE__->load_components(qw(Core));
 __PACKAGE__->table('events');
@@ -52,10 +53,24 @@ sub add_people {
         my $status = $statusmap{$statid};
         my ($name, $comment) = split_name_comment($line);
         warn "In add_people, adding $name/$comment=$status\n";
-        my $person =
-        $self->result_source->schema->resultset('People')
-            ->find_or_create( { name => $name }
-        );
+
+        # We have made email a unique, not null field, but we don't have
+        # that data right now, right here. Instead, fake it up with an MD5 of
+        # their name, and work this out later..
+        my $md5 = md5_hex($name);
+
+        my $person = $self->result_source->schema->resultset('People')
+            ->find( { name => $name } );
+        if (not $person) {
+            $person = $self->result_source->schema->resultset('People')
+                ->create(
+                    {
+                        name => $name,
+                        email => $md5
+                    }
+                );
+        }
+
         my $a = $self->result_source->schema->resultset('Attendees')
             ->find_or_create({
                 person => $person->id,
