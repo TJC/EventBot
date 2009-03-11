@@ -16,11 +16,13 @@ __PACKAGE__->add_columns(
     },
     status => {
         data_type => 'VARCHAR',
-        size => 5
+        size => 5,
+        is_nullable => 1,
     },
     comment => {
         data_type => 'VARCHAR',
-        size => 80
+        size => 80,
+        is_nullable => 1,
     },
 );
 __PACKAGE__->set_primary_key(qw(event person));
