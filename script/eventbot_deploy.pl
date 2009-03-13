@@ -10,10 +10,11 @@ if (not @ARGV or $ARGV[0] =~ /help/i) {
 }
 
 my $dbname = shift @ARGV;
+my $user = shift(@ARGV) || 'eventbot';
 
 system('createdb', '--encoding=utf8', $dbname);
 
-my $schema = EventBot::Schema->connect("dbi:Pg:dbname=$dbname")
+my $schema = EventBot::Schema->connect("dbi:Pg:dbname=$dbname", $user)
     or die;
 
 $schema->deploy;
