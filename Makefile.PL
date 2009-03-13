@@ -8,6 +8,7 @@ requires    'File::Spec';
 requires    'Email::Simple'     => 1.95;
 requires    'Email::Simple::Creator' => 1.423;
 requires    'Email::Send'       => 2.17;
+requires    'MIME::Lite' => 3;
 requires    'Mail::Address'     => 1.67; # figure out correct one
 requires    'DBIx::Class'       => 0.07003;
 requires    'File::Slurp';
