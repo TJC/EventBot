@@ -11,7 +11,7 @@ use Email::Send;
 use EventBot::Schema;
 #use Data::Dumper;
 
-our $VERSION = '0.10';
+our $VERSION = '0.20';
 
 sub new {
     my ($class, $args) = @_;
@@ -58,6 +58,21 @@ sub parse_email {
     my @lines = split("\n", $email->body);
     my (%vars, %attendees);
     foreach my $line (@lines) {
+        # Detect election votes:
+        if (my @votes = $line =~
+            /^
+            \s*
+            I\svote\s*:\s*
+            ([A-Za-z])\s*
+            ([A-Za-z])?\s*
+            ([A-Za-z])?\s*
+            ([A-Za-z])?\s*
+            /x
+        ) {
+            $self->log("Found votes: " . join(', ', @votes));
+            return $self->do_votes($sender, @votes);
+        }
+
         # Detect events:
         if (my (undef, $key, $val) = $line =~
           /^
@@ -225,6 +240,41 @@ EOM
 #    my $mailer = Email::Send->new({mailer => 'SMTP'});
 #    $mailer->mailer_args([ Host => 'localhost' ]);
 #    $mailer->send($email->as_string);
+}
+
+=head2 do_votes
+
+Handle incoming votes for current election!
+
+voter==Mail::Address
+
+=cut
+
+sub do_votes {
+    my ($self, $voter, @votes) = @_;
+
+    my $person = $self->schema->resultset('People')->find_or_create(
+        {
+            email => $voter->address,
+            name => ($voter->name || $voter->address)
+        }
+    );
+    $person->name($voter->name || $voter->address);
+    $person->update;
+
+    my $vote = uc(shift @votes);
+
+    # Get the most recent enabled election:
+    my $election = $self->schema->resultset('Elections')->search(
+        { enabled => 1 },
+        { order_by => 'id DESC' }
+    )->next;
+    if (not $election) {
+        $self->log("Erm, apparently no elections are running!");
+        exit;
+    }
+
+    $election->vote($vote, $person);
 }
 
 1;
