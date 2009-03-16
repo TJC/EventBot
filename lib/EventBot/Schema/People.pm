@@ -25,4 +25,15 @@ __PACKAGE__->has_many(
 );
 __PACKAGE__->many_to_many(endorsed => 'nominations', 'pub');
 
+# Return a version of their email address that is slightly redacted to
+# prevent email harvesting.
+sub email_redacted {
+    my $self = shift;
+    my $email = $self->email;
+    return '***' unless length($email) > 3;
+    my $len = int(length($email) / 3.0);
+    substr($email, $len, $len, '*'x$len);
+    return $email;
+}
+
 1;
