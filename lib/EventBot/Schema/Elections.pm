@@ -166,4 +166,56 @@ sub _get_random_pub :ResultSet {
     return $pub;
 }
 
+=head2 latest
+
+Returns the latest election.
+
+=cut
+
+sub latest :ResultSet {
+    my ($self) = @_;
+    return $self->search(
+        undef,
+        {
+            order_by => 'id DESC',
+            rows => 1,
+        }
+    )->next;
+}
+
+=head2 previous
+
+Returns the previous election to the latest, ie. 2nd most recent.
+
+=cut
+
+sub previous :ResultSet {
+    my ($self) = @_;
+    return $self->search(
+        undef,
+        {
+            order_by => 'id DESC',
+            rows => 1,
+            offset => 1,
+        }
+    )->next;
+}
+
+=head2 current
+
+Returns the current election, ie. latest which is enabled.
+
+=cut
+
+sub current :ResultSet {
+    my ($self) = @_;
+    return $self->search(
+        { enabled => 1 },
+        {
+            order_by => 'id DESC',
+            rows => 1,
+        }
+    )->next;
+}
+
 1;

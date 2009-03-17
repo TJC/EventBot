@@ -33,18 +33,21 @@ sub election :Chained PathPart('election') CaptureArgs(1) {
         when (/^\d+$/) {
             $c->stash->{election} = $c->model('DB::Elections')->find($eid);
         }
+        when ('latest') {
+            $c->stash->{election} = $c->model('DB::Elections')->latest;
+        }
         when ('current') {
-            $c->stash->{election} = $c->model('DB::Elections')->search(
-                { enabled => 1 },
-                { order_by => 'id DESC', rows => 1 }
-            )->next;
+            $c->stash->{election} = $c->model('DB::Elections')->current;
         }
         when ('last') {
-            $c->stash->{election} = $c->model('DB::Elections')->search(
-                { },
-                { order_by => 'id DESC', rows => 1 }
-            )->next;
+            $c->stash->{election} = $c->model('DB::Elections')->previous;
         }
+    }
+
+    if (not $c->stash->{election}) {
+        $c->response->status(404);
+        $c->response->body('Election not found');
+        return 0;
     }
 }
 

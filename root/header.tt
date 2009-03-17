@@ -20,7 +20,7 @@
         |
         <a href="/pub/all">Pub List</a>
         |
-        <a href="/election/current/result">Election results</a>
+        <a href="/election/latest/result">Election results</a>
         |
         <a href="/people/top">Top attendees</a>
         |

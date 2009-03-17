@@ -265,10 +265,7 @@ sub do_votes {
     my $vote = uc(shift @votes);
 
     # Get the most recent enabled election:
-    my $election = $self->schema->resultset('Elections')->search(
-        { enabled => 1 },
-        { order_by => 'id DESC' }
-    )->next;
+    my $election = $self->schema->resultset('Elections')->current;
     if (not $election) {
         $self->log("Erm, apparently no elections are running!");
         exit;
