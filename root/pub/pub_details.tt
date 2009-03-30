@@ -1,0 +1,22 @@
+[% INCLUDE header.tt %]
+
+<div class="event">
+  Name: [% pub.name %]<br/>
+  Region: [% pub.region %]<br/>
+  Address: [% pub.street_address %]<br/>
+  URL: <a href="[% pub.info_uri %]">[% pub.info_uri %]</a><br/>
+  Status:
+    [% IF pub.endorsed %]<span style="color: green">Endorsed</span>
+    [% ELSE %]<span style="color: red">Not endorsed</span>
+    [% END %]<br />
+  Endorsed by:
+  <ul>
+    [% FOREACH nom IN pub.nominees %]
+    <li><a href="/people/view/[% nom.name %]">[% nom.name %]</a></li>
+    [% END %]
+  </ul>
+  <a href="/manage/pub/[% pub.id %]/endorse">Add or remove your endorsement</a>
+
+</div>
+
+[% INCLUDE footer.tt %]

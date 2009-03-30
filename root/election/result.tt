@@ -1,0 +1,35 @@
+[% INCLUDE header.tt %]
+
+<h4>Result for election [% election.id %]:</h4>
+
+<div class="event">
+  <h4>Candidates are:</h4>
+  <ul>
+  [% FOREACH pub IN election.candidates %]
+    <li><a href="/pub/[% pub.region %]/[% pub.name %]">[% pub.name %] ([%
+      pub.region %])</a></li>
+  [% END %]
+  </ul>
+</div>
+
+<div class="event">
+  [% IF election.winner %]
+  We have a winner: <a href="/pub/[% election.winner.region %]/[%
+    election.winner.name %]">[% election.winner.name %] ([%
+    election.winner.region %])</a>.
+  [% ELSE %]
+  No winner announced yet.
+  [% END %]
+</div>
+
+<div class="event">
+  <h4>Votes:</h4>
+  <ul>
+  [% FOREACH vote IN election.votes %]
+  <li><a href="/people/view/[% vote.person.name %]">[% vote.person.name %]</a>
+    ([% vote.person.email_redacted %]): [% vote.pub.name %]</li>
+  [% END %]
+  </ul>
+</div>
+
+[% INCLUDE footer.tt %]

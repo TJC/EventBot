@@ -1,0 +1,10 @@
+[% INCLUDE header.tt %]
+
+<ul>
+  <li><a href="/manage/specialevent/list">List special events</a></li>
+  <li><a href="/manage/specialevent/create">Create new special event</a></li>
+  <li><u>Nominate new pub</u></li>
+</ul>
+
+[% INCLUDE footer.tt %]
+

@@ -1,0 +1,10 @@
+[% INCLUDE header.tt %]
+
+<div class="event">
+Your event has been created - however you will need to confirm it before it
+goes live. An email has been sent to the selected nominee.
+If you don't receive it in the next few minutes, please check your spam folder.
+</div>
+
+[% INCLUDE footer.tt %]
+

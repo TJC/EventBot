@@ -18,6 +18,12 @@
         |
         <a href="/event/pastlist">Past events</a>
         |
+        <a href="/pub/all">Pub List</a>
+        |
+        <a href="/manage">Manage stuff</a>
+        |
+        <a href="/election/latest/result">Election results</a>
+        |
         <a href="/people/top">Top attendees</a>
         |
         <a href="/about">About</a>
