@@ -25,6 +25,10 @@ __PACKAGE__->has_many(
 );
 __PACKAGE__->many_to_many(endorsed => 'nominations', 'pub');
 
+__PACKAGE__->has_many(
+    confirmations => 'EventBot::Schema::Confirmations', 'person'
+);
+
 # Return a version of their email address that is slightly redacted to
 # prevent email harvesting.
 sub email_redacted {

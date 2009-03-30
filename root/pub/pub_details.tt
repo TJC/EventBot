@@ -15,6 +15,7 @@
     <li><a href="/people/view/[% nom.name %]">[% nom.name %]</a></li>
     [% END %]
   </ul>
+  <a href="/manage/pub/[% pub.id %]/endorse">Add or remove your endorsement</a>
 
 </div>
 

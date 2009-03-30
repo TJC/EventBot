@@ -1,0 +1,13 @@
+[% INCLUDE header.tt %]
+
+<div class="event">
+  Nominee: <a href="/person/view/[% event.person.name %]">[% event.person.name
+  %]</a><br/>
+  Venue: <a href="/pub/[% event.pub.region _ '/' _ event.pub.name %]">[%
+  event.pub.name %]</a> ([% event.pub.region %])<br/>
+  Date: [% event.date.dmy %]<br/>
+  Comment: [% event.comment %]
+</div>
+
+[% INCLUDE footer.tt %]
+

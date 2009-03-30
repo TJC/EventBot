@@ -1,0 +1,28 @@
+[% INCLUDE header.tt %]
+[% IF message %]
+<div style="color: red;">[% message %]</div>
+[% END %]
+
+<form name="newEvent" method="POST">
+<div class="event">
+  Nominee: <select name="nominee">[% FOREACH nom IN nominees.all %]
+    <option value="[% nom.id %]">[% nom.name %]</option>
+  [% END %]</select>
+  <br/>
+  
+  Venue: <select name="venue">[% FOREACH pub IN venues.all %]
+  <option value="[% pub.id %]">[% pub.name %] ([% pub.region %])</option>
+  [% END %]
+  </select>
+  <br/>
+
+  Date: <input type="text" size="12" name="date"/><br/>
+  <em>Use DD/MM/YYYY or YYYY-MM-DD date formats.</em><br/>
+
+  Comment: <input type='text' size='80' name='comment'/><br/>
+
+  <input type="submit" value="Create"/>
+</div>
+</form>
+[% INCLUDE footer.tt %]
+
