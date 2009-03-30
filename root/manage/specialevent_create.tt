@@ -6,7 +6,9 @@
 <form name="newEvent" method="POST">
 <div class="event">
   Nominee: <select name="nominee">[% FOREACH nom IN nominees.all %]
+    [% IF nom.email.length != 32 # Skip MD5SUMs of emails %]
     <option value="[% nom.id %]">[% nom.name %]</option>
+    [% END %]
   [% END %]</select>
   <br/>
   
