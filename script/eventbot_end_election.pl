@@ -98,14 +98,14 @@ push @body, sprintf(
     $e->id
 );
 
-#$e->winner($pub);
-#$e->enabled(0);
-#$e->update;
+$e->winner($pub);
+$e->enabled(0);
+$e->update;
 
 my $mail = MIME::Lite->new(
     From => 'eventbot@dryft.net',
     To   => ($sendmail ? 'sluts@twisted.org.uk' : 'dryfter@gmail.com'),
-    Subject => 'Pub election results',
+    Subject => 'Election results for ' . next_thursday()->dmy,
     Data => join("\n", @body),
 );
 

@@ -43,6 +43,7 @@ for my $p ($e->candidates) {
           . "\n";
 }
 
+my $e_id = $e->id;
 $body .= qq{
 
 To vote, please send an email either directly to me, or to the list, which
@@ -50,6 +51,9 @@ says:
 I vote: X Y Z
 
 Where X Y Z are actually A B C etc, ordered in descending preference.
+
+You can keep track of votes (and the result) at:
+http://eventbot.dryft.net/election/$e_id/result
 
 Thanks,
 VoteBot
@@ -60,7 +64,7 @@ VoteBot
 my $mail = MIME::Lite->new(
     From => 'eventbot@dryft.net',
     To   => ($sendmail ? 'sluts@twisted.org.uk' : 'dryfter@gmail.com'),
-    Subject => 'Pub election started',
+    Subject => 'Pub election for ' . next_thursday()->dmy,
     Data => $body
 );
 if ($sendmail) {
@@ -68,5 +72,15 @@ if ($sendmail) {
 }
 else {
     say $mail->as_string;
+}
+
+
+
+sub next_thursday {
+    my $date = DateTime->now();
+    while ($date->day_of_week != 4) {
+        $date->add(days => 1);
+    }
+    return $date;
 }
 
