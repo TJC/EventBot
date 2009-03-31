@@ -94,7 +94,7 @@ for my $r (@results) {
 
 push @body, '';
 push @body, sprintf(
-    'For more info, see http://eventbot.dryft.net/election/%d/results',
+    'For more info, see http://eventbot.dryft.net/election/%d/result',
     $e->id
 );
 
