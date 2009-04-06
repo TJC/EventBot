@@ -102,7 +102,7 @@ This determines the candidates, and will return the election object.
 =cut
 
 sub commence :ResultSet {
-    my ($self) = @_;
+    my ($self, $args) = @_;
     my $max_id_query = $self->result_source->schema->storage->dbh->prepare(
         'SELECT MAX(id) FROM pubs'
     );
@@ -133,6 +133,13 @@ sub commence :ResultSet {
         next unless $pub->endorsed;
         push(@pubs, $pub);
     }
+
+    # Add extra birthday pubs:
+    if ($args->{extra}) {
+        push(@pubs, @{$args->{extra}});
+    }
+
+    # Add the none-of-the-above option:
     push(@pubs, $none_of_the_above);
     $election->candidates(@pubs);
 

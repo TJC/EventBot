@@ -32,9 +32,22 @@ Params:
 my $schema = EventBot::Schema->connect("dbi:Pg:dbname=$dbname", $user)
     or die("Failed to connect to DB!");
 
-my $e = $schema->resultset('Elections')->commence;
+my $thursday = next_thursday();
+my @specEvents = $schema->resultset('SpecialEvents')
+    ->search(
+        {
+            date => $thursday,
+            confirmed => 1
+        }
+    );
+my @extraPubs = map { $_->pub } @specEvents;
 
-my $body = sprintf('A new election (%d) has started!', $e->id);
+my $e = $schema->resultset('Elections')->commence({ extra => \@extraPubs });
+
+my $body = sprintf(
+    'A new election (%d) has started!%sThis is for Thursday %s',
+    $e->id, "\n", $thursday->dmy
+);
 $body .= "\nThe candidates are:\n";
 
 my $vcount = 0;
@@ -42,6 +55,14 @@ for my $p ($e->candidates) {
     my $letter = chr($vcount++ + ord('A'));
     $body .= sprintf('    %s -- %s (%s)', $letter, $p->name, $p->region)
           . "\n";
+}
+
+if (@specEvents) {
+    $body .= "\nThis list also includes special event(s):\n";
+    for my $event (@specEvents) {
+        $body .= sprintf(' * %s (%s)', $event->comment, $event->person->name)
+              . "\n";
+    }
 }
 
 my $e_id = $e->id;
@@ -65,7 +86,7 @@ VoteBot
 my $mail = MIME::Lite->new(
     From => 'eventbot@dryft.net',
     To   => ($sendmail ? 'sluts@twisted.org.uk' : 'dryfter@gmail.com'),
-    Subject => 'Pub election for ' . next_thursday()->dmy,
+    Subject => 'Pub election for ' . $thursday->dmy,
     Data => $body
 );
 if ($sendmail) {
