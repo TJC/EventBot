@@ -7,6 +7,7 @@ use lib "$FindBin::Bin/../lib";
 use EventBot::Schema;
 use Getopt::Long;
 use MIME::Lite;
+use DateTime;
 
 my ($dbname, $user) = qw(eventbot eventbot);
 my ($help, $sendmail);
