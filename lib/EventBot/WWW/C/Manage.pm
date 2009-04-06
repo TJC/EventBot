@@ -159,7 +159,7 @@ EventBot
 sub figure_date {
     my $date = shift;
 
-    if ($date =~ m{^(\d\d)[-/](\d\d)[-/](\d\d\d\d)$}) {
+    if ($date =~ m{^(\d{1,2})[-/](\d{1,2})[-/](\d\d\d\d)$}) {
         return DateTime->new(
             year => $3,
             month => $2,
@@ -167,7 +167,7 @@ sub figure_date {
         );
     }
 
-    if ($date =~ /^(\d\d\d\d)\-(\d\d)\-(\d\d)$/) {
+    if ($date =~ /^(\d\d\d\d)\-(\d{1,2})\-(\d{1,2})$/) {
         return DateTime->new(
             year => $2,
             month => $2,
