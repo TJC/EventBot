@@ -63,11 +63,13 @@ my $pub = $results[0]->pub;
 my @body;
 push @body, 'We have a winner:';
 push @body, sprintf('Place: %s (%s)', $pub->name, $pub->region);
-push @body, "Date: " . next_thursday()->dmy;
-push @body, "Time: Evening";
-push @body, 'Address: ' . $pub->street_address;
-if ($pub->info_uri) {
-    push @body, 'URL: ' . $pub->info_uri;
+if ($pub->name !~ /none of the above/i) {
+    push @body, "Date: " . next_thursday()->dmy;
+    push @body, "Time: Evening";
+    push @body, 'Address: ' . $pub->street_address;
+    if ($pub->info_uri) {
+        push @body, 'URL: ' . $pub->info_uri;
+    }
 }
 push @body, '';
 push @body, 'If you hate it, remember it was endorsed by:';
