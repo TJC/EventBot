@@ -169,7 +169,7 @@ sub figure_date {
 
     if ($date =~ /^(\d\d\d\d)\-(\d{1,2})\-(\d{1,2})$/) {
         return DateTime->new(
-            year => $2,
+            year => $1,
             month => $2,
             day => $3
         );
