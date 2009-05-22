@@ -37,13 +37,13 @@ sub top :Local {
             rows => 10,
     };
 
-    $c->stash->{attendees} = $c->model('Attendees')->search(
+    $c->stash->{attendees} = $c->model('DB::Attendees')->search(
         { 'status' => 'Yes', }, $query
     );
-    $c->stash->{absentees} = $c->model('Attendees')->search(
+    $c->stash->{absentees} = $c->model('DB::Attendees')->search(
         { 'status' => 'No', }, $query
     );
-    $c->stash->{unknown} = $c->model('Attendees')->search(
+    $c->stash->{unknown} = $c->model('DB::Attendees')->search(
         { 'status' => 'Maybe', }, $query
     );
 }
