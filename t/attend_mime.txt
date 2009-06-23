@@ -1,0 +1,80 @@
+Delivered-To: tjc@wintrmute.net
+Received: by 10.143.8.6 with SMTP id l6cs179256wfi;
+        Mon, 15 Jun 2009 00:27:17 -0700 (PDT)
+Received: by 10.210.70.8 with SMTP id s8mr7766482eba.75.1245050836481;
+        Mon, 15 Jun 2009 00:27:16 -0700 (PDT)
+Return-Path: <sluts-bounces@twisted.org.uk>
+Received: from toybox.twisted.org.uk (toybox.twisted.org.uk [195.144.8.6])
+        by mx.google.com with ESMTP id 7si7323357ewy.10.2009.06.15.00.27.14;
+        Mon, 15 Jun 2009 00:27:15 -0700 (PDT)
+Received-SPF: pass (google.com: domain of sluts-bounces@twisted.org.uk designates 195.144.8.6 as permitted sender) client-ip=195.144.8.6;
+Authentication-Results: mx.google.com; spf=pass (google.com: domain of sluts-bounces@twisted.org.uk designates 195.144.8.6 as permitted sender) smtp.mail=sluts-bounces@twisted.org.uk; dkim=pass (test mode) header.i=@yahoo.com
+Received: from localhost ([::1] helo=toybox.twisted.org.uk)
+	by toybox.twisted.org.uk with esmtp (Exim 4.69 (FreeBSD))
+	(envelope-from <sluts-bounces@twisted.org.uk>)
+	id 1MG6b4-000NYV-1Y; Mon, 15 Jun 2009 08:27:14 +0100
+Received: from mailnull by toybox.twisted.org.uk with spamc-scanned (Exim 4.69
+	(FreeBSD)) (envelope-from <iamontheinternet@yahoo.com>)
+	id 1MG6al-000NYM-Rd
+	for sluts@twisted.org.uk; Mon, 15 Jun 2009 08:26:57 +0100
+X-Spam-Score: 0.1 ()
+X-Spam-Checker-Version: SpamAssassin 3.2.5 (2008-06-10) on
+	toybox.twisted.org.uk
+X-Spam-Level: 
+X-Spam-Status: No, score=0.1 required=5.0 tests=RDNS_NONE autolearn=no
+	version=3.2.5
+Received: from [209.191.69.83] (helo=web32906.mail.mud.yahoo.com)
+	by toybox.twisted.org.uk with smtp (Exim 4.69 (FreeBSD))
+	(envelope-from <iamontheinternet@yahoo.com>) id 1MG6al-000NYH-IV
+	for sluts@twisted.org.uk; Mon, 15 Jun 2009 08:26:55 +0100
+Received: (qmail 23492 invoked by uid 60001); 15 Jun 2009 07:26:34 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s1024;
+	t=1245050794; bh=1cy6pXA6SoIYisRKXmF6+v/K1uTvT+G2QWIKXrUQf5M=;
+	h=Message-ID:X-YMail-OSG:Received:X-Mailer:References:Date:From:Subject:To:In-Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	b=eSdq5LR9N67xuRpvr+6gldTRgbqhv41U7LByzjAphCSRDWlEiZMtQiVApnCdBcudD5jVkt/VbryB5tyizdDKAm0EWAtHy+IqmsyMAXzRjkQ6jIsAnC27HyOpmeUUu0AESIZkWLmz3j22aTfei76HlgqqWCtNbvfugsXDuFr5UHE=
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; s=s1024; d=yahoo.com;
+	h=Message-ID:X-YMail-OSG:Received:X-Mailer:References:Date:From:Subject:To:In-Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding;
+	b=y2cRcfzKXMwzVnRfWydY1wtpUna+D/4GUe4JsAXSRKK/D7wu98jupcWMWVcipQnlwL01cWFWlYV16OcTylD7peYNQtBH4tFb8E7Lod6hGtBMcfJpmHPPj5DH6+2NcIHhQW+lGFydAjZR4TID9bOeD2180g2Xq3/uuIu/jtA5DQY=;
+Message-ID: <114616.22994.qm@web32906.mail.mud.yahoo.com>
+X-YMail-OSG: rxdTTDcVM1niTtodLv98jMXUDv6lJf.PIjhl1OLtaPQyt4qANYSt1zXUqstepgYuSSVvVoMqsnwsiaKf3dt3jp6T1cP.3IcPLgC5KDbXd1gwFXmYrziDWOoRdqnTvzqF3cj8DB.Gxin91kpIQYEwlkOZDyqJ6ge9GA34c5ACl4IYWsDAVVntpXBOKVJS4oRqAULWBzB8wxmUKST5A2kUD7rso4Xby0EZfq9cf2tU3irNfOPuytIlb6gOj3aRoDR1Ny1YiJXq86hxLSSAKqcGn7dd7nMh4hG_X9XEualOHNq3d296_nAYU8FApKSc8vaxbgbO9o5ydPrAaCoDsMPpxu8GC0oinnsJ4JKRuCK9XosgSASlvEc-
+Received: from [77.99.186.176] by web32906.mail.mud.yahoo.com via HTTP;
+	Mon, 15 Jun 2009 00:26:33 PDT
+X-Mailer: YahooMailRC/1277.43 YahooMailWebService/0.7.289.15
+References: <BLU0-SMTP98EEBC4B6D88B1D592B27C23E0@phx.gbl>
+Date: Mon, 15 Jun 2009 00:26:33 -0700 (PDT)
+From: simon c <iamontheinternet@example.com>
+To: Goth Sluts <sluts@twisted.org.uk>
+In-Reply-To: <BLU0-SMTP98EEBC4B6D88B1D592B27C23E0@phx.gbl>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-spamc-toybox: true
+Subject: Re: [sluts] [EVENT 205] Election results for 18-06-2009
+X-BeenThere: sluts@twisted.org.uk
+X-Mailman-Version: 2.1.11
+Precedence: list
+Reply-To: Goth Sluts <sluts@twisted.org.uk>
+List-Id: Goth Sluts <sluts.twisted.org.uk>
+List-Unsubscribe: <http://twisted.org.uk/mailman/options/sluts>,
+	<mailto:sluts-request@twisted.org.uk?subject=unsubscribe>
+List-Post: <mailto:sluts@twisted.org.uk>
+List-Help: <mailto:sluts-request@twisted.org.uk?subject=help>
+List-Subscribe: <http://twisted.org.uk/mailman/listinfo/sluts>,
+	<mailto:sluts-request@twisted.org.uk?subject=subscribe>
+Sender: sluts-bounces@twisted.org.uk
+Errors-To: sluts-bounces@twisted.org.uk
+
+
++ Simon C=0A=0A=0A=0A>New event added to database:=0A>Date: 18-06-2009=0A>T=
+ime: Evening=0A>Place: The Mucky Pup (Islington)=0A>Link: http://www.beerin=
+theevening.com/pubs/s/51/5169/Mucky_Pup/Angel_Islington =0A>=0A>To indicate=
+ that you're attending this event, reply to this email and add a=0A>line wi=
+th "+ Yourname" (without the quotes). You can indicate that you're not=0A>s=
+ure, or are not coming, by using the minus and question mark characters at =
+the=0A>start instead. You can change your status later by sending a new mes=
+sage.=0A>Note that the +, - or ? must be at the very start of the line.=0A>=
+Put multiple attendees on individual lines.=0A>=0A>To view the attendance r=
+ecord, visit http://eventbot.dryft.net/event/view/205 =0A>=0A>-- =0A>Yours =
+faithfully,=0A>EventBot=0A>http://eventbot.dryft.net/ =0A>=0A>=0A=0A=0A=0A =
+     
+
