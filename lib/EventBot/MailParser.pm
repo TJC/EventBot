@@ -3,7 +3,6 @@ use strict;
 use warnings;
 use parent 'Class::Accessor';
 use Mail::Address;
-use Email::Simple;
 use Email::MIME;
 use EventBot::MailParser::Votes;
 use EventBot::MailParser::Events;
@@ -28,16 +27,18 @@ returns a list of detected significant.. stuff.
   my $detected = $parser->commands;
   my $from = $parser->from;
 
-Results like:
+Results should look like:
 
   [
     {
       type => 'vote',
-      data => ['a', 'b', 'c', 'd']
+      votes => ['a', 'b', 'c', 'd']
     },
     {
       type => 'attendance',
-      data => '+john (running late)'
+      name => 'John Smith',
+      mode => '+',
+      event => 205,
     },
   ]
 
@@ -53,7 +54,7 @@ sub new {
 sub parse {
     my ($self, $raw) = @_;
 
-    my $email = Email::Simple->new($raw);
+    my $email = Email::MIME->new($raw);
     my ($sender) = Mail::Address->parse($email->header('From'));
     $self->from($sender);
 
@@ -62,8 +63,10 @@ sub parse {
     my $body = $email->body;
 
     for (@PARSERS) {
-        my $result = $_->parse($self->subject, $body);
-        $self->_add_command($result) if $result;
+        my @results = $_->parse($self->subject, $body);
+        for (@results) {
+            $self->_add_command($_);
+        }
     }
 }
     

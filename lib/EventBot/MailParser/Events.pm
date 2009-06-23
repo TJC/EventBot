@@ -12,7 +12,8 @@ sub parse {
     }
     my @commands;
     my @lines = split("\n", $body);
-    # TODO: Bring over the event detection routines
+    # TODO: Bring over the old event detection routines (ie. by name instead of
+    # using the subject line's event id)
 
     for my $line (@lines) {
         if (my($mode, $name) = $line =~
@@ -27,16 +28,14 @@ sub parse {
           ) {
               push(@commands, {
                       type => 'attend',
-                      data => {
-                          name => $name,
-                          mode => $mode,
-                          event => $event_id,
-                      }
+                      name => $name,
+                      mode => $mode,
+                      event => $event_id,
                   }
               );
         }
     }
-    return \@commands;
+    return @commands;
 }
 
 1;
