@@ -1,29 +1,76 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use Test::More tests => 2;
+use Test::More tests => 5;
 use File::Slurp qw(slurp);
 use Data::Dumper;
 
 use_ok('EventBot::MailParser') or die;
 
-#########################
+# Test new events:
+{
+    my $newevent_text = slurp('t/newevent.txt');
+    my $parser = EventBot::MailParser->new;
+    $parser->parse($newevent_text);
+    diag(Dumper($parser->commands));
+    is_deeply(
+        $parser->commands,
+        [ {
+            type => 'newevent',
+            # TODO
+        } ],
+        "Locate new event in email"
+    );
+}
 
-use_ok('Email::Simple');
-my $newevent_text = slurp('t/newevent.txt');
+# Test attendance to an event:
+{
+    my $attend_text = slurp('t/attend.txt');
+    my $parser = EventBot::MailParser->new;
+    $parser->parse($attend_text);
+    diag(Dumper($parser->commands));
+    is_deeply(
+        $parser->commands,
+        [{
+            type => 'attend',
+            mode => '+',
+            name => 'Wintrmute (blah)',
+            event => undef, # TODO: Use an ID or something?
+        }],
+        "Found attendance command in plaintext email"
+    );
+}
 
-my $parser = EventBot::MailParser->new;
-$parser->parse($newevent_text);
-diag(Dumper($parser->commands));
+# Test attendance to an event, in a MIME-encoded email:
+{
+    my $attend_mime = slurp('t/attend_mime.txt');
+    my $parser = EventBot::MailParser->new;
+    $parser->parse($attend_mime);
+    diag(Dumper($parser->commands));
+    is_deeply(
+        $parser->commands,
+        [{
+            type => 'attend',
+            mode => '+',
+            name => 'Simon C',
+            event => 205,
+        }],
+        "Found attendance command in MIME encoded email"
+    );
+}
 
-my $attend_text = slurp('t/attend.txt');
-my $parser2 = EventBot::MailParser->new;
-$parser2->parse($attend_text);
-diag(Dumper($parser2->commands));
-
-
-my $attend_mime = slurp('t/attend_mime.txt');
-my $parser3 = EventBot::MailParser->new;
-$parser3->parse($attend_mime);
-diag(Dumper($parser3->commands));
-
+# Test a vote:
+{
+    my $attend_mime = slurp('t/vote.txt');
+    my $parser = EventBot::MailParser->new;
+    $parser->parse($attend_mime);
+    diag(Dumper($parser->commands));
+    is_deeply(
+        $parser->commands,
+        [{
+            type => 'vote',
+            votes => [qw(A B C E)],
+        }],
+        "Found votes in plaintext email"
+    );
+}
