@@ -2,12 +2,13 @@ package EventBot::MailParser;
 use strict;
 use warnings;
 use parent 'Class::Accessor';
+use Mail::Address;
 use Email::Simple;
 use Email::MIME;
 use EventBot::MailParser::Votes;
 use EventBot::MailParser::Events;
 
-__PACKAGE__->mk_accessors(qw(commands from));
+__PACKAGE__->mk_accessors(qw(commands from subject));
 
 our @PARSERS = ('EventBot::MailParser::Votes', 'EventBot::MailParser::Events');
 
@@ -53,12 +54,15 @@ sub parse {
     my ($self, $raw) = @_;
 
     my $email = Email::Simple->new($raw);
-    $self->from($email->header('From'));
+    my ($sender) = Mail::Address->parse($email->header('From'));
+    $self->from($sender);
+
+    $self->subject($email->header('Subject'));
 
     my $body = $email->body;
 
     for (@PARSERS) {
-        my $result = $_->parse($body);
+        my $result = $_->parse($self->subject, $body);
         $self->_add_command($result) if $result;
     }
 }
