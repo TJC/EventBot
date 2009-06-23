@@ -4,7 +4,7 @@ use warnings;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use EventBot;
-use Email::Simple;
+use Email::MIME;
 use IO::File;
 use File::Slurp;
 use File::Spec;
@@ -15,7 +15,7 @@ my $log = IO::File->new($logfile, 'a')
     or die("Unable to open logfile: $!");
 
 my $body = read_file(\*STDIN);
-my $email = Email::Simple->new($body);
+my $email = Email::MIME->new($body);
 my $bot = EventBot->new({logfile => $log});
 $bot->parse_email($email);
 $log->close;
