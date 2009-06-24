@@ -6,6 +6,7 @@ use Mail::Address;
 use Email::MIME;
 use EventBot::MailParser::Votes;
 use EventBot::MailParser::Events;
+use List::Util qw(first);
 
 __PACKAGE__->mk_accessors(qw(commands from subject));
 
@@ -55,12 +56,25 @@ sub parse {
     my ($self, $raw) = @_;
 
     my $email = Email::MIME->new($raw);
+    my @parts = $email->parts;
+    my $plain_part;
+    if (@parts > 1) {
+        # Then we need to pick the correct one..
+        $plain_part = first { $_->content_type =~ m{text/plain}i } @parts;
+        die "Failed to locate plain text component of email!"
+            unless $plain_part;
+    }
+    else {
+        # Just go with the top-level object:
+        $plain_part = $email;
+    }
+
     my ($sender) = Mail::Address->parse($email->header('From'));
     $self->from($sender);
 
     $self->subject($email->header('Subject'));
 
-    my $body = $email->body;
+    my $body = $plain_part->body;
 
     for (@PARSERS) {
         my @results = $_->parse($self->subject, $body);

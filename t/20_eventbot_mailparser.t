@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use File::Slurp qw(slurp);
 use Data::Dumper;
 
@@ -56,6 +56,24 @@ use_ok('EventBot::MailParser') or die;
             event => 205,
         }],
         "Found attendance command in MIME encoded email"
+    );
+}
+
+# Test attendance to an event, in a multi-part html email:
+{
+    my $attend_mime = slurp('t/attend_html.txt');
+    my $parser = EventBot::MailParser->new;
+    $parser->parse($attend_mime);
+    diag(Dumper($parser->commands));
+    is_deeply(
+        $parser->commands,
+        [{
+            type => 'attend',
+            mode => '-',
+            name => 'Wintrmute (testing HTML emails)',
+            event => 204,
+        }],
+        "Found attendance command in multi-part HTML email"
     );
 }
 

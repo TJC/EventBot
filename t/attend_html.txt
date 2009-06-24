@@ -1,0 +1,85 @@
+                                                                                                                                                                                                                                                               
+MIME-Version: 1.0
+Received: by 10.142.68.20 with HTTP; Tue, 23 Jun 2009 00:23:13 -0700 (PDT)
+In-Reply-To: <20090610232007.2D99510005@penfold.example.net>
+References: <20090610232007.2D99510005@penfold.example.net>
+Date: Tue, 23 Jun 2009 17:23:13 +1000
+Delivered-To: toby@example.net
+Message-ID: <a20233a0906230023q5a46c347r51bde4868485410e@mail.gmail.com>
+Subject: Re: [sluts] [EVENT 204] Election results for 11-06-2009
+From: Toby Wintermute <tjc@example.com>
+To: London Goth Sluts <sluts@twisted.org.uk>
+Content-Type: multipart/alternative; boundary=001636e907cd15c1e1046cfedd19
+
+--001636e907cd15c1e1046cfedd19
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+-Wintrmute (testing HTML emails)
+
+2009/6/11 <eventbot@example.net>
+
+> New event added to database:
+> Date: 2009-06-11
+> Time: Evening
+> Place: Big Red, 385 Holloway Road, London, N7 0RY
+> Link:
+>
+> To indicate that you're attending this event, reply to this email and add a
+> line with "+ Yourname" (without the quotes). You can indicate that you're
+> not
+> sure, or are not coming, by using the minus and question mark characters at
+> the
+> start instead. You can change your status later by sending a new message.
+> Note that the +, - or ? must be at the very start of the line.
+> Put multiple attendees on individual lines.
+>
+> To view the attendance record, visit
+> http://eventbot.dryft.net/event/view/204
+>
+> --
+> Yours faithfully,
+> EventBot
+> http://eventbot.dryft.net/
+>
+>
+
+--001636e907cd15c1e1046cfedd19
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+-Wintrmute (testing HTML emails)<br><br><div class=3D"gmail_quote">2009/6/1=
+1  <span dir=3D"ltr">&lt;<a href=3D"mailto:eventbot@example.net">eventbot@dry=
+ft.net</a>&gt;</span><br><blockquote class=3D"gmail_quote" style=3D"border-=
+left: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left=
+: 1ex;">
+New event added to database:<br>
+Date: 2009-06-11<br>
+Time: Evening<br>
+Place: Big Red, 385 Holloway Road, London, N7 0RY<br>
+Link:<br>
+<br>
+To indicate that you&#39;re attending this event, reply to this email and a=
+dd a<br>
+line with &quot;+ Yourname&quot; (without the quotes). You can indicate tha=
+t you&#39;re not<br>
+sure, or are not coming, by using the minus and question mark characters at=
+ the<br>
+start instead. You can change your status later by sending a new message.<b=
+r>
+Note that the +, - or ? must be at the very start of the line.<br>
+Put multiple attendees on individual lines.<br>
+<br>
+To view the attendance record, visit <a href=3D"http://eventbot.dryft.net/e=
+vent/view/204" target=3D"_blank">http://eventbot.dryft.net/event/view/204</=
+a><br>
+<font color=3D"#888888"><br>
+--<br>
+Yours faithfully,<br>
+EventBot<br>
+<a href=3D"http://eventbot.dryft.net/" target=3D"_blank">http://eventbot.dr=
+yft.net/</a><br>
+<br>
+</font></blockquote></div><br>
+
+--001636e907cd15c1e1046cfedd19--
