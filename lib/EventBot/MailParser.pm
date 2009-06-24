@@ -5,12 +5,17 @@ use parent 'Class::Accessor';
 use Mail::Address;
 use Email::MIME;
 use EventBot::MailParser::Votes;
-use EventBot::MailParser::Events;
+use EventBot::MailParser::NewEvent;
+use EventBot::MailParser::Attend;
 use List::Util qw(first);
 
 __PACKAGE__->mk_accessors(qw(commands from subject));
 
-our @PARSERS = ('EventBot::MailParser::Votes', 'EventBot::MailParser::Events');
+our @PARSERS = (qw(
+    EventBot::MailParser::Votes
+    EventBot::MailParser::Attend
+    EventBot::MailParser::NewEvent
+));
 
 =head1 NAME
 

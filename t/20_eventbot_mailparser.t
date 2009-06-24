@@ -35,7 +35,7 @@ use_ok('EventBot::MailParser') or die;
             type => 'attend',
             mode => '+',
             name => 'Wintrmute (blah)',
-            event => undef, # TODO: Use an ID or something?
+            event => 123,
         }],
         "Found attendance command in plaintext email"
     );

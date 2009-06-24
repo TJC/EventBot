@@ -1,19 +1,30 @@
-package EventBot::MailParser::Events;
+package EventBot::MailParser::Attend;
 use strict;
 use warnings;
 
+=head1 NAME
+
+EventBot::MailParser::Attend
+
+=head1 SYNOPSIS
+
+Mail parser module for event attendance emails.
+
+ie. Where the subject line is [Event 1234] and the body contains something
+like:
+
+  +Your Name (optional comment)
+
+=cut
+
 sub parse {
     my ($class, $subject, $body) = @_;
-    my $event_id;
 
-    if ($subject =~ /\[event (\d+)\]/i) {
-        $event_id = $1;
-        warn "Suspected event ID: $event_id\n";
-    }
+    my ($event_id) = $subject =~ /\[event (\d+)\]/i;
+    return() unless $event_id;
+
     my @commands;
     my @lines = split("\n", $body);
-    # TODO: Bring over the old event detection routines (ie. by name instead of
-    # using the subject line's event id)
 
     for my $line (@lines) {
         if (my($mode, $name) = $line =~
