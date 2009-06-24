@@ -1,7 +1,9 @@
 package EventBot::WWW::M::DB;
-
 use strict;
+use warnings;
 use base 'Catalyst::Model::DBIC::Schema';
+require EventBot::WWW; # TODO: Remove this almost-circular dependency..
+# (We use to get at the config object, which we can access in better ways)
 
 __PACKAGE__->config(
     schema_class => 'EventBot::Schema',
@@ -32,7 +34,7 @@ L<Catalyst::Model::DBIC::Schema> Model using schema L<EventBot::Schema>
 
 =head1 AUTHOR
 
-A clever guy
+Toby Corkindale, tjc@cpan.org
 
 =head1 LICENSE
 
