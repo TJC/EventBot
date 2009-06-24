@@ -1,154 +1,101 @@
 package EventBot;
-
-use 5.008001;
+use 5.010;
 use strict;
 use warnings;
+use feature qw(switch);
 
 use Mail::Address;
 use Email::Simple;
 use Email::Simple::Creator;
 use Email::Send;
 use EventBot::Schema;
-#use Data::Dumper;
+use EventBot::MailParser;
+use base 'Class::Accessor';
+__PACKAGE__->mk_accessors(qw(schema parser logfile from_addr list_addr));
 
-our $VERSION = '0.20';
+our $VERSION = '2.00';
 
 sub new {
     my ($class, $args) = @_;
-    my $self = {};
-    $self->{logfile} = $args->{logfile};
-    $self->{schema} = EventBot::Schema->connect(
+    my $self = bless {}, $class;
+
+    $self->logfile($args->{logfile});
+    # TODO: Get addresses from config file
+    $self->from_addr('eventbot@dryft.net');
+    $self->list_addr('sluts@twisted.org.uk');
+
+    $self->schema( EventBot::Schema->connect(
+        # TODO: Take database params from config file
         'dbi:Pg:dbname=eventbot', undef, undef,
         {
             AutoCommit => 1,
             pg_enable_utf8 => 1,
             pg_server_prepare =>1
         }
-    );
-    return bless $self, $class;
-}
+    ));
 
-sub schema {
-    return $_[0]->{schema};
+    $self->parser(EventBot::MailParser->new);
+
+    return $self;
 }
 
 sub parse_email {
     my ($self, $email) = @_;
     my ($sender, $event_id);
-    die("need email object") 
-        unless (ref $email and $email->isa('Email::Simple'));
 
-    eval {
-        ($sender) = Mail::Address->parse($email->header("From"));
-    };
-    if ($@ or not ref $sender) {
-        $self->log("Error parsing From address: " . $email->header("From"));
-        return;
-    }
+    $self->parser->parse($email);
 
-    $self->log("Parsing email from " . $sender->address);
-    $self->{sender} = $sender->address;
-    $self->{subject} = $email->header('Subject');
+    $self->log("Parsing email from " . $self->parser->from->address);
 
-    if ($self->{subject} =~ /\[event (\d+)\]/i) {
-        $event_id = $1;
-        $self->log("Suspected event ID: $event_id");
-    }
-
-    my @lines = split("\n", $email->body);
-    my (%vars, %attendees);
-    foreach my $line (@lines) {
-        # Detect election votes:
-        if (my @votes = $line =~
-            /^
-            \s*
-            I\svote\s*:\s*
-            ([A-Za-z])\s*
-            ([A-Za-z])?\s*
-            ([A-Za-z])?\s*
-            ([A-Za-z])?\s*
-            /x
-        ) {
-            $self->log("Found votes: " . join(', ', @votes));
-            return $self->do_votes($sender, @votes);
+    for my $command (@{$self->parser->commands}) {
+        given($command->{type}) {
+            when ('newevent') {
+                $self->do_newevent($command);
+            }
+            when ('vote') {
+                $self->do_votes($command);
+            }
+            when ('attend') {
+                $self->do_attend($command);
+            }
         }
-
-        # Detect events:
-        if (my (undef, $key, $val) = $line =~
-          /^
-          (\s*>\s*)*
-          (\w{2,8})
-          :\s+
-          ([[:print:]]+)
-          $/x) {
-            $val =~ s/\s*$//;
-            $key = lc($key);
-            $vars{$key} = $val;
-        }
-        # Detect attendance notices:
-        elsif (my($mode, $name) = $line =~
-          /^\s*
-          ([-\+\?])
-          \s*
-          [`']?
-          ([\w\d][[:print:]]+?)
-          [`']?
-          \s*$
-          /x) {
-            $attendees{$name} = $mode;
-            $self->log("Located attendee: $name");
-        }
-    }
-
-    # Attempt to locate event based on event id, or the date/time/place:
-    my $event;
-    if ($event_id) {
-        $event = $self->schema->resultset('Events')->find($event_id);
-    }
-    elsif ( $vars{date} and $vars{time} and $vars{place} ) {
-        $event = $self->find_event(\%vars);
-    }
-    else {
-        $self->log("Insufficient details to create/locate event");
-        return;
-    }
-
-    if (%attendees) {
-        if (not $event) {
-            $self->log("Can't add attendees as no existing event!");
-            return;
-        }
-        $self->log("Appending attendees to existing event..");
-        # Don't try to add a new event, just add people
-        $self->schema->txn_do(sub {
-            $event->add_people(%attendees);
-        });
-    }
-    else {
-        # Create a new event:
-        $self->log("Creating a new event..");
-        $self->create_event(\%vars);
     }
 }
 
+sub do_attend {
+    my ($self, $details) = @_;
+    my $event_id = $details->{event};
+    my $event = $self->schema->resultset('Events')->find($event_id);
+    if (not $event) {
+        $self->log("Can't add attendees as event $event_id not found!");
+        return;
+    }
+    $self->log("Appending attendees to existing event..");
+
+    # TODO: Update API for adding new attendees?
+    $event->add_people( $details->name, $details->mode );
+}
+
+# NOTE: This function is from previous version of eventbot..
 sub find_event {
     my ($self, $vars) = @_;
-#    $self->log("Searching for event based on: " . Dumper($vars));
-    my ($event) = $self->schema->resultset('Events')->search({
-            startdate => $vars->{date},
-            starttime => $vars->{time},
-            place     => $vars->{place}
-        });
-    if (not $event) {
-        $self->log("Could not locate event based on these details.");
-    }
+
+    my $event = $self->schema->resultset('Events')->single({
+        startdate => $vars->{date},
+        starttime => $vars->{time},
+        place     => $vars->{place}
+    });
+
+    $self->log("Could not locate event based on these details.")
+        unless $event;
+
     return $event;
 }
 
 sub log {
     my ($self, $msg) = @_;
-    if (defined $self->{logfile}) {
-        $self->{logfile}->print("$msg\n");
+    if (defined $self->logfile) {
+        $self->logfile->print("$msg\n");
     }
     else {
         print "Log: $msg\n";
@@ -163,19 +110,23 @@ our %keyconv = (
     'comments' => 'comments',
 );
 
-sub create_event {
+# NOTE: This function is from previous version of eventbot..
+sub do_newevent {
     my ($self, $vars) = @_;
+
+    # Check that these vars are populated!
+    unless ($vars->{'date'} and $vars->{'time'} and $vars->{place}) {
+        $self->log("Cowardly refusing to create empty event!");
+        return;
+    }
+
     # Check if one already exists:
     my $event = $self->find_event($vars);
     if ($event) {
         $self->log("Event already exists..");
         return $event;
     }
-    # Check that these vars are populated!
-    unless ($vars->{'date'} and $vars->{'time'} and $vars->{place}) {
-        $self->log("Cowardly refusing to create empty event!");
-        return;
-    }
+
     my %new;
     foreach (keys %$vars) {
         if (exists $keyconv{$_}) {
@@ -194,6 +145,8 @@ sub create_event {
     return $event;
 }
 
+# TODO: Convert this function to use Template::Toolkit instead of inline
+# text..
 sub mail_new_event {
     my ($self, $event) = @_;
     my ($date, $time, $place, $url, $id) = (
@@ -222,15 +175,16 @@ EventBot
 http://eventbot.dryft.net/
 
 EOM
-    my $subject = $self->{subject};
+    my $subject = $self->parser->subject;
     $subject =~ s/^re:\s+//i;
     $subject =~ s/\s*\[event\s*\d*\s*\]\s*//i;
     $subject =~ s/\s*\[sluts]\s*//;
     $subject = "[EVENT $id] " . $subject;
+
     my $email = Email::Simple->create(
         header => [
-            From => 'eventbot@dryft.net',
-            To   => 'sluts@twisted.org.uk',
+            From => $self->from_addr,
+            To   => $self->list_addr,
             Subject => $subject
         ],
         body => $body
@@ -251,7 +205,9 @@ voter==Mail::Address
 =cut
 
 sub do_votes {
-    my ($self, $voter, @votes) = @_;
+    my ($self, $command) = @_;
+    my @votes = @{$command->{votes}};
+    my $voter = $self->parser->from;
 
     my $person = $self->schema->resultset('People')->find_or_create(
         {
@@ -259,16 +215,19 @@ sub do_votes {
             name => ($voter->name || $voter->address)
         }
     );
+    # Update their name in case they've changed it:
     $person->name($voter->name || $voter->address);
     $person->update;
 
+    # Currently just taking their primary vote..
+    # TODO: Implement full run-off elections, and store all votes in order.
     my $vote = uc(shift @votes);
 
     # Get the most recent enabled election:
     my $election = $self->schema->resultset('Elections')->current;
     if (not $election) {
         $self->log("Erm, apparently no elections are running!");
-        exit;
+        return;
     }
 
     $election->vote($vote, $person);
@@ -284,11 +243,14 @@ EventBot - Garner events and attendees from emails
 =head1 SYNOPSIS
 
   use EventBot;
-  blah blah blah
+  my $bot = EventBot->new({
+    logfile => IO::File->new('/some/file')
+  });
+  $bot->parse_email($text);
 
 =head1 DESCRIPTION
 
-Blah blah blah.
+Process emails to find events, attendance notices and votes.
 
 =head2 EXPORT
 
@@ -296,18 +258,18 @@ None by default.
 
 =head1 SEE ALSO
 
-Associated web functionality (to be written).
+EventBot::Schema and EventBot::MailParser and EventBot::WWW
 
 =head1 AUTHOR
 
-Toby Corkindale, E<lt>cpan@corkindale.netE<gt>
+Toby Corkindale, tjc@cpan.org
 
 =head1 COPYRIGHT AND LICENSE
 
 Copyright (C) 2006 by Toby Corkindale
 
 This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.8 or,
+it under the same terms as Perl itself, either Perl version 5.10.0 or,
 at your option, any later version of Perl 5 you may have available.
 
 =cut
