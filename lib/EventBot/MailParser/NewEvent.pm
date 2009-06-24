@@ -4,15 +4,33 @@ use warnings;
 
 sub parse {
     my ($class, $subject, $body) = @_;
+    my %vars; # for events..
 
-    my @commands;
     my @lines = split("\n", $body);
-    # TODO: Bring over the old event detection routines (ie. by name instead of
-    # using the subject line's event id)
-
     for my $line (@lines) {
+        # Detect events:
+        if (my (undef, $key, $val) = $line =~
+          /^
+          (\s*>\s*)*
+          (\w{2,8})
+          :\s+
+          ([[:print:]]+)
+          $/x) {
+            $val =~ s/\s*$//;
+            $key = lc($key);
+            $vars{$key} = $val;
+        }
     }
-    return @commands;
+
+    if ( $vars{'date'} and $vars{'time'} and $vars{'place'} ) {
+        # Don't pass on a "type" var:
+        delete $vars{type};
+        return({
+            type => 'newevent',
+            %vars,
+        });
+    }
+    return;
 }
 
 1;

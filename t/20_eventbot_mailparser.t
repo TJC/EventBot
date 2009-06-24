@@ -17,7 +17,11 @@ use_ok('EventBot::MailParser') or die;
         $parser->commands,
         [ {
             type => 'newevent',
-            # TODO
+            time => '19:00 GMT onwards',
+            date => '2006-11-23',
+            place => 'The Anchor, 34 Park Street, Bankside, Southwark, London, SE1 9EF',
+            comments => 'http://www.beerintheevening.com/pubs/show.shtml/1638',
+            anddo => 'list sluts tarts expire 24/11/2006',
         } ],
         "Locate new event in email"
     );
@@ -28,9 +32,12 @@ use_ok('EventBot::MailParser') or die;
     my $attend_text = slurp('t/attend.txt');
     my $parser = EventBot::MailParser->new;
     $parser->parse($attend_text);
-    diag(Dumper($parser->commands));
+    my $commands = $parser->commands;
+    diag(Dumper($commands));
+    # Skip the newevent that is also usually created:
+    my @attends = grep { $_->{type} eq 'attend' } @$commands;
     is_deeply(
-        $parser->commands,
+        \@attends,
         [{
             type => 'attend',
             mode => '+',
