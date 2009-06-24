@@ -1,1 +1,21 @@
-Run script/eventbot_www_server.pl to test the application.
+Hi,
+This is EventBot, version, erm, about 1.99..
+It's currently in a state of flux as I attempt to migrate the dodgy-but-working
+version-1 code over to a slightly-less-dodgy version-2.
+
+I suggest you visit the wiki page for up-to-date info:
+http://wiki.github.com/TJC/EventBot/gettingstarted
+
+To deploy the database: script/eventbot_deploy.pl eventbot
+
+To run the webserver: script/eventbot_www_server.pl -r -d
+Then visit it on http://localhost:3000/
+
+The mail filter is script/eventbot_maild.pl which is designed to work as a
+procmail filter, and expects one email at a time to be piped in via STDIN.
+
+Please raise any issues (or wishlists) at http://github.com/TJC/EventBot/issues
+
+A wiki is also available at: http://wiki.github.com/TJC/EventBot
+
+-Toby
