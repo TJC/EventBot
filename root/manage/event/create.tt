@@ -1,0 +1,37 @@
+[% INCLUDE header.tt %]
+[% IF message %]
+<div style="color: red;">[% message %]</div>
+[% END %]
+
+<form name="newEvent" method="POST">
+<div class="event">
+  Nominee: <select name="nominee">[% FOREACH nom IN nominees.all %]
+    [% IF nom.email.length != 32 # Skip MD5SUMs of emails %]
+    <option value="[% nom.id %]">[% nom.name %]</option>
+    [% END %]
+  [% END %]</select>
+  <br/>
+  
+  Venue: <select name="venue">
+    <option value="">Other</option>
+    [% FOREACH pub IN venues.all %]
+    <option value="[% pub.id %]">[% pub.name %] ([% pub.region %])</option>
+    [% END %]
+  </select>
+  <br/>
+  Other: <input type="text" name="venue_other" size="48" /><br/>
+  <em>To enter free-text please select "Other" in the pub list!</em>
+  Address: <input type="text" name="venue_other" size="48" /><br/>
+  <br/><em>Only needed if Other selected above.</em><br/>
+
+  Date: <input type="text" size="12" name="date"/><br/>
+  <em>Use DD/MM/YYYY or YYYY-MM-DD date formats.</em><br/>
+
+  Comment: <input type='text' size='80' name='comment'/><br/>
+
+  <input type="submit" value="Create"/>
+</div>
+</form>
+[% INCLUDE footer.tt %]
+
+

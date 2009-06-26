@@ -1,0 +1,8 @@
+[% INCLUDE header.tt %]
+
+<div class="event">
+  Endorsement stuff goes here.
+</div>
+
+[% INCLUDE footer.tt %]
+
