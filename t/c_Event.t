@@ -1,14 +1,14 @@
 use strict;
 use warnings;
-use Test::More;
+use Test::More tests => 2;
+use Test::WWW::Mechanize::Catalyst 'EventBot::WWW';
 
-eval "use Test::WWW::Mechanize::Catalyst 'EventBot::WWW'";
-plan $@
-    ? ( skip_all => 'Test::WWW::Mechanize::Catalyst required' )
-    : ( tests => 2 );
+# Another very lame test, sorry.. This needs some Event Fixtures and proper
+# tests to see if event details are visible, etc.
 
-ok( my $mech = Test::WWW::Mechanize::Catalyst->new, 'Created mech object' );
+my $mech = Test::WWW::Mechanize::Catalyst->new;
 
-$mech->get_ok( 'http://localhost/event' );
+$mech->get_ok( '/event/list' );
 
+$mech->get_ok( '/event/pastlist' );
 
