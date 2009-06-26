@@ -84,6 +84,8 @@ sub add_people {
 
 sub split_name_comment {
     my $name = shift;
+    # Ditch trailing periods:
+    $name =~ s/\s*\.+\s*//;
     if ($name =~ /^
             ([[:print:]]+?)
             \s*
