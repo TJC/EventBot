@@ -1,4 +1,5 @@
-[% INCLUDE header.tt %]
+[% INCLUDE header.tt need_datepicker=1 %]
+
 [% IF message %]
 <div style="color: red;">[% message %]</div>
 [% END %]
@@ -24,7 +25,7 @@
   Address: <input type="text" name="venue_other" size="48" /><br/>
   <br/><em>Only needed if Other selected above.</em><br/>
 
-  Date: <input type="text" size="12" name="date"/><br/>
+  Date: <input type="text" size="16" name="date" /><br/>
   <em>Use DD/MM/YYYY or YYYY-MM-DD date formats.</em><br/>
 
   Comment: <input type='text' size='80' name='comment'/><br/>
@@ -32,6 +33,13 @@
   <input type="submit" value="Create"/>
 </div>
 </form>
+
+<script type='text/javascript'>
+  $(function(){
+    $('input[name=date]').datepicker(
+        { dateFormat: 'dd/mm/yy' }
+    );
+  });
+</script>
+
 [% INCLUDE footer.tt %]
-
-
