@@ -2,8 +2,15 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
+    <title>[% title || 'EventBot' %]</title>
     <link title="defaultStyle" href="[% base %]static/main.css" type="text/css"
           rel="stylesheet" />
+    <script type="text/javascript" src="/static/jquery-1.3.2.min.js"></script>
+[% IF need_datepicker %]
+    <link type="text/css" href="static/ui/ui.all.css" rel="stylesheet" />
+    <script type="text/javascript" src="/static/ui/ui.core.js"></script>
+    <script type="text/javascript" src="/static/ui/ui.datepicker.js"></script>
+[% END %]
   </head>
   <body>
       <p class="slogan">
