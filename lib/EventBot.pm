@@ -77,10 +77,13 @@ sub do_attend {
         $self->log("Can't add attendees as event $event_id not found!");
         return;
     }
-    $self->log("Appending attendees to existing event..");
+
+    $self->log("Adding attendee: " . $details->{name}
+        . " to event ID " . $event->id
+    );
 
     # TODO: Update API for adding new attendees?
-    $event->add_people( $details->name, $details->mode );
+    $event->add_people( $details->{name}, $details->{mode} );
 }
 
 # NOTE: This function is from previous version of eventbot..
