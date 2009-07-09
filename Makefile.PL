@@ -6,7 +6,7 @@ all_from 'lib/EventBot.pm';
 requires 'Class::Accessor';
 requires    'File::HomeDir';
 requires    'File::Spec';
-requires    'Email::Simple' => 2.01;
+requires    'Email::Simple' => 2.005;
 requires    'Email::MIME';
 requires    'Email::Simple::Creator' => 1.423;
 requires    'Email::Send'  => 2.17;
