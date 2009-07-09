@@ -101,7 +101,7 @@ sub find_event {
 
 sub log {
     my ($self, $msg) = @_;
-    if (defined $self->logfile) {
+    if (defined $self->logfile and not $ENV{EVENTBOT_TEST}) {
         $self->logfile->print("$msg\n");
     }
     else {
@@ -196,6 +196,9 @@ EOM
         ],
         body => $body
     );
+
+    # Do not *actually* send email if we're testing:
+    return if $ENV{EVENTBOT_TEST};
 
     Email::Send->new({mailer => 'Sendmail'})->send($email->as_string);
 #    my $mailer = Email::Send->new({mailer => 'SMTP'});
