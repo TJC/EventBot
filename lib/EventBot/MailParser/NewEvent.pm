@@ -9,13 +9,14 @@ sub parse {
     my @lines = split("\n", $body);
     for my $line (@lines) {
         # Detect events:
-        if (my (undef, $key, $val) = $line =~
+        if (my ($key, $val) = $line =~
           /^
-          (\s*>\s*)*
-          (\w{2,8})
-          :\s+
-          ([[:print:]]+)
-          $/x) {
+            \s*
+            (\w{2,8})
+            :\s+
+            ([[:print:]]+)
+          $/x
+        ) {
             $val =~ s/\s*$//;
             $key = lc($key);
             $vars{$key} = $val;
@@ -34,4 +35,3 @@ sub parse {
 }
 
 1;
-
