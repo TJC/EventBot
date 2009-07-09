@@ -41,14 +41,14 @@ sub new {
         }
     ));
 
-    $self->parser(EventBot::MailParser->new);
-
     return $self;
 }
 
 sub parse_email {
     my ($self, $email) = @_;
     my ($sender, $event_id);
+
+    $self->parser(EventBot::MailParser->new);
 
     $self->parser->parse($email);
 
@@ -115,9 +115,11 @@ our %keyconv = (
     'place' => 'place',
     'url'  => 'url',
     'comments' => 'comments',
+    'link' => 'url',
 );
 
 # NOTE: This function is from previous version of eventbot..
+# I think I've migrated it across OK now.
 sub do_newevent {
     my ($self, $vars) = @_;
 
@@ -140,11 +142,16 @@ sub do_newevent {
             $new{$keyconv{$_}} = $vars->{$_};
         }
     }
+
     # Kludge for comment->URL
-    if (not $new{url} and $new{comments} =~ /^(http:[^\s]+)/) {
+    if (not $new{url}
+        and $new{comments}
+        and $new{comments} =~ /^(http:[^\s]+)/
+    ) {
         $new{url} = $1;
         delete $new{comments};
     }
+
     $event = $self->schema->resultset('Events')->create(\%new);
     $self->log("Created new event, id " . $event->id);
     # At this point, I should email the list to say..
