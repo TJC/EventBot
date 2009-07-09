@@ -4,10 +4,12 @@ use strict;
 use warnings;
 use feature qw(switch);
 
+use Carp qw(croak);
 use Mail::Address;
 use Email::Simple;
 use Email::Simple::Creator;
 use Email::Send;
+use Config::General;
 use EventBot::Schema;
 use EventBot::MailParser;
 use base 'Class::Accessor';
@@ -20,17 +22,22 @@ sub new {
     my $self = bless {}, $class;
 
     $self->logfile($args->{logfile});
-    # TODO: Get addresses from config file
-    $self->from_addr('eventbot@dryft.net');
-    $self->list_addr('sluts@twisted.org.uk');
+
+    # Get addresses from config file
+    croak("Config file not specified") unless $args->{config};
+    my %config = Config::General->new($args->{config})->getall;
+    die("Failed to read valid configuration!") unless %config;
+
+    $self->from_addr($config{from_addr});
+    $self->list_addr($config{list_addr});
 
     $self->schema( EventBot::Schema->connect(
-        # TODO: Take database params from config file
-        'dbi:Pg:dbname=eventbot', undef, undef,
+        $config{database}->{dsn},
+        $config{database}->{username},
+        $config{database}->{password},
         {
             AutoCommit => 1,
             pg_enable_utf8 => 1,
-            pg_server_prepare =>1
         }
     ));
 

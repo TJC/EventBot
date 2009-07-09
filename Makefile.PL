@@ -3,6 +3,7 @@ use inc::Module::Install;
 name 'EventBot';
 all_from 'lib/EventBot.pm';
 
+requires 'Config::General';
 requires 'Class::Accessor';
 requires    'File::HomeDir';
 requires    'File::Spec';
