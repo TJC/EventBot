@@ -4,12 +4,15 @@ use warnings;
 use feature ':5.10';
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-use EventBot::Schema;
+use EventBot;
 use Getopt::Long;
 use MIME::Lite;
 use DateTime;
 
 my ($dbname, $user) = qw(eventbot eventbot);
+my $bot = EventBot->new({
+	    config => ($ENV{EVENTBOT_CONFIG} || 'eventbot.cfg'),
+});
 my ($help, $sendmail, $election_id);
 GetOptions(
     'database=s' => \$dbname,
@@ -33,8 +36,7 @@ Params:
 
 my $thursday = next_thursday();
 
-my $schema = EventBot::Schema->connect("dbi:Pg:dbname=$dbname", $user)
-    or die("Failed to connect to DB!");
+my $schema = $bot->schema;
 
 my $e;
 if ($election_id ) {
