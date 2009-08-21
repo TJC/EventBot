@@ -16,7 +16,7 @@ sub parse {
             ([A-Za-z])?\s*
             ([A-Za-z])?\s*
             ([A-Za-z])?\s*
-            /x
+            /xi
         ) {
             warn "Found votes: " . join(', ', @votes) . "\n";
             push(@commands, {
