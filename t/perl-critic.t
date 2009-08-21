@@ -1,4 +1,5 @@
 #!/usr/bin/env perl
+# vim: sw=4 sts=4 et tw=75 wm=5
 
 ## Run Perl::Critic against the source code and the tests
 ## Requires TEST_CRITIC to be set

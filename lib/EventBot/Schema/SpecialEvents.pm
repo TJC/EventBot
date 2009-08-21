@@ -1,3 +1,4 @@
+# vim: sw=4 sts=4 et tw=75 wm=5
 package EventBot::Schema::SpecialEvents;
 use strict;
 use warnings;
