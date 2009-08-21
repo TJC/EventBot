@@ -12,10 +12,10 @@ sub parse {
             /^
             \s*
             I\svote\s*:\s*
-            ([A-Za-z])\s*
-            ([A-Za-z])?\s*
-            ([A-Za-z])?\s*
-            ([A-Za-z])?\s*
+            ([A-Z])\s*
+            ([A-Z])?\s*
+            ([A-Z])?\s*
+            ([A-Z])?\s*
             /xi
         ) {
             warn "Found votes: " . join(', ', @votes) . "\n";
