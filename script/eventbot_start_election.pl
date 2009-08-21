@@ -87,8 +87,8 @@ VoteBot
 
 
 my $mail = MIME::Lite->new(
-    From => 'eventbot@dryft.net',
-    To   => ($sendmail ? 'sluts@twisted.org.uk' : 'dryfter@gmail.com'),
+    From => $bot->from_addr,
+    To   => $bot->list_addr,
     Subject => 'Pub election for ' . $thursday->dmy,
     Data => $body
 );

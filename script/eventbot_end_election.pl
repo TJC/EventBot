@@ -107,8 +107,8 @@ $e->enabled(0);
 $e->update;
 
 my $mail = MIME::Lite->new(
-    From => 'eventbot@dryft.net',
-    To   => ($sendmail ? 'sluts@twisted.org.uk' : 'dryfter@gmail.com'),
+    From => $bot->from_addr,
+    To   => $bot->list_addr,
     Subject => 'Election results for ' . next_thursday()->dmy,
     Data => join("\n", @body),
 );
