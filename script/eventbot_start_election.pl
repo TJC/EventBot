@@ -73,9 +73,11 @@ $body .= qq{
 
 To vote, please send an email either directly to me, or to the list, which
 says:
-I vote: X Y Z
+I vote: X
 
-Where X Y Z are actually A B C etc, ordered in descending preference.
+Where X is one of A B C etc.  Currently you only have a single,
+non-transferrable, vote.  Attempting to express a preference will merely
+lead to the first referenced pub being counted as your vote.
 
 You can keep track of votes (and the result) at:
 http://eventbot.dryft.net/election/$e_id/result
