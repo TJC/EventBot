@@ -64,33 +64,41 @@ Usage:
 =cut
 
 sub vote {
-    my ($self, $vote, $person) = @_;
-    die("Missing vote") unless $vote;
+    my ($self, $votes, $person) = @_;
+    die("Missing votes") unless ($votes and @$votes);
     die("Missing person") unless $person;
 
-    die("Invalid vote: $vote") unless $vote =~ /^[A-Z]$/;
-
-    # Need to convert $pub into the correct ID from the candidates..
-    my $vote_num = ord($vote) - ord('A');
-    my @cand_list = split(':', $self->candidate_list);
-    my $candidate_id = $cand_list[$vote_num];
-    my $pub = $self->result_source->schema->resultset('Pubs')
-        ->find($candidate_id);
-
-    die("Invalid vote, pub $vote ($candidate_id) not found") unless $pub;
-
     $self->result_source->schema->txn_do(sub {
+        # Delete any previous votes:
         $self->search_related('votes',
             {
                 person => $person->id
             }
         )->delete;
-        $self->add_to_votes(
-            {
-                person => $person,
-                pub => $pub
-            }
-        );
+        my $rank = 1;
+        for my $vote (@$votes) {
+
+            die("Invalid vote: $vote") unless $vote =~ /^[A-Z]$/;
+
+            # Need to convert $pub into the correct ID from the candidates..
+            my $vote_num = ord($vote) - ord('A');
+            my @cand_list = split(':', $self->candidate_list);
+            my $candidate_id = $cand_list[$vote_num];
+            my $pub = $self->result_source->schema->resultset('Pubs')
+                ->find($candidate_id);
+
+            die("Invalid vote, pub $vote ($candidate_id) not found")
+                unless $pub;
+
+            $self->add_to_votes(
+                {
+                    person => $person,
+                    rank => $rank++,
+                    pub => $pub
+                }
+            );
+
+        }
     });
 }
 
