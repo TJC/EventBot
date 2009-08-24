@@ -96,6 +96,7 @@ if ($sendmail) {
     $mail->send;
 }
 else {
+    say " ** TEST MODE ** Not really sending mail to anyone!";
     say $mail->as_string;
 }
 
