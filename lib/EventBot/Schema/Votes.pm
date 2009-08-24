@@ -12,7 +12,7 @@ __PACKAGE__->add_columns(
     pub => { data_type => 'INTEGER', is_nullable => 0 },
     rank => { data_type => 'INTEGER', is_nullable => 0, default_value => 0 },
 );
-__PACKAGE__->set_primary_key(qw(election person pub rank));
+__PACKAGE__->set_primary_key(qw(election person pub));
 
 __PACKAGE__->belongs_to(
     election => 'EventBot::Schema::Elections'
