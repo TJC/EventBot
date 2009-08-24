@@ -234,4 +234,33 @@ sub current :ResultSet {
     )->next;
 }
 
+=head2 conclude
+
+Concludes the election, and tallies up the results.
+
+=cut
+
+sub conclude :ResultSet {
+    my $self = shift;
+
+    my $rs = $self->search_related('votes', undef,
+        {
+            select => [ 'pub', { count => 'pub' } ],
+            as => ['pub', 'pub_count'],
+            group_by => ['pub'],
+        }
+    );
+
+    # sort in descending order: (because dbix wasn't letting me sort)
+    my @results = sort {
+        $a->get_column('pub_count') <= $b->get_column('pub_count')
+    } $rs->all;
+
+    $self->winner($results[0]->pub);
+    $self->enabled(0);
+    $self->update;
+
+    return @results;
+}
+
 1;

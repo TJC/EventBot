@@ -47,21 +47,10 @@ else {
         or die("No current election found!\n");
 }
 
-my $rs = $e->search_related('votes', undef,
-    {
-        select => [ 'pub', { count => 'pub' } ],
-        as => ['pub', 'pub_count'],
-        group_by => ['pub'],
-    }
-);
+my @results = $e->conclude; # Finish the election and get vote tallies!
 
-# sort in descending order:
-my @results = sort {
-    $a->get_column('pub_count') <= $b->get_column('pub_count')
-} $rs->all;
 
-# The winner is the top one:
-my $pub = $results[0]->pub;
+my $pub = $e->winner;
 my @body;
 push @body, 'We have a winner:';
 push @body, sprintf('Place: %s (%s)', $pub->name, $pub->region);
@@ -102,9 +91,6 @@ push @body, sprintf(
     $e->id
 );
 
-$e->winner($pub);
-$e->enabled(0);
-$e->update;
 
 my $mail = MIME::Lite->new(
     From => $bot->from_addr,
