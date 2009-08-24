@@ -14,7 +14,8 @@ requires    'Email::Simple::Creator' => 1.423;
 requires    'Email::Send'  => 2.17;
 requires    'MIME::Lite' => 3;
 requires    'Mail::Address'     => 1.67; # figure out correct one
-requires    'DBIx::Class'       => 0.08013;
+requires    'DBIx::Class'       => 0.08107;
+requires    'SQL::Translator'   => 0.09007;
 requires    'File::Slurp';
 requires 'Catalyst' => '5.7100';
 requires 'Catalyst::View::TT';
