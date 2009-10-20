@@ -16,7 +16,7 @@ use Catalyst::Runtime '5.70';
 
 use Catalyst qw/ConfigLoader Static::Simple/;
 
-our $VERSION = '0.10';
+our $VERSION = '0.15';
 
 # Configure the application. 
 #
@@ -27,7 +27,10 @@ our $VERSION = '0.10';
 # with a external configuration file acting as an override for
 # local deployment.
 
-__PACKAGE__->config( name => 'EventBot::WWW' );
+__PACKAGE__->config(
+    name => 'EventBot',
+    default_view => 'TT',
+);
 
 # Start the application
 __PACKAGE__->setup;

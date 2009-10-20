@@ -1,0 +1,12 @@
+[% INCLUDE header.tt %]
+<div class="event">
+  There is now an API available for EventBot.
+  <br/>
+  The initial calls are:<br/>
+  <ul>
+    <li>/api/current_events</li>
+    <li>/api/election_candidates</li>
+  </ul>
+  Both return data in JSON format.
+</div>
+[% INCLUDE footer.tt %]
