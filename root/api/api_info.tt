@@ -1,4 +1,4 @@
-[% INCLUDE header.tt %]
+[% INCLUDE header.tt need_api=1 %]
 <div class="event">
   There is now an API available for EventBot.
   <br/>
@@ -8,5 +8,35 @@
     <li>/api/election_candidates</li>
   </ul>
   Both return data in JSON format.
+<br/><br/>
+
+    Current events:<br/>
+    <div id='events'>
+    This is a demonstration of the AJAX API.<br/>
+    Press button to update..
+    </div>
+    <br/>
+    <input type='button' name='update' id='update_events' value="Update" />
+
 </div>
+
+<script type='text/javascript'>
+  $(function(){
+    $('#update_events').click(function(){
+        eventbot.current_events(
+          function(result) {
+            $('#events').text('');
+            $.each(result, function(i,item){
+                var event = $("<a/>");
+                event.attr('href', eventbot.event_url_from_id(item.id));
+                event.text(item.place);
+                event.appendTo('#events');
+                $("<br/>").appendTo('#events');
+            });
+          }
+        );
+    });
+  });
+</script>
+
 [% INCLUDE footer.tt %]
