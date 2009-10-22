@@ -3,7 +3,7 @@
  * Version 0.1
  */
 
-var eventbot_base_url = 'http://arya:3000';
+var eventbot_base_url = 'http://eventbot.dryft.net';
 
 var eventbot = {
   current_events: function(callback) {
