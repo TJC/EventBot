@@ -240,7 +240,7 @@ Concludes the election, and tallies up the results.
 
 =cut
 
-sub conclude :ResultSet {
+sub conclude {
     my $self = shift;
 
     my $rs = $self->search_related('votes', undef,
