@@ -71,8 +71,8 @@ push @body, 'Vote tallies:';
 
 # Display tallies:
 for my $r (@results) {
-    push @body, sprintf('%s has %d votes:',
-                $r->pub->name, $r->get_column('pub_count')
+    push @body, sprintf('%s has a score of %d:',
+                $r->pub->name, $r->get_column('pub_score')
             );
     my @voters = $schema->resultset('Votes')->search(
         {
@@ -81,7 +81,11 @@ for my $r (@results) {
         }
     );
     for my $v (@voters) {
-        push @body, ' * ' . $v->person->name;
+        push(@body,
+            sprintf(' * %s (%d points)',
+                $v->person->name, (5 - $v->rank) * 2
+            )
+        );
     }
 }
 
