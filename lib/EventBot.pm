@@ -240,9 +240,8 @@ sub do_votes {
     $person->name($voter->name || $voter->address);
     $person->update;
 
-    # Currently just taking their primary vote..
-    # TODO: Implement full run-off elections, and store all votes in order.
-    my $vote = uc(shift @votes);
+    # Make sure votes are uppercase:
+    @votes = map { uc($_) } @votes;
 
     # Get the most recent enabled election:
     my $election = $self->schema->resultset('Elections')->current;
@@ -251,7 +250,9 @@ sub do_votes {
         return;
     }
 
-    $election->vote($vote, $person);
+    # Store all their votes, in order:
+    # TODO: Implement full run-off elections.
+    $election->vote(\@votes, $person);
 }
 
 1;

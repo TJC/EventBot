@@ -33,10 +33,16 @@ sub index : Private {
     $c->stash->{template} = 'frontpage.tt';
 }
 
-sub default : Private {
+sub fourohfour : Private {
     my ($self, $c) = @_;
     $c->stash->{template} = '404.tt';
     $c->response->status(404);
+    $c->stash->{current_view} = 'TT'; # Even if you hit the API..
+}
+
+sub default : Private {
+    my ($self, $c) = @_;
+    $c->detach('fourohfour');
 }
 
 =head2 end

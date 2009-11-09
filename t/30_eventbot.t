@@ -6,6 +6,7 @@ use Test::More 'no_plan';
 use FindBin;
 use lib "$FindBin::Bin";
 use Test::EventBot;
+use Fixture::Pub;
 use File::Slurp qw(slurp);
 use File::Temp qw(:seekable);
 use IO::File;
@@ -21,7 +22,16 @@ use Data::Dumper;
 my $schema = Test::EventBot->schema;
 
 use_ok('EventBot') or die;
-ok($ENV{EVENTBOT_TEST}, "Testing environment enabled");
+ok($ENV{EVENTBOT_TEST}, "Testing environment enabled") or die;
+
+# Add some test pubs..
+for (1..10) {
+    my $pub = Fixture::Pub->new;
+    $pub->update({ endorsed => 1 });
+}
+# Start an election:
+$schema->resultset('Elections')->commence;
+
 
 my $bot = EventBot->new({
     logfile => File::Temp->new,
@@ -56,4 +66,13 @@ my $bot = EventBot->new({
 {
     my $voter = slurp('t/vote.txt');
     $bot->parse_email($voter);
+}
+
+# Check how the votes look in the DB:
+{
+    my $election = $schema->resultset('Elections')->latest;
+    my @votes = $election->votes;
+    for my $vote (@votes) {
+        diag("Vote rank " . $vote->rank . " for pub " . $vote->pub->name);
+    }
 }

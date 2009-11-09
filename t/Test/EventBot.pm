@@ -38,6 +38,8 @@ use EventBot::Schema;
 # Setup a config file:
 my %test_config = Config::General->new("$FindBin::Bin/../eventbot.cfg")->getall;
 $test_config{database}->{dsn} = "dbi:Pg:dbname=$EventBot_DB";
+$test_config{database}->{username} = '';
+$test_config{database}->{password} = '';
 $test_config{list_addr} = 'sluts@example.com';
 $test_config{from_addr} = 'eventbot@example.com';
 SaveConfig($config_file->filename, \%test_config);
