@@ -2,7 +2,7 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
 use strict;
 use warnings;
-use Test::More tests => 6;
+use Test::More;
 use File::Slurp qw(slurp);
 use Data::Dumper;
 
@@ -13,7 +13,7 @@ use_ok('EventBot::MailParser') or die;
     my $newevent_text = slurp('t/newevent.txt');
     my $parser = EventBot::MailParser->new;
     $parser->parse($newevent_text);
-    diag(Dumper($parser->commands));
+    # diag(Dumper($parser->commands));
     is_deeply(
         $parser->commands,
         [ {
@@ -27,6 +27,24 @@ use_ok('EventBot::MailParser') or die;
         "Locate new event in email"
     );
 }
+{
+    my $newevent_text = slurp('t/newevent2.txt');
+    my $parser = EventBot::MailParser->new;
+    $parser->parse($newevent_text);
+    diag(Dumper($parser->commands));
+    is_deeply(
+        $parser->commands,
+        [ {
+            type => 'newevent',
+            time => 'Evening',
+            date => '19-11-2009',
+            place => 'The Edinboro Castle (Camden)',
+            url => 'http://www.beerintheevening.com/pubs/show.shtml/1009',
+            address => '57 Mornington Terrace, London, NW1 7RU',
+        } ],
+        "Located new event from election"
+    );
+}
 
 # Test attendance to an event:
 {
@@ -34,7 +52,7 @@ use_ok('EventBot::MailParser') or die;
     my $parser = EventBot::MailParser->new;
     $parser->parse($attend_text);
     my $commands = $parser->commands;
-    diag(Dumper($commands));
+    # diag(Dumper($commands));
     # Skip the newevent that is also usually created:
     my @attends = grep { $_->{type} eq 'attend' } @$commands;
     is_deeply(
@@ -54,7 +72,7 @@ use_ok('EventBot::MailParser') or die;
     my $attend_mime = slurp('t/attend_mime.txt');
     my $parser = EventBot::MailParser->new;
     $parser->parse($attend_mime);
-    diag(Dumper($parser->commands));
+    # diag(Dumper($parser->commands));
     is_deeply(
         $parser->commands,
         [{
@@ -72,7 +90,7 @@ use_ok('EventBot::MailParser') or die;
     my $attend_mime = slurp('t/attend_html.txt');
     my $parser = EventBot::MailParser->new;
     $parser->parse($attend_mime);
-    diag(Dumper($parser->commands));
+    # diag(Dumper($parser->commands));
     is_deeply(
         $parser->commands,
         [{
@@ -90,7 +108,7 @@ use_ok('EventBot::MailParser') or die;
     my $attend_mime = slurp('t/vote.txt');
     my $parser = EventBot::MailParser->new;
     $parser->parse($attend_mime);
-    diag(Dumper($parser->commands));
+    # diag(Dumper($parser->commands));
     is_deeply(
         $parser->commands,
         [{
@@ -100,3 +118,5 @@ use_ok('EventBot::MailParser') or die;
         "Found votes in plaintext email"
     );
 }
+
+done_testing();
