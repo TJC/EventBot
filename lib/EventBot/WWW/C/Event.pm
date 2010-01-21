@@ -63,6 +63,8 @@ sub view :Local {
 
     my $event = $c->model('DB::Events')->find($id);
     $c->stash->{event} = $event;
+    $c->stash->{attendees} = $event->search_related('attendees',
+        undef, { order_by => 'status DESC' });
 }
 
 

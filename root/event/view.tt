@@ -6,7 +6,7 @@
     Link: <a href="[% event.url %]">[% event.url %]</a><br/>
     Attendees:
     <ul class="attendees">
-        [% FOREACH attendee IN event.attendees %]
+      [% FOREACH attendee IN attendees.all %]
         <li>
           <a href="/people/view/[% attendee.person.id %]">[%
           attendee.person.name %]</a> said <b>[% attendee.status %]</b>
