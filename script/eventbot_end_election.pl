@@ -51,6 +51,16 @@ my @results = $e->conclude; # Finish the election and get vote tallies!
 
 
 my $pub = $e->winner;
+
+# Check if that pub was a special event:
+my $birthday = $schema->resultset('SpecialEvents')->search(
+    {
+        date => next_thursday(),
+        pub => $pub->id,
+        confirmed => 1,
+    }
+)->next;
+
 my @body;
 push @body, 'We have a winner:';
 push @body, sprintf('Place: %s (%s)', $pub->name, $pub->region);
@@ -63,7 +73,12 @@ if ($pub->name !~ /none of the above/i) {
     }
 }
 push @body, '';
-push @body, 'If you hate it, remember it was endorsed by:';
+if ($birthday) {
+    push @body, sprintf('This is %s\'s special event - %s.',
+        $birthday->person->name, $birthday->comment
+    );
+}
+push @body, 'If you hate the venue, remember it was endorsed by:';
 push @body, join(' and ', map { $_->name } $pub->nominees);
 
 push @body, '';

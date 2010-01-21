@@ -63,8 +63,9 @@ for my $p ($e->candidates) {
 if (@specEvents) {
     $body .= "\nThis list also includes special event(s):\n";
     for my $event (@specEvents) {
-        $body .= sprintf(' * %s (%s)', $event->comment, $event->person->name)
-              . "\n";
+        $body .= sprintf(' * %s\'s %s at the %s.',
+            $event->person->name, $event->comment, $event->pub->name
+        ) . "\n";
     }
 }
 
