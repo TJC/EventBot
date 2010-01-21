@@ -51,6 +51,16 @@ my @results = $e->conclude; # Finish the election and get vote tallies!
 
 
 my $pub = $e->winner;
+
+# Check if that pub was a special event:
+my $birthday = $schema->resultset('SpecialEvents')->search(
+    {
+        date => next_thursday(),
+        pub => $pub->id,
+        confirmed => 1,
+    }
+)->next;
+
 my @body;
 push @body, 'We have a winner:';
 push @body, sprintf('Place: %s (%s)', $pub->name, $pub->region);
@@ -62,8 +72,17 @@ if ($pub->name !~ /none of the above/i) {
         push @body, 'URL: ' . $pub->info_uri;
     }
 }
+
+# Capture event info so far for email to the eventbot..
+my $event_body = join("\n", @body);
+
 push @body, '';
-push @body, 'If you hate it, remember it was endorsed by:';
+if ($birthday) {
+    push @body, sprintf('This is %s\'s special event - %s.',
+        $birthday->person->name, $birthday->comment
+    );
+}
+push @body, 'If you hate the venue, remember it was endorsed by:';
 push @body, join(' and ', map { $_->name } $pub->nominees);
 
 push @body, '';
@@ -71,8 +90,8 @@ push @body, 'Vote tallies:';
 
 # Display tallies:
 for my $r (@results) {
-    push @body, sprintf('%s has %d votes:',
-                $r->pub->name, $r->get_column('pub_count')
+    push @body, sprintf('%s has a score of %d:',
+                $r->pub->name, $r->get_column('pub_score')
             );
     my @voters = $schema->resultset('Votes')->search(
         {
@@ -81,7 +100,11 @@ for my $r (@results) {
         }
     );
     for my $v (@voters) {
-        push @body, ' * ' . $v->person->name;
+        push(@body,
+            sprintf(' * %s (%d points)',
+                $v->person->name, (5 - $v->rank) * 2
+            )
+        );
     }
 }
 
@@ -91,6 +114,12 @@ push @body, sprintf(
     $e->id
 );
 
+my $event_mail = MIME::Lite->new(
+    From => $bot->from_addr,
+    To   => $bot->from_addr,
+    Subject => 'Pub for ' . next_thursday()->dmy,
+    Data => $event_body,
+);
 
 my $mail = MIME::Lite->new(
     From => $bot->from_addr,
@@ -100,6 +129,7 @@ my $mail = MIME::Lite->new(
 );
 
 if ($sendmail) {
+    $event_mail->send;
     $mail->send;
 }
 else {

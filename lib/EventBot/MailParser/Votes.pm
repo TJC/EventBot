@@ -19,6 +19,7 @@ sub parse {
             ([A-Z])?\s*
             /xi
         ) {
+            @votes = grep { $_ } @votes; # Remove blank votes.
             warn "Found votes: " . join(', ', @votes) . "\n";
             push(@commands, {
                 type => 'vote',

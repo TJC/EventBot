@@ -240,20 +240,20 @@ Concludes the election, and tallies up the results.
 
 =cut
 
-sub conclude :ResultSet {
+sub conclude {
     my $self = shift;
 
     my $rs = $self->search_related('votes', undef,
         {
-            select => [ 'pub', { count => 'pub' } ],
-            as => ['pub', 'pub_count'],
+            select => [ 'pub', { sum => '(5-rank)*2' } ],
+            as => ['pub', 'pub_score'],
             group_by => ['pub'],
         }
     );
 
     # sort in descending order: (because dbix wasn't letting me sort)
     my @results = sort {
-        $a->get_column('pub_count') <= $b->get_column('pub_count')
+        $a->get_column('pub_score') <= $b->get_column('pub_score')
     } $rs->all;
 
     $self->winner($results[0]->pub);
