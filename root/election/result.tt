@@ -27,7 +27,9 @@
   <ul>
   [% FOREACH vote IN election.votes %]
   <li><a href="/people/view/[% vote.person.name %]">[% vote.person.name %]</a>
-    ([% vote.person.email_redacted %]): [% vote.pub.name %]</li>
+    ([% vote.person.email_redacted %]): [% vote.pub.name %]
+    (Rank [% vote.rank %])
+  </li>
   [% END %]
   </ul>
 </div>
