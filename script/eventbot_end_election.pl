@@ -72,6 +72,10 @@ if ($pub->name !~ /none of the above/i) {
         push @body, 'URL: ' . $pub->info_uri;
     }
 }
+
+# Capture event info so far for email to the eventbot..
+my $event_body = join("\n", @body);
+
 push @body, '';
 if ($birthday) {
     push @body, sprintf('This is %s\'s special event - %s.',
@@ -110,6 +114,12 @@ push @body, sprintf(
     $e->id
 );
 
+my $event_mail = MIME::Lite->new(
+    From => $bot->from_addr,
+    To   => $bot->from_addr,
+    Subject => 'Pub for ' . next_thursday()->dmy,
+    Data => $event_body,
+);
 
 my $mail = MIME::Lite->new(
     From => $bot->from_addr,
@@ -119,6 +129,7 @@ my $mail = MIME::Lite->new(
 );
 
 if ($sendmail) {
+    $event_mail->send;
     $mail->send;
 }
 else {
