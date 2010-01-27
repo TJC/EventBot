@@ -51,13 +51,17 @@ my $body = sprintf(
     'A new election (%d) has started!%sThis is for Thursday %s',
     $e->id, "\n", $thursday->dmy
 );
-$body .= "\nThe candidates are:\n";
+$body .= "\n\nThe candidates are:\n";
 
 my $vcount = 0;
 for my $p ($e->candidates) {
     my $letter = chr($vcount++ + ord('A'));
     $body .= sprintf('    %s -- %s (%s)', $letter, $p->name, $p->region)
           . "\n";
+    # Also show the URL, if there is one:
+    if ($p->info_uri) {
+        $body .= sprintf('         %s', $p->info_uri) . "\n"
+    }
 }
 
 if (@specEvents) {
