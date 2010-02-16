@@ -118,7 +118,7 @@ sub commence :ResultSet {
     $max_id_query->execute;
     my ($max_id) = $max_id_query->fetchrow_array;
     warn "Maximum ID of pubs: $max_id\n";
-    die("Apparently no pubs?") unless $max_id > 5; # sanity check.
+    die("Not enough pubs in database") unless $max_id >= 5;
 
     my $election = $self->create(
         {
@@ -136,9 +136,13 @@ sub commence :ResultSet {
         );
 
     my @pubs;
+    my %seen_pubs;
     while (@pubs < 4) {
         my $pub = $self->_get_random_pub($max_id);
-        next if $pub ~~ \@pubs; # Avoid dups! ;)
+        # next if $pub ~~ @pubs;
+        # Smart-matching objects deferred until 5.10.1
+        next if $seen_pubs{$pub->id};
+        $seen_pubs{$pub->id} = 1;
         next unless $pub->endorsed;
         push(@pubs, $pub);
     }

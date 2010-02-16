@@ -3,6 +3,19 @@ package EventBot::Schema::Pubs;
 use strict;
 use warnings;
 use parent 'DBIx::Class';
+use Carp qw(carp croak);
+use overload
+    '""' => sub {
+        my $self = shift;
+        sprintf('%s (%s)', $self->name, $self->region);
+    },
+    '~~' => sub {
+        my ($left, $right) = @_;
+        carp "Smart-matching Pub object probably won't work!";
+        warn "Left = $left, right = $right";
+        return($left eq $right);
+    },
+    fallback => 1;
 
 __PACKAGE__->load_components(qw(Core));
 __PACKAGE__->table('pubs');
