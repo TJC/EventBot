@@ -232,7 +232,7 @@ sub do_votes {
 
     my $person = $self->schema->resultset('People')->find_or_create(
         {
-            email => $voter->address,
+            email => lc($voter->address),
             name => ($voter->name || $voter->address)
         }
     );
