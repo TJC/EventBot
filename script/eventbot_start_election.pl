@@ -71,10 +71,6 @@ if (@specEvents) {
             $event->person->name, $event->comment, $event->pub->name
         ) . "\n";
     }
-    $body .= "In the unlikely event that the special event(s) are\n"
-    . "duplicated in the first random 4 pubs, please DO NOT vote\n"
-    . "for both copies; this will cause your vote to be discarded\n"
-    . "as vote-stuffing. Sorry.. I'll fix this eventually.\n";
 }
 
 my $e_id = $e->id;
