@@ -137,6 +137,10 @@ sub commence :ResultSet {
 
     my @pubs;
     my %seen_pubs;
+    # Avoid picking birthday pubs in the random pub selection..
+    if ($args->{extra}) {
+        %seen_pubs = map { $_->id => 1 } @{$args->{extra}};
+    }
     while (@pubs < 4) {
         my $pub = $self->_get_random_pub($max_id);
         # next if $pub ~~ @pubs;
