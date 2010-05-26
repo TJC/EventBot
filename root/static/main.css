@@ -1,18 +1,24 @@
-body {
+html, body {
     background-color: black;
     color: white;
+    height: 100%;
+    margin: 0;
 }
-h1, h2, h3, h4 {
-    font-family: sans-serif;
+h1 {
+    font-size: 64pt;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+}
+h1, h2, h3 {
+    font-family: 'IM Fell English', arial, serif;
     text-align: center;
 }
-.slogan {
+h4 {
+    font-family: 'Tangerine', arial, serif;
     text-align: center;
-    font-size: 60%
-}
-#big {
-    font-size: 500%;
-    font-family: sans-serif;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    font-size: 20pt;
 }
 img {
     border: none;
@@ -27,13 +33,23 @@ a:hover {
 }
 .menubar {
     text-align: center;
-    font-family: sans-serif;
+    font-family: 'Nobile', sans-serif;
     font-weight: bold;
     margin-bottom: 2px;
 }
-.footer {
-    font-size: 50%;
-    font-family: sans-serif;
+.menubar a {
+    font-family: 'Nobile', sans-serif;
+}
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -2em;
+}
+.footer, .push {
+    height: 2em;
+    font-size: 8pt;
+    font-family: 'Nobile', sans-serif;
     text-align: center;
 }
 .event {

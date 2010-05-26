@@ -1,4 +1,7 @@
-<p class="footer">Powered by Coffee and Cheese</p>
+</div>
+<div class="footer">
+Powered by Coffee and Cheese
+</div>
 
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
