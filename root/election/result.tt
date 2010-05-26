@@ -1,9 +1,9 @@
 [% INCLUDE header.tt %]
 
-<h4>Result for election [% election.id %]:</h4>
+<h3>Result for election [% election.id %]:</h3>
 
 <div class="event">
-  <h4>Candidates are:</h4>
+  <h4>Candidates</h4>
   <ul>
   [% FOREACH pub IN election.candidates %]
     <li><a href="/pub/[% pub.region %]/[% pub.name %]">[% pub.name %] ([%
@@ -14,7 +14,8 @@
 
 <div class="event">
   [% IF election.winner %]
-  We have a winner: <a href="/pub/[% election.winner.region %]/[%
+  <h4>Winner</h4>
+  <a href="/pub/[% election.winner.region %]/[%
     election.winner.name %]">[% election.winner.name %] ([%
     election.winner.region %])</a>.
   [% ELSE %]
@@ -23,7 +24,7 @@
 </div>
 
 <div class="event">
-  <h4>Votes:</h4>
+  <h4>Votes</h4>
   <ul>
   [% FOREACH vote IN election.votes %]
   <li><a href="/people/view/[% vote.person.name %]">[% vote.person.name %]</a>
