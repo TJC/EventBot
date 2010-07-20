@@ -261,7 +261,7 @@ sub conclude {
 
     # sort in descending order: (because dbix wasn't letting me sort)
     my @results = sort {
-        $a->get_column('pub_score') <= $b->get_column('pub_score')
+        $b->get_column('pub_score') <=> $a->get_column('pub_score')
     } $rs->all;
 
     $self->winner($results[0]->pub);
