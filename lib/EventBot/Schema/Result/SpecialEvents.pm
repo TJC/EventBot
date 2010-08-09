@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::Schema::SpecialEvents;
+package EventBot::Schema::Result::SpecialEvents;
 use strict;
 use warnings;
 use parent 'DBIx::Class';
@@ -20,7 +20,7 @@ __PACKAGE__->add_columns(
     comment => { data_type => 'VARCHAR', size => 256, is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key('id');
-__PACKAGE__->belongs_to(person => 'EventBot::Schema::People');
-__PACKAGE__->belongs_to(pub => 'EventBot::Schema::Pubs');
+__PACKAGE__->belongs_to(person => 'EventBot::Schema::Result::People');
+__PACKAGE__->belongs_to(pub => 'EventBot::Schema::Result::Pubs');
 
 1;

@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::Schema::Pubs;
+package EventBot::Schema::Result::Pubs;
 use strict;
 use warnings;
 use parent 'DBIx::Class';
@@ -33,7 +33,9 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key('id');
 __PACKAGE__->add_unique_constraint([qw(name region)]);
-__PACKAGE__->has_many(endorsements => 'EventBot::Schema::Endorsements', 'pub');
+__PACKAGE__->has_many(
+    endorsements => 'EventBot::Schema::Result::Endorsements', 'pub'
+);
 __PACKAGE__->many_to_many(
     nominees => 'endorsements', 'person'
 );

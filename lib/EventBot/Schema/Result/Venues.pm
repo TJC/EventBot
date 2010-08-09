@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::Schema::Venues;
+package EventBot::Schema::Result::Venues;
 use strict;
 use warnings;
 use base 'DBIx::Class';

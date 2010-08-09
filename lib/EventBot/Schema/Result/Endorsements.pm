@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::Schema::Endorsements;
+package EventBot::Schema::Result::Endorsements;
 use strict;
 use warnings;
 use parent 'DBIx::Class';
@@ -11,10 +11,10 @@ __PACKAGE__->add_columns(
     pub => { data_type => 'INTEGER', is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key(qw(person pub));
-__PACKAGE__->has_many(person => 'EventBot::Schema::People',
+__PACKAGE__->has_many(person => 'EventBot::Schema::Result::People',
     { 'foreign.id' => 'self.person' }
 );
-__PACKAGE__->has_many(pub => 'EventBot::Schema::Pubs',
+__PACKAGE__->has_many(pub => 'EventBot::Schema::Result::Pubs',
     { 'foreign.id' => 'self.pub' }
 );
 

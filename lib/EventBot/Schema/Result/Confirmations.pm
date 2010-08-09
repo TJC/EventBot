@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::Schema::Confirmations;
+package EventBot::Schema::Result::Confirmations;
 use strict;
 use warnings;
 use parent 'DBIx::Class';
@@ -20,7 +20,7 @@ __PACKAGE__->add_columns(
     action => { data_type => 'TEXT', is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key('id');
-__PACKAGE__->belongs_to(person => 'EventBot::Schema::People');
+__PACKAGE__->belongs_to(person => 'EventBot::Schema::Result::People');
 
 =head2 object
 

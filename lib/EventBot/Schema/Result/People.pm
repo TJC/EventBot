@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::Schema::People;
+package EventBot::Schema::Result::People;
 use strict;
 use warnings;
 use base 'DBIx::Class';
@@ -15,19 +15,21 @@ __PACKAGE__->set_primary_key('id');
 
 __PACKAGE__->add_unique_constraint([qw(email)]);
 
-__PACKAGE__->has_many(attends => 'EventBot::Schema::Attendees', 'person');
+__PACKAGE__->has_many(
+    attends => 'EventBot::Schema::Result::Attendees', 'person'
+);
 __PACKAGE__->many_to_many(events => 'attends', 'event');
 
 __PACKAGE__->has_many(
-    votes => 'EventBot::Schema::Votes', 'person'
+    votes => 'EventBot::Schema::Result::Votes', 'person'
 );
 __PACKAGE__->has_many(
-    nominations => 'EventBot::Schema::Endorsements', 'person'
+    nominations => 'EventBot::Schema::Result::Endorsements', 'person'
 );
 __PACKAGE__->many_to_many(endorsed => 'nominations', 'pub');
 
 __PACKAGE__->has_many(
-    confirmations => 'EventBot::Schema::Confirmations', 'person'
+    confirmations => 'EventBot::Schema::Result::Confirmations', 'person'
 );
 
 # Return a version of their email address that is slightly redacted to

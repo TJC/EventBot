@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::Schema::Events;
+package EventBot::Schema::Result::Events;
 use strict;
 use warnings;
 use base 'DBIx::Class';
@@ -39,7 +39,10 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key('id');
 
-__PACKAGE__->has_many(attendees => 'EventBot::Schema::Attendees', 'event');
+__PACKAGE__->has_many(
+    attendees => 'EventBot::Schema::Result::Attendees',
+    'event'
+);
 
 our %statusmap = (
     '+' => 'Yes',

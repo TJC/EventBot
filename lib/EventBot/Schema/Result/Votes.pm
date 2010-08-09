@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::Schema::Votes;
+package EventBot::Schema::Result::Votes;
 use strict;
 use warnings;
 use parent 'DBIx::Class';
@@ -15,13 +15,13 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key(qw(election person pub));
 
 __PACKAGE__->belongs_to(
-    election => 'EventBot::Schema::Elections'
+    election => 'EventBot::Schema::Result::Elections'
 );
 __PACKAGE__->belongs_to(
-    person => 'EventBot::Schema::People'
+    person => 'EventBot::Schema::Result::People'
 );
 __PACKAGE__->belongs_to(
-    pub => 'EventBot::Schema::Pubs'
+    pub => 'EventBot::Schema::Result::Pubs'
 );
 
 1;
