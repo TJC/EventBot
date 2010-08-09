@@ -7,12 +7,10 @@ use feature qw(switch);
 
 use Carp qw(croak);
 use Mail::Address;
-use Email::Simple;
-use Email::Simple::Creator;
-use Email::Send;
 use Config::General;
 use EventBot::Schema;
 use EventBot::MailParser;
+use EventBot::Mailer;
 use base 'Class::Accessor';
 __PACKAGE__->mk_accessors(qw(schema parser logfile from_addr list_addr));
 
@@ -163,58 +161,22 @@ sub do_newevent {
     return $event;
 }
 
-# TODO: Convert this function to use Template::Toolkit instead of inline
-# text..
 sub mail_new_event {
     my ($self, $event) = @_;
-    my ($date, $time, $place, $url, $id) = (
-        $event->startdate, $event->starttime,
-        $event->place, $event->url, $event->id
-    );
-    my $body = <<EOM;
-New event added to database:
-Date: $date
-Time: $time
-Place: $place
-Link: $url
-
-To indicate that you're attending this event, reply to this email and add a
-line with "+ Yourname" (without the quotes). You can indicate that you're not
-sure, or are not coming, by using the minus and question mark characters at the
-start instead. You can change your status later by sending a new message.
-Note that the +, - or ? must be at the very start of the line.
-Put multiple attendees on individual lines.
-
-To view the attendance record, visit http://eventbot.dryft.net/event/view/$id
-
--- 
-Yours faithfully,
-EventBot
-http://eventbot.dryft.net/
-
-EOM
+    my $id = $event->id;
     my $subject = $self->parser->subject;
     $subject =~ s/^re:\s+//i;
     $subject =~ s/\s*\[event\s*\d*\s*\]\s*//i;
     $subject =~ s/\s*\[sluts]\s*//;
     $subject = "[EVENT $id] " . $subject;
 
-    my $email = Email::Simple->create(
-        header => [
-            From => $self->from_addr,
-            To   => $self->list_addr,
-            Subject => $subject
-        ],
-        body => $body
+    EventBot::Mailer->new(
+        from_addr => $self->from_addr,
+        list_addr => $self->list_addr,
+    )->new_event(
+        event => $event,
+        subject => $subject,
     );
-
-    # Do not *actually* send email if we're testing:
-    return if $ENV{EVENTBOT_TEST};
-
-    Email::Send->new({mailer => 'Sendmail'})->send($email->as_string);
-#    my $mailer = Email::Send->new({mailer => 'SMTP'});
-#    $mailer->mailer_args([ Host => 'localhost' ]);
-#    $mailer->send($email->as_string);
 }
 
 =head2 do_votes
