@@ -63,11 +63,19 @@ sub add_people {
         # their name, and work this out later..
         my $md5 = md5_hex($name);
 
+        # Attempt to find their real user first:
         my $person = $self->result_source->schema->resultset('People')
-            ->find( { name => $name } );
+            ->search(
+                {
+                    name => $name,
+                    email => { '<>' => $md5 },
+                },
+                { rows => 1 },
+            )->single;
+
         if (not $person) {
             $person = $self->result_source->schema->resultset('People')
-                ->create(
+                ->find_or_create(
                     {
                         name => $name,
                         email => $md5
