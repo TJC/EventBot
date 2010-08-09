@@ -24,6 +24,7 @@ requires 'Catalyst::Model::DBIC::Schema';
 requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Action::RenderView';
+requires 'Catalyst::Controller::reCAPTCHA';
 requires 'XML::RSS';
 requires 'JSON::XS'; # Used for API calls
 requires 'YAML'; # This should reflect the config file format you've chosen

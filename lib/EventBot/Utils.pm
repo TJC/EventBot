@@ -2,6 +2,7 @@
 package EventBot::Utils;
 use strict;
 use warnings;
+use DateTime;
 
 =head1 NAME
 

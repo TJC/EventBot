@@ -5,14 +5,20 @@
 [% END %]
 
 <form name="newEvent" method="POST">
+
 <div class="event">
-  Nominee: <select name="nominee">[% FOREACH nom IN nominees.all %]
-    [% IF nom.email.length != 32 # Skip MD5SUMs of emails %]
+  Nominee: <select name="nominee">
+    <option value=""></option>
+    [% FOREACH nom IN nominees.all %]
+    [% IF nom.email.length != 32 # Skip MD5SUMs of emails -%]
     <option value="[% nom.id %]">[% nom.name %]</option>
-    [% END %]
+    [%- END %]
   [% END %]</select>
   <br/>
-  
+
+  <em>Select an existing venue to pre-fill details, or else select Other and
+  fill them in yourself:</em><br/>
+
   Venue: <select name="venue">
     <option value="">Other</option>
     [% FOREACH pub IN venues.all %]
@@ -20,16 +26,21 @@
     [% END %]
   </select>
   <br/>
-  Other: <input type="text" name="venue_other" size="48" /><br/>
-  <em>To enter free-text please select "Other" in the pub list!</em>
-  Address: <input type="text" name="venue_other" size="48" /><br/>
-  <br/><em>Only needed if Other selected above.</em><br/>
-
-  Date: <input type="text" size="16" name="date" /><br/>
+  Subject line: <input type="text" name="subject" size="48"
+          value="[% c.request.params.subject %]" /><br/>
+  Venue: <input type="text" name="venue_name" size="60"
+          value="[% c.request.params.venue_name %]" /><br/>
+  Comment: <input type="text" name="comment" size="60"
+            value="[% c.request.params.comment %]" /><br/>
+  Linky: <input type="text" name="url" size="60" 
+          value="[% c.request.params.url %]" /><br/>
+  Start time: <input type="text" name="starttime" size="48"
+               value="[% c.request.params.starttime %]" /><br/>
+  Date: <input type="text" size="16" name="date"
+         value="[% c.request.params.date %]" /><br/>
   <em>Use DD/MM/YYYY or YYYY-MM-DD date formats.</em><br/>
 
-  Comment: <input type='text' size='80' name='comment'/><br/>
-
+  [% recaptcha %]<br/>
   <input type="submit" value="Create"/>
 </div>
 </form>
@@ -39,6 +50,17 @@
     $('input[name=date]').datepicker(
         { dateFormat: 'dd/mm/yy' }
     );
+    $('select[name=venue]').change(function() {
+      $.ajax({
+        url: '/api/pub/' + $(this).val(),
+        dataType: 'json',
+        success: function(data) {
+          $('input[name=venue_name]').val(data.name);
+          $('input[name=comment]').val(data.street_address);
+          $('input[name=url]').val(data.info_uri);
+        }
+     });
+    });
   });
 </script>
 
