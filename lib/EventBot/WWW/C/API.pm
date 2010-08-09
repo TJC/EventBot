@@ -96,6 +96,24 @@ sub current_events :Chained('api') PathPart Args(0) {
     $c->stash->{response} = [map { _serialise_event($_) } $events->all];
 }
 
+=head2 pub
+
+Returns the venue details for a given pub.
+
+This version does it by ID, but one by name and region would be good too.
+
+=cut
+
+sub pub :Chained('api') PathPart Args(1) {
+    my ($self, $c, $id) = @_;
+    my $pub = $c->model('DB::Pubs')->find($id);
+    $c->detach('/fourohfour') unless $pub;
+
+    $c->stash->{response} = {
+        map { $_ => $pub->$_ } qw(id name street_address region info_uri)
+    };
+}
+
 =head2 _serialise_event
 
 Converts an event object into a serialisable hash of data.
