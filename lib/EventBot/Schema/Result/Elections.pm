@@ -33,9 +33,8 @@ __PACKAGE__->set_primary_key('id');
 __PACKAGE__->has_many(
     votes => 'EventBot::Schema::Result::Votes', 'election'
 );
-__PACKAGE__->might_have(
+__PACKAGE__->belongs_to(
     'winner' => 'EventBot::Schema::Result::Pubs',
-    { 'foreign.id' => 'self.winner' }
 );
 
 sub candidates {
