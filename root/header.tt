@@ -28,7 +28,9 @@
         |
         <a href="/event/list">Event list</a>
         |
-        <a href="/rss/upcoming">RSS feed</a>
+        <a href="/rss/upcoming">RSS</a>
+        |
+        <a href="/ical">iCal</a>
         |
         <a href="/event/pastlist">Past events</a>
         |
