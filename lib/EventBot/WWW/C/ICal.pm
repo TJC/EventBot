@@ -60,8 +60,11 @@ sub index :Private {
             location => $event->place,
             url => $event->url,
         );
-        $item->start($event->date_obj);
-        $item->all_day;
+        my $start = $event->date_obj;
+        $start->set(hour => 19);
+        $item->start($start);
+        $item->duration(DateTime::Duration->new(hours => 3));
+
         $cal->add_entry($item);
     }
 
@@ -78,8 +81,11 @@ sub index :Private {
                         ),
             url => $event->pub->info_uri,
         );
-        $item->start($event->date);
-        $item->all_day;
+        my $start = $event->date;
+        $start->set(hour => 19);
+        $item->start($start);
+        $item->duration(DateTime::Duration->new(hours => 3));
+
         $cal->add_entry($item);
     }
 
