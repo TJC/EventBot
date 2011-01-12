@@ -16,6 +16,7 @@
 [% IF need_api %]
     <script type="text/javascript" src="/static/eventbot-api.js"></script>
 [% END %]
+    <meta property="fb:admins" content="536696491" />
   </head>
   <body>
     <div class="wrapper">

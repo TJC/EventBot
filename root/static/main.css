@@ -67,3 +67,9 @@ a:hover {
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
 }
+
+.bottom_left {
+  position: absolute;
+  left: 5px;
+  top: 10px;
+}
