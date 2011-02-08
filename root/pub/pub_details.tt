@@ -1,4 +1,4 @@
-[% INCLUDE header.tt %]
+[% INCLUDE header.tt need_gmaps=1 %]
 
 <div class="event">
   Name: [% pub.name %]<br/>
@@ -21,5 +21,53 @@
   <a href="/[% c.request.path %]/edit">Edit details</a>
 
 </div>
+
+<div class='event'>
+<div id='map_canvas' style='height: 500px; width: 700px'></div>
+</div>
+
+<script type='text/javascript'>
+  var map;
+
+  function get_location() {
+    var address = "[% pub.street_address %], [% pub.region %]";
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode(
+      {
+        'address': address,
+        'region': 'uk',
+      },
+      function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          maps_init(results[0].geometry.location);
+        }
+        else {
+          alert('Geocode failed: ' + status);
+        }
+      }
+    );
+
+  }
+
+  function maps_init(loc) {
+    // Once we have pre-geocoded, we can do:
+    // center: new google.maps.LatLng(-34.397, 150.644),
+    var myOptions = {
+      zoom: 15,
+      center: loc,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("map_canvas"),
+          myOptions);
+    var marker = new google.maps.Marker({
+      map: map,
+      position: loc
+    });
+  }
+
+$(function() {
+    get_location();
+});
+</script>
 
 [% INCLUDE footer.tt %]

@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html>
   <head>
     <title>[% title || 'EventBot' %]</title>
@@ -7,7 +6,14 @@
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine" />
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Nobile" />
     <link href="[% base %]static/main.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="/static/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+
+    [% IF need_gmaps %]
+    <script type="text/javascript"
+      src="http://maps.google.com/maps/api/js?sensor=false">
+    </script>
+    [% END %]
+
 [% IF need_datepicker %]
     <link type="text/css" href="/static/ui/ui.all.css" rel="stylesheet" />
     <script type="text/javascript" src="/static/ui/ui.core.js"></script>
