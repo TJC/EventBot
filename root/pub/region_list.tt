@@ -1,0 +1,12 @@
+[% INCLUDE header.tt %]
+
+<div class="event">
+  <ul>
+    <li><a href="/pub/all">List All Pubs</a></li>
+    [% FOREACH region IN regions.all %]
+    <li><a href="/pub/[% region.region_escaped %]">[% region.region %]</a></li>
+    [% END %]
+  </ul>
+</div>
+
+[% INCLUDE footer.tt %]

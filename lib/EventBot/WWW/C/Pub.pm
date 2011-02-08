@@ -68,6 +68,19 @@ sub pub_region_list :Chained('pub_region') PathPart('') Args(0) {
     );
 }
 
+sub region_list : Chained PathPart('pub') Args(0) {
+    my ($self, $c) = @_;
+    $c->stash->{regions} =
+      $c->model('DB::Pubs')->search(
+        {},
+        {
+            columns => ['region'],
+            group_by => ['region'],
+            order_by => 'region',
+        }
+    );
+}
+
 =head1 AUTHOR
 
 Toby Corkindale

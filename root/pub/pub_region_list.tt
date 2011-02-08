@@ -4,8 +4,7 @@ Pubs in region: [% region %]:
 
 [% FOREACH pub IN pubs.all %]
 <div class="event">
-  <a href="/pub/[% pub.region %]/[% pub.name %]">[% pub.name %] ([% pub.region
-    %])</a>
+  <a href="[% pub.url_to_self %]">[% pub.name %] ([% pub.region %])</a>
   [% IF pub.endorsed %]<span style="color: green">Endorsed</span>[% END %]
 </div>
 [% END %]
