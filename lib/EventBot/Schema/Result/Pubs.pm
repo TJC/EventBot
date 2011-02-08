@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use parent 'DBIx::Class';
 use Carp qw(carp croak);
+use URI::Escape qw(uri_escape);
 use overload
     '""' => sub {
         my $self = shift;
@@ -39,5 +40,20 @@ __PACKAGE__->has_many(
 __PACKAGE__->many_to_many(
     nominees => 'endorsements', 'person'
 );
+
+sub name_escaped {
+    my $self = shift;
+    return uri_escape($self->name);
+}
+
+sub region_escaped {
+    my $self = shift;
+    return uri_escape($self->region);
+}
+
+sub url_to_self {
+    my $self = shift;
+    return sprintf('/pub/%s/%s', $self->region_escaped, $self->name_escaped);
+}
 
 1;

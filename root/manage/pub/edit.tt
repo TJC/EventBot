@@ -1,7 +1,12 @@
 [% INCLUDE header.tt %]
 
 <div class="event">
-  Pub edit stuff goes here.
+  [% IF message %]
+  <div class="error">[% message %]</div>
+  [% END %]
+
+  [% form.render %]
+
 </div>
 
 [% INCLUDE footer.tt %]

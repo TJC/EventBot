@@ -25,6 +25,10 @@ requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Action::RenderView';
 requires 'Catalyst::Controller::reCAPTCHA';
+requires 'HTML::FormHandler' => '0.32000';
+requires 'HTML::FormHandler::Model::DBIC' => '0.12000';
+requires 'URI::Escape';
+
 requires 'XML::RSS';
 requires 'JSON::XS'; # Used for API calls
 requires 'YAML'; # This should reflect the config file format you've chosen
@@ -32,5 +36,5 @@ requires 'YAML'; # This should reflect the config file format you've chosen
 catalyst;
 
 install_script glob('script/*.pl');
-auto_install;
+
 WriteAll;
