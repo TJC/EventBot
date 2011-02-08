@@ -34,6 +34,11 @@ sub edit : Chained('/pub/pub_name') PathPart Args(0) {
     $c->stash->{form} = $self->form;
     $c->stash->{template} = 'manage/pub/edit.tt';
 
+    if ($c->stash->{pub}->name =~ /None of the above/i) {
+        $c->stash->{message} = 'Not allowed to edit meta-pubs!';
+        return;
+    }
+
     return unless $self->form->process(
         item => $c->stash->{pub},
         params => $c->request->params,

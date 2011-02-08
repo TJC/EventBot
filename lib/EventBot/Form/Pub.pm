@@ -12,6 +12,12 @@ has_field 'name' => (
     required => 1,
 );
 
+sub validate_name {
+    my ($self, $field) = @_;
+    $field->add_error('Not allowed to edit meta-pubs!')
+        if $field->value =~ /None of the above/i;
+}
+
 has_field 'street_address' => (
     label => 'Street address',
     type => 'Text',
