@@ -1,6 +1,12 @@
-[% INCLUDE header.tt %]
+[% INCLUDE header.tt need_gmaps=1 %]
 
 Pubs in region: [% region %]:
+
+<div class='event'>
+  <div id='map_canvas' style='height: 500px; width: 700px'>
+    <i>Loading map..</i>
+  </div>
+</div>
 
 [% FOREACH pub IN pubs.all %]
 <div class="event">
@@ -8,5 +14,56 @@ Pubs in region: [% region %]:
   [% IF pub.endorsed %]<span style="color: green">Endorsed</span>[% END %]
 </div>
 [% END %]
+
+
+<script type='text/javascript'>
+  var map;
+
+  function maps_setup() {
+    var myOptions = {
+      zoom: 11,
+      center: new google.maps.LatLng(51.550, -0.117), // London
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(
+        document.getElementById("map_canvas"),
+        myOptions
+    );
+  }
+
+  function add_marker(name, lat, lng, url) {
+    var loc = new google.maps.LatLng(lat, lng);
+
+    var marker = new google.maps.Marker({
+      map: map,
+      position: loc,
+      title: name
+    });
+
+    var pubinfo = new google.maps.InfoWindow({
+      content: "<span style='color: black'><a href='" + url + "'>"
+                + name + "</a></span>"
+    });
+
+    google.maps.event.addListener(marker, 'click', function() {
+      pubinfo.open(map, marker);
+    });
+  }
+
+  function all_pubs() {
+    [% FOR pub IN pubs.all %]
+      [% IF pub.lat %]
+        add_marker("[% pub.name %]", [% pub.lat %], [% pub.lng %],
+                   "[% pub.url_to_self %]"
+                  );
+      [% END %]
+    [% END %]
+  }
+
+$(function() {
+    maps_setup();
+    all_pubs();
+});
+</script>
 
 [% INCLUDE footer.tt %]
