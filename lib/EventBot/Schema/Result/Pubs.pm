@@ -31,6 +31,8 @@ __PACKAGE__->add_columns(
         is_nullable => 0,
         default_value => 0
     },
+    lat => { data_type => 'REAL', is_nullable => 1 },
+    lng => { data_type => 'REAL', is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key('id');
 __PACKAGE__->add_unique_constraint([qw(name region)]);
