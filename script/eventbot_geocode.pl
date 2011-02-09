@@ -13,8 +13,8 @@ my $g = EventBot::Geocode->new;
 my $pubs = $schema->resultset('Pubs')->search({}, { order_by => 'id' });
 
 while (my $pub = $pubs->next) {
-    eval {
-        my $loc = $g->address(sprintf('%s, %s',
+    my $loc = eval {
+        $g->address(sprintf('%s, %s',
             $pub->street_address, $pub->region
         ));
     };
@@ -24,7 +24,9 @@ while (my $pub = $pubs->next) {
             $pub->street_address,
             $@, "\n"
         );
+        next;
     }
     $pub->update($loc);
+    print "Geocoded " . $pub->name . "\n";
 }
 
