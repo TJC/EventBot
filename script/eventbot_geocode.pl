@@ -14,9 +14,7 @@ my $pubs = $schema->resultset('Pubs')->search({}, { order_by => 'id' });
 
 while (my $pub = $pubs->next) {
     my $loc = eval {
-        $g->address(sprintf('%s, %s',
-            $pub->street_address, $pub->region
-        ));
+        $g->address($pub->street_address);
     };
     if ($@) {
         print sprintf('Failed to geocode pub %s (%d) at %s: %s%s',

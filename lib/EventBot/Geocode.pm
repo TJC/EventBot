@@ -26,7 +26,6 @@ sub address {
         'region=' . $self->region
     );
     my $url = join('?', $self->geocode_url, $params);
-    warn "URL = $url\n";
     my $response = $ua->get($url);
 
     my $json = JSON->new;
