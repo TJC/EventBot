@@ -39,6 +39,12 @@ has_field 'info_uri' => (
     required => 0,
 );
 
+has_field 'status' => (
+    label => 'Status',
+    required => 1,
+    type => 'Select',
+);
+
 has_field 'submit' => (
     type => 'Submit',
     label => 'Save',
@@ -61,6 +67,20 @@ after 'validate' => sub {
         );
     }
     1;       
+};
+
+# If the pub has closed, un-endorse it as well.
+around 'update_model' => sub {
+    my $orig = shift;
+    my $self = shift;
+    my $item = $self->item;
+
+    $self->schema->txn_do( sub {
+        $self->$orig(@_);
+        if ($item->status->name eq 'Closed') {
+            $item->update({ endorsed => 0 });
+        }
+    });
 };
 
 __PACKAGE__->meta->make_immutable;
