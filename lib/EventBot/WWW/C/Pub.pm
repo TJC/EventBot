@@ -64,7 +64,7 @@ sub pub_region_list :Chained('pub_region') PathPart('') Args(0) {
     }
     $c->stash->{pubs} = $c->model('DB::Pubs')->search(
         \%where,
-        { order_by => 'region, name' }
+        { order_by => 'status, region, name' }
     );
 }
 

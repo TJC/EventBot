@@ -11,7 +11,11 @@ Pubs in region: [% region %]:
 [% FOREACH pub IN pubs.all %]
 <div class="event">
   <a href="[% pub.url_to_self %]">[% pub.name %] ([% pub.region %])</a>
-  [% IF pub.endorsed %]<span style="color: green">Endorsed</span>[% END %]
+  [% IF pub.endorsed %]
+    <span style="color: green">Endorsed</span>
+  [% ELSIF pub.status.name == 'Closed' %]
+    <span style="color: red">Closed</span>
+  [% END %]
 </div>
 [% END %]
 
