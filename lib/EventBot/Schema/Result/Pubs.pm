@@ -21,8 +21,9 @@ use overload
 __PACKAGE__->load_components(qw(Core));
 __PACKAGE__->table('pubs');
 __PACKAGE__->add_columns(
-    id => { data_type => "INTEGER", is_nullable => 0, is_auto_increment => 1 },
-    name => { data_type => 'VARCHAR', size => 64, is_nullable => 0 },
+    id => { data_type => "INTEGER", is_auto_increment => 1 },
+    name => { data_type => 'VARCHAR', size => 64 },
+    status => { data_type => 'INTEGER', default_value => 1 },
     street_address => { data_type => 'VARCHAR', size => 80, is_nullable => 1 },
     region => { data_type => 'VARCHAR', size => 64, is_nullable => 1 },
     info_uri => { data_type => 'VARCHAR', size => 128, is_nullable => 1 },
@@ -41,6 +42,10 @@ __PACKAGE__->has_many(
 );
 __PACKAGE__->many_to_many(
     nominees => 'endorsements', 'person'
+);
+
+__PACKAGE__->belongs_to(
+    status => 'EventBot::Schema::Result::PubStatus'
 );
 
 sub name_escaped {
