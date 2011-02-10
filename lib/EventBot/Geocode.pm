@@ -19,7 +19,7 @@ has 'region' => (
 sub address {
     my ($self, $address) = @_;
     my $ua = LWP::UserAgent->new;
-    $ua->timeout(30);
+    $ua->timeout(5);
     my $params = join('&',
         "address=" . uri_escape($address),
         'sensor=false',

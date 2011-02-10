@@ -3,6 +3,8 @@ package EventBot::WWW::C::Manage::Pub;
 use Moose;
 use namespace::autoclean;
 use EventBot::Form::Pub;
+use EventBot::Geocode;
+
 BEGIN { extends 'Catalyst::Controller'; }
 
 has 'form' => (
@@ -44,6 +46,20 @@ sub edit : Chained('/pub/pub_name') PathPart Args(0) {
         params => $c->request->params,
         action => $c->request->uri->path,
     );
+
+    my $pub = $c->stash->{pub};
+    eval {
+        my $g = EventBot::Geocode->new;
+        my $loc = $g->address($pub->street_address);
+        $pub->update($loc);
+    };
+    if ($@) {
+        my $err = sprintf('Failed to geocode pub %s (%d) at %s: %s%s',
+            $pub->name, $pub->id, $pub->street_address,
+            $@
+        );
+        $c->log->error($err);
+    }
 
     $c->response->redirect($c->stash->{pub}->url_to_self);
     $c->response->body('Redirecting..');
