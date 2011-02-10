@@ -22,6 +22,8 @@ Pubs in region: [% region %]:
 
 <script type='text/javascript'>
   var map;
+  var beer_full;
+  var beer_empty;
 
   function maps_setup() {
     var myOptions = {
@@ -33,16 +35,25 @@ Pubs in region: [% region %]:
         document.getElementById("map_canvas"),
         myOptions
     );
+
+    beer_full = new google.maps.MarkerImage("/static/beer_full_sml.png");
+    beer_empty = new google.maps.MarkerImage("/static/beer_empty_sml.png");
   }
 
-  function add_marker(name, lat, lng, url) {
+  function add_marker(name, lat, lng, url, endorsed) {
     var loc = new google.maps.LatLng(lat, lng);
 
     var marker = new google.maps.Marker({
       map: map,
       position: loc,
-      title: name
+      title: name,
     });
+    if (endorsed) {
+      marker.setIcon(beer_full);
+    }
+    else {
+      marker.setIcon(beer_empty);
+    }
 
     var pubinfo = new google.maps.InfoWindow({
       content: "<span style='color: black'><a href='" + url + "'>"
@@ -58,7 +69,8 @@ Pubs in region: [% region %]:
     [% FOR pub IN pubs.all %]
       [% IF pub.lat %]
         add_marker("[% pub.name %]", [% pub.lat %], [% pub.lng %],
-                   "[% pub.url_to_self %]"
+                   "[% pub.url_to_self %]",
+                   [% IF pub.endorsed %]1[% ELSE %]0[% END %]
                   );
       [% END %]
     [% END %]
