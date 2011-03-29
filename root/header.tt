@@ -23,6 +23,12 @@
     <script type="text/javascript" src="/static/eventbot-api.js"></script>
 [% END %]
     <meta property="fb:admins" content="536696491" />
+    <meta property="og:title" content="EventBot" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://eventbot.dryft.net" />
+    <meta property="og:site_name" content="EventBot" />
+    <meta property="og:image"
+          content="http://eventbot.dryft.net/static/eventbot_icon.png" />
   </head>
   <body>
     <div class="wrapper">
