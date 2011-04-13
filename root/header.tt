@@ -2,8 +2,8 @@
 <html>
   <head>
     <title>[% title || 'EventBot' %]</title>
-    <link href='http://fonts.googleapis.com/css?family=IM+Fell+English' rel='stylesheet' type='text/css' />
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine" />
+    <link href='http://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css' />
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Nobile" />
     <link href="[% base %]static/main.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
