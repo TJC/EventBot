@@ -28,6 +28,9 @@ requires 'Catalyst::Controller::reCAPTCHA';
 requires 'HTML::FormHandler' => '0.32000';
 requires 'HTML::FormHandler::Model::DBIC' => '0.12000';
 requires 'URI::Escape';
+requires 'FCGI';
+requires 'Data::ICal';
+requires 'Data::ICal::DateTime';
 
 requires 'XML::RSS';
 requires 'JSON::XS'; # Used for API calls
