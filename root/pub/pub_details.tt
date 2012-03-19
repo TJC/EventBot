@@ -20,7 +20,7 @@
     [% END %]
   </ul>
 
-  <a href="/[% c.request.path %]/endorse">Add or remove your endorsement</a>
+  <a href="/[% c.request.path %]/endorse">Edit endorsements</a>
   |
   <a href="/[% c.request.path %]/edit">Edit details</a>
 
