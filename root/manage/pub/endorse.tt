@@ -31,7 +31,7 @@
       <option value="[% p.id %]">[% p.name | html %]</option>
       [% END %]
     </select><br>
-    Admin key: <input type="text" name="pw" value="" /><br>
+    Admin key: <input type="password" name="pw" value="" /><br>
     <input type="submit" name="submit" value="Save" />
   </form>
 
