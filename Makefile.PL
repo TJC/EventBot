@@ -18,7 +18,7 @@ requires    'DBIx::Class'       => 0.08107;
 requires    'SQL::Translator'   => 0.09007;
 requires    'File::Slurp';
 requires 'DateTime::Format::Pg';
-requires 'Catalyst' => '5.7100';
+requires 'Catalyst' => '5.9000';
 requires 'Catalyst::View::TT';
 requires 'Catalyst::Model::DBIC::Schema';
 requires 'Catalyst::Plugin::ConfigLoader';
