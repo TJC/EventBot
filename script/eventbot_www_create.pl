@@ -23,7 +23,7 @@ eventbot_www_create.pl [options] model|view|controller name [helper] [options]
 
  Examples:
    eventbot_www_create.pl controller My::Controller
-   eventbot_www_create.pl -mechanize controller My::Controller
+   eventbot_www_create.pl --mechanize controller My::Controller
    eventbot_www_create.pl view My::View
    eventbot_www_create.pl view HTML TT
    eventbot_www_create.pl model My::Model
