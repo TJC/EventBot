@@ -110,20 +110,31 @@ Concludes the election, and tallies up the results.
 sub conclude {
     my $self = shift;
 
-    my $rs = $self->search_related('votes', undef,
+    my @votes = $self->search_related('votes', undef,
         {
             select => [ 'pub', { sum => '(5-rank)*2' } ],
             as => ['pub', 'pub_score'],
             group_by => ['pub'],
         }
-    );
+    )->all;
 
-    # sort in descending order: (because dbix wasn't letting me sort)
+    # sort in descending order: (because dbix wasn't letting me sort, at least
+    # when I first wrote this years ago)
     my @results = sort {
         $b->get_column('pub_score') <=> $a->get_column('pub_score')
-    } $rs->all;
+    } @votes;
 
-    $self->winner($results[0]->pub);
+    if (@votes) {
+        $self->winner($results[0]->pub);
+    }
+    else {
+        # What if there are NO votes?
+        # We pick a random pub..
+        my @candidates = $self->candidates;
+        my $winner = $candidates[int(rand(scalar(@candidates)))];
+        $self->winner($winner);
+    }
+
     $self->enabled(0);
     $self->update;
 
