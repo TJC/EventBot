@@ -18,13 +18,20 @@ requires    'DBIx::Class'       => 0.08107;
 requires    'SQL::Translator'   => 0.09007;
 requires    'File::Slurp';
 requires 'DateTime::Format::Pg';
-requires 'Catalyst' => '5.7100';
+requires 'Catalyst' => '5.9000';
 requires 'Catalyst::View::TT';
 requires 'Catalyst::Model::DBIC::Schema';
 requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Action::RenderView';
 requires 'Catalyst::Controller::reCAPTCHA';
+requires 'HTML::FormHandler' => '0.32000';
+requires 'HTML::FormHandler::Model::DBIC' => '0.12000';
+requires 'URI::Escape';
+requires 'FCGI';
+requires 'Data::ICal';
+requires 'Data::ICal::DateTime';
+
 requires 'XML::RSS';
 requires 'JSON::XS'; # Used for API calls
 requires 'YAML'; # This should reflect the config file format you've chosen
@@ -32,5 +39,5 @@ requires 'YAML'; # This should reflect the config file format you've chosen
 catalyst;
 
 install_script glob('script/*.pl');
-auto_install;
+
 WriteAll;

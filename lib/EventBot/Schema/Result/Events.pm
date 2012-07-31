@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use base 'DBIx::Class';
 use Digest::MD5 qw(md5_hex);
+use DateTime::Format::Pg;
 
 __PACKAGE__->load_components(qw(Core));
 __PACKAGE__->table('events');
@@ -43,6 +44,13 @@ __PACKAGE__->has_many(
     attendees => 'EventBot::Schema::Result::Attendees',
     'event'
 );
+
+# Ugh, I didn't use auto-inflating date columns in this class, so now I'm
+# resorting to this as I'm not sure adding them now won't break something..
+sub date_obj {
+    my $self = shift;
+    return DateTime::Format::Pg->parse_datetime($self->startdate);
+}
 
 our %statusmap = (
     '+' => 'Yes',

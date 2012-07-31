@@ -1,13 +1,85 @@
-[% INCLUDE header.tt %]
+[% INCLUDE header.tt need_gmaps=1 %]
 
 Pubs in region: [% region %]:
 
+<div class='event'>
+  <div id='map_canvas' style='height: 500px; width: 700px'>
+    <i>Loading map..</i>
+  </div>
+</div>
+
 [% FOREACH pub IN pubs.all %]
 <div class="event">
-  <a href="/pub/[% pub.region %]/[% pub.name %]">[% pub.name %] ([% pub.region
-    %])</a>
-  [% IF pub.endorsed %]<span style="color: green">Endorsed</span>[% END %]
+  <a href="[% pub.url_to_self %]">[% pub.name %] ([% pub.region %])</a>
+  [% IF pub.endorsed %]
+    <span style="color: green">Endorsed</span>
+  [% ELSIF pub.status.name == 'Closed' %]
+    <span style="color: red">Closed</span>
+  [% END %]
 </div>
 [% END %]
+
+
+<script type='text/javascript'>
+  var map;
+  var beer_full;
+  var beer_empty;
+
+  function maps_setup() {
+    var myOptions = {
+      zoom: 11,
+      center: new google.maps.LatLng(51.550, -0.117), // London
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(
+        document.getElementById("map_canvas"),
+        myOptions
+    );
+
+    beer_full = new google.maps.MarkerImage("/static/beer_full_sml.png");
+    beer_empty = new google.maps.MarkerImage("/static/beer_empty_sml.png");
+  }
+
+  function add_marker(name, lat, lng, url, endorsed) {
+    var loc = new google.maps.LatLng(lat, lng);
+
+    var marker = new google.maps.Marker({
+      map: map,
+      position: loc,
+      title: name,
+    });
+    if (endorsed) {
+      marker.setIcon(beer_full);
+    }
+    else {
+      marker.setIcon(beer_empty);
+    }
+
+    var pubinfo = new google.maps.InfoWindow({
+      content: "<span style='color: black'><a href='" + url + "'>"
+                + name + "</a></span>"
+    });
+
+    google.maps.event.addListener(marker, 'click', function() {
+      pubinfo.open(map, marker);
+    });
+  }
+
+  function all_pubs() {
+    [% FOR pub IN pubs.all %]
+      [% IF pub.lat %]
+        add_marker("[% pub.name %]", [% pub.lat %], [% pub.lng %],
+                   "[% pub.url_to_self %]",
+                   [% IF pub.endorsed %]1[% ELSE %]0[% END %]
+                  );
+      [% END %]
+    [% END %]
+  }
+
+$(function() {
+    maps_setup();
+    all_pubs();
+});
+</script>
 
 [% INCLUDE footer.tt %]

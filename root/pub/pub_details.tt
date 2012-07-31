@@ -1,4 +1,4 @@
-[% INCLUDE header.tt %]
+[% INCLUDE header.tt need_gmaps=1 %]
 
 <div class="event">
   Name: [% pub.name %]<br/>
@@ -6,8 +6,12 @@
   Address: [% pub.street_address %]<br/>
   URL: <a href="[% pub.info_uri %]">[% pub.info_uri %]</a><br/>
   Status:
-    [% IF pub.endorsed %]<span style="color: green">Endorsed</span>
-    [% ELSE %]<span style="color: red">Not endorsed</span>
+    [% IF pub.endorsed %]
+      <span style="color: green">Endorsed</span>
+    [% ELSIF pub.status.name == 'Closed' %]
+      <span style="color: red">Closed</span>
+    [% ELSE %]
+      <span style="color: red">Not endorsed</span>
     [% END %]<br />
   Endorsed by:
   <ul>
@@ -16,10 +20,77 @@
     [% END %]
   </ul>
 
-  <a href="/[% c.request.path %]/endorse">Add or remove your endorsement</a>
+  <a href="/[% c.request.path %]/endorse">Edit endorsements</a>
   |
   <a href="/[% c.request.path %]/edit">Edit details</a>
 
 </div>
+
+<div class='event'>
+<div id='map_canvas' style='height: 500px; width: 700px'></div>
+</div>
+
+<script type='text/javascript'>
+  var map;
+
+  function get_location() {
+    var address = "[% pub.street_address %], [% pub.region %]";
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode(
+      {
+        'address': address,
+        'region': 'uk',
+      },
+      function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+          maps_init(results[0].geometry.location);
+        }
+        else {
+          alert('Geocode failed: ' + status);
+        }
+      }
+    );
+
+  }
+
+  function maps_init(loc) {
+    // Once we have pre-geocoded, we can do:
+    // center: new google.maps.LatLng(-34.397, 150.644),
+    var myOptions = {
+      zoom: 15,
+      center: loc,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("map_canvas"),
+          myOptions);
+    var marker = new google.maps.Marker({
+      map: map,
+      position: loc
+    });
+  }
+
+  function maps_setup() {
+    var loc = new google.maps.LatLng([% pub.lat || 0.0 %], [% pub.lng || 0.0 %]);
+    var myOptions = {
+      zoom: 15,
+      center: loc,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("map_canvas"),
+          myOptions);
+    var marker = new google.maps.Marker({
+      map: map,
+      position: loc
+    });
+  }
+
+$(function() {
+  [% IF pub.lat %]
+    maps_setup();
+  [% ELSE %]
+    $('#map_canvas').html("<p>Map not yet available.</p>");
+  [% END %]
+});
+</script>
 
 [% INCLUDE footer.tt %]

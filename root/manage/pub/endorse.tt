@@ -1,7 +1,40 @@
 [% INCLUDE header.tt %]
 
 <div class="event">
-  Endorsement stuff goes here.
+  
+  [% IF message %]
+  <div style="color: red; border: 1px solid red;">[% message %]</div>
+  [% END %]
+
+  <form method="post">
+    <em>First endorser:</em><br>
+    <select name="endorser1">
+      <option id="DELETE">--Unendorsed--</option>
+      [% FOR p IN all_users %]
+      <option value="[% p.id %]"
+        [% IF current_endorsers.0 == p.id %]selected="selected"[% END %]
+      >[% p.name | html %]</option>
+      [% END %]
+    </select><br>
+    <em>Second endorser:</em><br>
+    <select name="endorser2">
+      <option id="DELETE">--Unendorsed--</option>
+      [% FOR p IN all_users %]
+      <option value="[% p.id %]"
+        [% IF current_endorsers.1 == p.id %]selected="selected"[% END %]
+      >[% p.name | html %]</option>
+      [% END %]
+    </select><br>
+    Admin: <select name="admin">
+      <option id=""></option>
+      [% FOR p IN all_admins.all %]
+      <option value="[% p.id %]">[% p.name | html %]</option>
+      [% END %]
+    </select><br>
+    Admin key: <input type="password" name="pw" value="" /><br>
+    <input type="submit" name="submit" value="Save" />
+  </form>
+
 </div>
 
 [% INCLUDE footer.tt %]
