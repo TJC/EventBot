@@ -1,10 +1,8 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
 package EventBot::WWW;
-
-use strict;
+use 5.16.0;
 use warnings;
-
-use Catalyst::Runtime '5.70';
+use Catalyst::Runtime '5.90';
 
 # Set flags and add plugins for the application
 #
@@ -30,11 +28,11 @@ our $VERSION = '0.15';
 __PACKAGE__->config(
     name => 'EventBot',
     default_view => 'TT',
+    encoding => 'UTF-8',
 );
 
 # Start the application
 __PACKAGE__->setup;
-
 
 =head1 NAME
 

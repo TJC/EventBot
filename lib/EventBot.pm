@@ -1,9 +1,7 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
 package EventBot;
-use 5.010;
-use strict;
+use 5.16.0;
 use warnings;
-use feature qw(switch);
 
 use Carp qw(croak);
 use Mail::Address;
