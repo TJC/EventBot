@@ -4,7 +4,7 @@ use warnings;
 use Test::More tests => 2;
 use Catalyst::Test 'EventBot::WWW';
 
-use_ok('EventBot::WWW::C::RSS');
+use_ok('EventBot::WWW::Controller::RSS');
 
 ok( request('/rss/upcoming')->is_success, 'RSS feed live');
 
