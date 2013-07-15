@@ -1,4 +1,4 @@
-package EventBot::WWW::V::JSON;
+package EventBot::WWW::View::JSON;
 use strict;
 use warnings;
 use parent qw(Catalyst::View);
@@ -6,7 +6,7 @@ use JSON::XS;
 
 =head1 NAME
 
-EventBot::WWW::V::JSON
+EventBot::WWW::View::JSON
 
 =head1 DESCRIPTION
 

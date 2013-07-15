@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::WWW::V::TT;
+package EventBot::WWW::View::TT;
 
 use strict;
 use base 'Catalyst::View::TT';
@@ -14,7 +14,7 @@ __PACKAGE__->config(
 
 =head1 NAME
 
-EventBot::WWW::V::TT - TT View for EventBot::WWW
+EventBot::WWW::View::TT - TT View for EventBot::WWW
 
 =head1 DESCRIPTION
 

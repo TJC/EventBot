@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::WWW::M::DB;
+package EventBot::WWW::Model::DB;
 use strict;
 use warnings;
 use base 'Catalyst::Model::DBIC::Schema';
@@ -23,7 +23,7 @@ __PACKAGE__->config(
 
 =head1 NAME
 
-EventBot::WWW::M::DB - Catalyst DBIC Schema Model
+EventBot::WWW::Model::DB - Catalyst DBIC Schema Model
 
 =head1 SYNOPSIS
 
