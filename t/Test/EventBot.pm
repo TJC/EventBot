@@ -5,6 +5,10 @@ use warnings;
 use FindBin;
 use File::Temp qw(:seekable);
 use Config::General qw(SaveConfig);
+use Try::Tiny;
+use EventBot::Schema;
+use Test::More;
+use Test::WWW::Mechanize::Catalyst;
 
 =head1 NAME
 
@@ -26,23 +30,28 @@ BEGIN {
     print STDERR "Creating database $EventBot_DB\n";
     system('createdb', '--encoding=utf8', $EventBot_DB);
 
-    $config_file = File::Temp->new(SUFFIX => '.cfg');
-    $ENV{EVENTBOT_CONFIG} = $config_file->filename;
+    $config_file = File::Temp->new(SUFFIX => '.conf');
+    $ENV{CATALYST_CONFIG} = $ENV{EVENTBOT_CONFIG} = $config_file->filename;
 
     $ENV{EVENTBOT_TEST} = 1;
 
-    print "\nFindBin = $FindBin::Bin\n\n";
-}
-use EventBot::Schema;
+    # Setup a config file:
+    my %test_config = Config::General->new("$FindBin::Bin/../eventbot.conf")->getall;
+    $test_config{database}{dsn} =
+        $test_config{"Model::DB"}{connect_info}{dsn} =
+            "dbi:Pg:dbname=$EventBot_DB";
 
-# Setup a config file:
-my %test_config = Config::General->new("$FindBin::Bin/../eventbot.conf")->getall;
-$test_config{database}->{dsn} = "dbi:Pg:dbname=$EventBot_DB";
-$test_config{database}->{username} = '';
-$test_config{database}->{password} = '';
-$test_config{list_addr} = 'sluts@example.com';
-$test_config{from_addr} = 'eventbot@example.com';
-SaveConfig($config_file->filename, \%test_config);
+    $test_config{"Model::DB"}{connect_info}{username} =
+        $test_config{database}{username} = "$ENV{USER}";
+
+    $test_config{"Model::DB"}{connect_info}{password} =
+        $test_config{database}{password} = "";
+
+    $test_config{list_addr} = 'sluts@example.com';
+    $test_config{from_addr} = 'eventbot@example.com';
+
+    SaveConfig($config_file->filename, \%test_config);
+}
 
 =head2 schema
 
@@ -58,18 +67,17 @@ sub schema {
             "dbi:Pg:dbname=$EventBot_DB"
         );
         # Verify we're deployed:
-        eval {
+        try {
             $schema->resultset('Pubs')->search->next;
-        };
-        if ($@) {
-           if ($@ =~ /(no such table|does not exist)/i) {
-               warn "Deploying database $EventBot_DB..\n"
-                   unless $ENV{HARNESS_ACTIVE};
+        }
+        catch {
+           if ($_ =~ /(no such table|does not exist)/i) {
+               note("Deploying database $EventBot_DB");
                $schema->deploy;
             } else {
-                die $@;
+                die $_;
             }
-        }
+        };
     }
 
     return $schema;
@@ -83,6 +91,12 @@ Returns the filename for the config file for testing.
 
 sub config_file {
     return $config_file->filename;
+}
+
+# Ensure schema exists and test config written out before starting app
+sub mech {
+    schema();
+    return Test::WWW::Mechanize::Catalyst->new(catalyst_app => 'EventBot::WWW');
 }
 
 =head2 END
