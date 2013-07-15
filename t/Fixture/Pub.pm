@@ -1,8 +1,7 @@
 package Fixture::Pub;
-use strict;
+use 5.16.0;
 use warnings;
-use base qw(Fixture::Base);
-use Digest;
+use parent qw(Fixture::Base);
 
 our $pubcount = 0;
 
@@ -39,6 +38,7 @@ sub new {
             street_address => "$unique Old Street",
             region => "Testing",
             info_uri => "http://example.com/$unique",
+            status => { name => 'Open' },
         }
     );
 
