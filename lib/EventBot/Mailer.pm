@@ -1,17 +1,20 @@
 package EventBot::Mailer;
-use Moose;
+use 5.16.0;
+use warnings;
+use Moo;
+use MooX::Types::MooseLike::Base qw( :all );
+use Email::Sender::Simple qw(sendmail);
 use Email::Simple;
 use Email::Simple::Creator;
-use Email::Send;
 
 has 'from_addr' => (
     is => 'rw',
-    isa => 'Str',
+    isa => Str,
 );
 
 has 'list_addr' => (
     is => 'rw',
-    isa => 'Str',
+    isa => Str,
 );
 
 
@@ -61,13 +64,7 @@ EOM
     # Do not *actually* send email if we're testing:
     return if $ENV{EVENTBOT_TEST};
 
-    Email::Send->new({mailer => 'Sendmail'})->send($email->as_string);
-
-#    my $mailer = Email::Send->new({mailer => 'SMTP'});
-#    $mailer->mailer_args([ Host => 'localhost' ]);
-#    $mailer->send($email->as_string);
+    sendmail($email);
 }
-
-
 
 1;
