@@ -11,6 +11,14 @@ before 'deploy' => sub {
     $schema->storage->dbh->do('SET client_min_messages = warning');
 };
 
+after 'deploy' => sub {
+    my $schema = shift;
+    my $rs = $schema->resultset('PubStatus');
+    for my $status (qw(Open Closed)) {
+        $rs->create({name => $status});
+    }
+};
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 1;
