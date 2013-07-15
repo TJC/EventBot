@@ -2,7 +2,6 @@
 use strict;
 use warnings;
 use Test::More;
-use Test::WWW::Mechanize::Catalyst 'EventBot::WWW';
 use FindBin;
 use lib "$FindBin::Bin";
 use Test::EventBot;
@@ -10,22 +9,14 @@ use Fixture::Pub;
 use DateTime;
 use JSON::XS;
 
-=head1 WARNING
-
-This test is a bit flawed; EventBot::Test connects to a temp DB, but
-EventBot::WWW still connects to the DB in the eventbot.yml file.
-
-Will fix later. -Toby
-
-=cut
-
 my $tomorrow = DateTime->today->add(days => 1)->ymd;
 
 ok($ENV{EVENTBOT_TEST}, "Testing environment enabled") or die;
 
 # Causes database to be deployed!
 my $schema = Test::EventBot->schema;
-my $mech = Test::WWW::Mechanize::Catalyst->new;
+
+my $mech = Test::EventBot->mech;
 
 # Create an event:
 $schema->resultset('Events')->create(
@@ -41,7 +32,7 @@ $schema->resultset('Events')->create(
 $mech->get_ok('/api');
 
 $mech->get_ok( '/api/current_events' );
-diag("Current events = " . $mech->content) unless $ENV{HARNESS_ACTIVE};
+note("Current events = " . $mech->content);
 my $event = decode_json($mech->content);
 is($event->[0]->{comments}, 'foo bar baby!', "Event comments returned");
 
@@ -55,7 +46,7 @@ for (1..10) {
 $schema->resultset('Elections')->commence;
 
 $mech->get_ok( '/api/election_candidates' );
-diag($mech->content) unless $ENV{HARNESS_ACTIVE};
+note($mech->content);
 my $candidates = decode_json($mech->content);
 ok($candidates->{election}{id}, "Retrieved election ID");
 
