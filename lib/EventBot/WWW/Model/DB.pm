@@ -1,17 +1,17 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
 package EventBot::WWW::Model::DB;
-use strict;
+use 5.16.0;
 use warnings;
-use base 'Catalyst::Model::DBIC::Schema';
+use parent 'Catalyst::Model::DBIC::Schema';
 require EventBot::WWW; # TODO: Remove this almost-circular dependency..
 # (We use to get at the config object, which we can access in better ways)
 
 __PACKAGE__->config(
     schema_class => 'EventBot::Schema',
     connect_info => [
-        EventBot::WWW->config->{db}{dsn},
-        EventBot::WWW->config->{db}{username},
-        EventBot::WWW->config->{db}{password},
+        EventBot::WWW->config->{database}{dsn},
+        EventBot::WWW->config->{database}{username},
+        EventBot::WWW->config->{database}{password},
         {
             AutoCommit => 1,
             pg_enable_utf8 => 1,

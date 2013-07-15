@@ -36,7 +36,7 @@ BEGIN {
 use EventBot::Schema;
 
 # Setup a config file:
-my %test_config = Config::General->new("$FindBin::Bin/../eventbot.cfg")->getall;
+my %test_config = Config::General->new("$FindBin::Bin/../eventbot.conf")->getall;
 $test_config{database}->{dsn} = "dbi:Pg:dbname=$EventBot_DB";
 $test_config{database}->{username} = '';
 $test_config{database}->{password} = '';
@@ -95,7 +95,7 @@ sub END {
      # The test harnesses tend to hold the DB connection open until after END
      # is called, so we queue the delete for a moment later:
      print STDERR "Dropping Test DB " . $EventBot_DB . "\n";
-     open(my $fh, "| at 'now + 1 minutes'");
+     open(my $fh, "| at 'now + 2 minutes'");
      print $fh "dropdb $EventBot_DB\n";
      close $fh;
 }

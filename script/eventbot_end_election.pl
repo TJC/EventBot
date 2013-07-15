@@ -11,7 +11,7 @@ use DateTime;
 
 my ($dbname, $user) = qw(eventbot eventbot);
 my $bot = EventBot->new({
-	    config => ($ENV{EVENTBOT_CONFIG} || 'eventbot.cfg'),
+        config => ($ENV{EVENTBOT_CONFIG} || 'eventbot.conf'),
 });
 my ($help, $sendmail, $election_id);
 GetOptions(

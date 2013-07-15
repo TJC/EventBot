@@ -18,7 +18,7 @@ my $log = IO::File->new($logfile, 'a')
 my $email = read_file(\*STDIN);
 my $bot = EventBot->new({
     logfile => $log,
-    config => ($ENV{EVENTBOT_CONFIG} || 'eventbot.cfg'),
+    config => ($ENV{EVENTBOT_CONFIG} || 'eventbot.conf'),
 });
 $bot->parse_email($email);
 $log->close;
