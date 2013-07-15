@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::WWW::C::Event;
+package EventBot::WWW::Controller::Event;
 
 use strict;
 use warnings;
@@ -7,7 +7,7 @@ use base 'Catalyst::Controller';
 
 =head1 NAME
 
-EventBot::WWW::C::Event - Catalyst Controller
+EventBot::WWW::Controller::Event - Catalyst Controller
 
 =head1 DESCRIPTION
 

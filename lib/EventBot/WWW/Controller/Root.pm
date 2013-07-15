@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::WWW::C::Root;
+package EventBot::WWW::Controller::Root;
 
 use strict;
 use warnings;
@@ -13,7 +13,7 @@ __PACKAGE__->config->{namespace} = '';
 
 =head1 NAME
 
-EventBot::WWW::C::Root - Root Controller for EventBot::WWW
+EventBot::WWW::Controller::Root - Root Controller for EventBot::WWW
 
 =head1 DESCRIPTION
 

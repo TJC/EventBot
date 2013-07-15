@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::WWW::C::Election;
+package EventBot::WWW::Controller::Election;
 
 use strict;
 use warnings;
@@ -8,7 +8,7 @@ use feature ':5.10';
 
 =head1 NAME
 
-EventBot::WWW::C::Election
+EventBot::WWW::Controller::Election
 
 =head1 DESCRIPTION
 

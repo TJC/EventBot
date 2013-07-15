@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::WWW::C::Manage::Pub;
+package EventBot::WWW::Controller::Manage::Pub;
 use Moose;
 use namespace::autoclean;
 use EventBot::Form::Pub;

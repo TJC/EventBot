@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::WWW::C::RSS;
+package EventBot::WWW::Controller::RSS;
 
 use strict;
 use warnings;
@@ -8,7 +8,7 @@ use XML::RSS;
 
 =head1 NAME
 
-EventBot::WWW::C::RSS - Catalyst Controller
+EventBot::WWW::Controller::RSS - Catalyst Controller
 
 =head1 DESCRIPTION
 

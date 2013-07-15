@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::WWW::C::Manage::SpecialEvent;
+package EventBot::WWW::Controller::Manage::SpecialEvent;
 use strict;
 use warnings;
 use parent 'Catalyst::Controller';

@@ -1,5 +1,5 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
-package EventBot::WWW::C::ICal;
+package EventBot::WWW::Controller::ICal;
 
 use strict;
 use warnings;
@@ -11,7 +11,7 @@ use Data::ICal::Entry::Event;
 
 =head1 NAME
 
-EventBot::WWW::C::ICal
+EventBot::WWW::Controller::ICal
 
 =head1 DESCRIPTION
 

@@ -1,11 +1,11 @@
-package EventBot::WWW::C::API;
+package EventBot::WWW::Controller::API;
 use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 
 =head1 NAME
 
-EventBot::WWW::C::API
+EventBot::WWW::Controller::API
 
 =head1 DESCRIPTION
 
