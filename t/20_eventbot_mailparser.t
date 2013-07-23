@@ -103,9 +103,16 @@ use_ok('EventBot::MailParser') or die;
     );
 }
 
-# Test a vote:
-{
-    my $attend_mime = slurp('t/vote.txt');
+# Test vote emails:
+my %votes = (
+    'vote.txt' => [qw(A B C E)],
+    'vote_1.txt' => [qw(D A B)],
+    'vote_2.txt' => [qw(B)],
+    'vote_3.txt' => [qw(D C B)],
+    'vote_4.txt' => [qw(E)],
+);
+while (my ($file, $results) = each %votes) {
+    my $attend_mime = slurp("t/$file");
     my $parser = EventBot::MailParser->new;
     $parser->parse($attend_mime);
     # diag(Dumper($parser->commands));
@@ -113,10 +120,10 @@ use_ok('EventBot::MailParser') or die;
         $parser->commands,
         [{
             type => 'vote',
-            votes => [qw(A B C E)],
+            votes => $results,
         }],
-        "Found votes in plaintext email"
+        "Found correct votes in email $file"
     );
 }
 
-done_testing();
+done_testing;
