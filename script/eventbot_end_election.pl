@@ -1,7 +1,6 @@
 #!/usr/bin/env perl
-use strict;
+use 5.14.0;
 use warnings;
-use feature ':5.10';
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use EventBot;
@@ -55,7 +54,7 @@ my $pub = $e->winner;
 # Check if that pub was a special event:
 my $birthday = $schema->resultset('SpecialEvents')->search(
     {
-        date => next_thursday(),
+        date => $schema->storage->datetime_parser->format_datetime($thursday),
         pub => $pub->id,
         confirmed => 1,
     }
@@ -65,7 +64,7 @@ my @body;
 push @body, 'We have a winner:';
 push @body, sprintf('Place: %s (%s)', $pub->name, $pub->region);
 if ($pub->name !~ /none of the above/i) {
-    push @body, "Date: " . next_thursday()->dmy;
+    push @body, "Date: " . $thursday->dmy;
     push @body, "Time: Evening";
     push @body, 'Address: ' . $pub->street_address;
     if ($pub->info_uri) {
@@ -117,14 +116,14 @@ push @body, sprintf(
 my $event_mail = MIME::Lite->new(
     From => $bot->from_addr,
     To   => $bot->from_addr,
-    Subject => 'Pub for ' . next_thursday()->dmy,
+    Subject => 'Pub for ' . $thursday->dmy,
     Data => $event_body,
 );
 
 my $mail = MIME::Lite->new(
     From => $bot->from_addr,
     To   => $bot->list_addr,
-    Subject => 'Election results for ' . next_thursday()->dmy,
+    Subject => 'Election results for ' . $thursday->dmy,
     Data => join("\n", @body),
 );
 

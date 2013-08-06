@@ -1,7 +1,6 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
 package EventBot::WWW::Controller::ICal;
-
-use strict;
+use 5.14.0;
 use warnings;
 use parent 'Catalyst::Controller';
 use DateTime;
@@ -34,16 +33,18 @@ sub index :Private {
     my $recently = DateTime->now;
     $recently->add(days => -14);
 
+    my $db_date = $c->model('DB')->storage->datetime_parser->format_datetime($recently);
+
     my $events = $c->model('DB::Events')->search(
         {
-            startdate => { '>=' => $recently },
+            startdate => { '>=' => $db_date },
         },
         { order_by => 'startdate' }
     );
 
     my $specEvents = $c->model('DB::SpecialEvents')->search(
         {
-            date => { '>=' => $recently },
+            date => { '>=' => $db_date },
             confirmed => 1
         },
         { order_by => 'date' }

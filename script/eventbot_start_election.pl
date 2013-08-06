@@ -39,7 +39,7 @@ my $thursday = next_thursday();
 my @specEvents = $schema->resultset('SpecialEvents')
     ->search(
         {
-            date => $thursday,
+            date => $schema->storage->datetime_parser->format_datetime($thursday),
             confirmed => 1
         }
     );
