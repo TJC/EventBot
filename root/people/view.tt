@@ -1,7 +1,7 @@
 [% INCLUDE header.tt %]
 [% IF message %]<b>[% message %]</b>[% END %]
 <div class="event">
-Details for [% person.name %].<br/>
+Details for [% person.name_redacted %].<br/>
 They have been at the following events:
 <ul>
   [% FOREACH event IN person.events %]

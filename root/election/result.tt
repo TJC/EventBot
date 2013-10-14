@@ -27,7 +27,7 @@
   <h4>Votes</h4>
   <ul>
   [% FOREACH vote IN election.votes %]
-  <li><a href="/people/view/[% vote.person.name %]">[% vote.person.name %]</a>
+  <li><a href="/people/view/[% vote.person.id %]">[% vote.person.name_redacted %]</a>
     ([% vote.person.email_redacted %]): [% vote.pub.name %]
     (Rank [% vote.rank %])
   </li>

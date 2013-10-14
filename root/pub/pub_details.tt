@@ -16,7 +16,7 @@
   Endorsed by:
   <ul>
     [% FOREACH nom IN pub.nominees %]
-    <li><a href="/people/view/[% nom.name %]">[% nom.name %]</a></li>
+    <li><a href="/people/view/[% nom.id %]">[% nom.name_redacted %]</a></li>
     [% END %]
   </ul>
 

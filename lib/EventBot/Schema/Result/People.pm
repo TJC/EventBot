@@ -43,4 +43,22 @@ sub email_redacted {
     return $email;
 }
 
+# Return a redacted version of someone's name if it appears to be a full
+# name, and not just a single word.
+sub name_redacted {
+    my $self = shift;
+    my $name = $self->name;
+    my $email = $self->email;
+    if ($name eq $email) {
+        return $self->email_redacted;
+    }
+
+    my ($first, $rest) = $name =~ /^([[:graph:]]+)\s+(.+)/;
+    return $name unless defined $rest and length($rest) > 1;
+
+    my $len = int(length($rest) / 3.0);
+    substr($rest, $len, $len, '*'x$len);
+    return "$first $rest";
+}
+
 1;

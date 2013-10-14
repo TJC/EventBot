@@ -1,4 +1,4 @@
   <tr>
     <td>[% a.get_column('count') %]</td>
-    <td><a href="/people/view/[% a.person.id %]">[% a.person.name %]</a></td>
+    <td><a href="/people/view/[% a.person.id %]">[% a.person.name_redacted %]</a></td>
   </tr>

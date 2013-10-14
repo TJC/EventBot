@@ -13,7 +13,7 @@
       [% FOR p IN all_users %]
       <option value="[% p.id %]"
         [% IF current_endorsers.0 == p.id %]selected="selected"[% END %]
-      >[% p.name | html %]</option>
+      >[% p.name_redacted | html %]</option>
       [% END %]
     </select><br>
     <em>Second endorser:</em><br>
@@ -22,13 +22,13 @@
       [% FOR p IN all_users %]
       <option value="[% p.id %]"
         [% IF current_endorsers.1 == p.id %]selected="selected"[% END %]
-      >[% p.name | html %]</option>
+      >[% p.name_redacted | html %]</option>
       [% END %]
     </select><br>
     Admin: <select name="admin">
       <option id=""></option>
       [% FOR p IN all_admins.all %]
-      <option value="[% p.id %]">[% p.name | html %]</option>
+      <option value="[% p.id %]">[% p.name_redacted | html %]</option>
       [% END %]
     </select><br>
     Admin key: <input type="password" name="pw" value="" /><br>
