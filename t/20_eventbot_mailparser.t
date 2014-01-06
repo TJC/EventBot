@@ -110,6 +110,7 @@ my %votes = (
     'vote_2.txt' => [qw(B)],
     'vote_3.txt' => [qw(D C B)],
     'vote_4.txt' => [qw(E)],
+    'vote_5.txt' => [qw(B A D)],
 );
 while (my ($file, $results) = each %votes) {
     my $attend_mime = slurp("t/$file");

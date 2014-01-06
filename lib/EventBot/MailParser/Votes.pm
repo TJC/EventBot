@@ -13,10 +13,11 @@ sub parse {
             /^
             \s*
             I\svote\s*:\s*
-            ([A-P])\s*
-            ([A-P])?\s*
-            ([A-P])?\s*
-            ([A-P])?\s*
+            ([A-P])[,\s]*
+            ([A-P])?[,\s]*
+            ([A-P])?[,\s]*
+            ([A-P])?
+            \.?
             /xi
         ) {
             @votes = grep { $_ } @votes; # Remove blank votes.
