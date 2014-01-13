@@ -11,8 +11,8 @@ requires    'File::Spec';
 requires    'Email::Simple' => 2.005;
 requires    'Email::MIME';
 requires    'Email::Simple::Creator' => 1.423;
-requires    'Email::Send'  => 2.17;
-requires    'MIME::Lite' => 3;
+requires    'Email::Sender::Simple';
+requires    'Email::MIME';
 requires    'Mail::Address'     => 1.67; # figure out correct one
 requires    'DBIx::Class'       => 0.08107;
 requires    'SQL::Translator'   => 0.09007;
@@ -28,14 +28,13 @@ requires 'Catalyst::Controller::reCAPTCHA';
 requires 'HTML::FormHandler' => '0.32000';
 requires 'HTML::FormHandler::Model::DBIC' => '0.12000';
 requires 'URI::Escape';
-requires 'FCGI';
+#requires 'FCGI';
 requires 'Data::ICal';
 requires 'Data::ICal::DateTime';
 
 requires 'XML::RSS';
 requires 'JSON::XS'; # Used for API calls
-requires 'YAML'; # This should reflect the config file format you've chosen
-                 # See Catalyst::Plugin::ConfigLoader for supported formats
+
 catalyst;
 
 install_script glob('script/*.pl');
