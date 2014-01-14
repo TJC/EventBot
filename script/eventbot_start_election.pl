@@ -11,9 +11,7 @@ use MIME::Lite;
 use DateTime;
 
 my ($dbname, $user) = qw(eventbot eventbot);
-my $bot = EventBot->new({
-    config => ($ENV{EVENTBOT_CONFIG} || 'eventbot.conf'),
-});
+my $bot = EventBot->new;
 my ($help, $sendmail);
 GetOptions(
     'database=s' => \$dbname,

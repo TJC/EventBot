@@ -2,43 +2,71 @@
 package EventBot;
 use 5.16.0;
 use warnings;
-
+use Moo;
 use Carp qw(croak);
 use Mail::Address;
 use Config::General;
 use EventBot::Schema;
 use EventBot::MailParser;
 use EventBot::Mailer;
-use base 'Class::Accessor';
-__PACKAGE__->mk_accessors(qw(schema parser logfile from_addr list_addr));
 
 our $VERSION = '2.00';
 
-sub new {
-    my ($class, $args) = @_;
-    my $self = bless {}, $class;
+# This module was converted from Class::Accessor to Moo, which causes a few
+# things to not-quite-make-sense now. Also the original object design was
+# poor.
 
-    $self->logfile($args->{logfile});
+has 'parser' => (
+    is => 'rw',
+);
 
-    # Get addresses from config file
-    croak("Config file not specified") unless $args->{config};
-    my %config = Config::General->new($args->{config})->getall;
-    die("Failed to read valid configuration!") unless %config;
+has 'config' => (
+    is => 'rw',
+    default => sub { $ENV{EVENTBOT_CONFIG} || 'eventbot.conf' },
+);
 
-    $self->from_addr($config{from_addr});
-    $self->list_addr($config{list_addr});
+has 'from_addr' => (
+    is => 'rw',
+    lazy => 1,
+    default => sub { shift->config->{from_addr} },
+);
 
-    $self->schema( EventBot::Schema->connect(
-        $config{database}->{dsn},
-        $config{database}->{username},
-        $config{database}->{password},
+has 'list_addr' => (
+    is => 'rw',
+    lazy => 1,
+    default => sub { shift->config->{list_addr} },
+);
+
+has 'schema' => (
+    is => 'rw',
+    lazy => 1,
+    default => sub {
+      my $self = shift;
+      EventBot::Schema->connect(
+        $self->config->{database}->{dsn},
+        $self->config->{database}->{username},
+        $self->config->{database}->{password},
         {
             AutoCommit => 1,
             pg_enable_utf8 => 1,
         }
-    ));
+      )
+    },
+);
 
-    return $self;
+has 'logfile' => (
+    is => 'rw',
+);
+
+sub BUILD {
+    my $self = shift;
+    # This is pretty nasty.. It's because I added Moo to this module later,
+    # and the original API has it called with the name of the config file.
+    croak("Config file " . $self->config . " invalid") unless (-r $self->config);
+    my %config = Config::General->new($self->config)->getall;
+    die("Failed to read valid configuration from " . $self->config) unless %config;
+    $self->config(\%config);
+    return;
 }
 
 sub parse_email {

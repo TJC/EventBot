@@ -16,10 +16,9 @@ my $log = IO::File->new($logfile, 'a')
     or die("Unable to open logfile: $!");
 
 my $email = read_file(\*STDIN);
-my $bot = EventBot->new({
+my $bot = EventBot->new(
     logfile => $log,
-    config => ($ENV{EVENTBOT_CONFIG} || 'eventbot.conf'),
-});
+);
 $bot->parse_email($email);
 $log->close;
 

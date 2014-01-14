@@ -18,9 +18,7 @@ system('createdb', '--encoding=utf8', $dbname);
 # EventBot::Schema->connect("dbi:Pg:dbname=$dbname;host=YOUR_DB_HOST_HERE", $user)
 # And if you have password auth setup:
 # EventBot::Schema->connect("dbi:Pg:dbname=$dbname;host=192.168.1.162", $user, 'PASSWORD')
-my $bot = EventBot->new({
-    config => ($ENV{EVENTBOT_CONFIG} || 'eventbot.conf'),
-});
+my $bot = EventBot->new;
 
 my $schema = $bot->schema;
 
