@@ -36,7 +36,7 @@ for my $i (1 .. $nm) {
     print $email->header('Date') . "\t==\t";
     say $email->header('Subject');
 
-    $bot->parse_email($message);
+    $bot->parse_email("$message");
     $imap->delete($i);
 }
 
