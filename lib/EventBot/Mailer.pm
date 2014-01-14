@@ -6,6 +6,9 @@ use MooX::Types::MooseLike::Base qw( :all );
 use Email::Sender::Simple qw(sendmail);
 use Email::Simple;
 use Email::Simple::Creator;
+use Email::Sender::Simple qw(sendmail);
+use Email::Sender::Transport::SMTP qw();
+use EventBot (); # required for config; TODO properly
 
 has 'from_addr' => (
     is => 'rw',
@@ -64,7 +67,20 @@ EOM
     # Do not *actually* send email if we're testing:
     return if $ENV{EVENTBOT_TEST};
 
-    sendmail($email);
+    my $bot = EventBot->new; # TODO get config properly
+    sendmail(
+        $email,
+        {
+            from => $bot->config->{imap}{email},
+            transport => Email::Sender::Transport::SMTP->new({
+                host => 'smtp.gmail.com',
+                port => 465,
+                sasl_username => $bot->config->{imap}{email},
+                sasl_password => $bot->config->{imap}{passwd},
+                ssl => $bot->config->{imap}{use_ssl}
+            })
+        }
+    );
 }
 
 1;
