@@ -115,8 +115,19 @@ sub do_attend {
 sub find_event {
     my ($self, $vars) = @_;
 
+    # Normalize date to ISO8601
+    my $date;
+    given ($vars->{date}) {
+        when (/^\s*(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/) {
+            $date = "$1-$2-$3";
+        }
+        when (/^\s*(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/) {
+            $date = "$3-$2-$1";
+        }
+    }
+
     my $event = $self->schema->resultset('Events')->single({
-        startdate => $vars->{date},
+        startdate => $date,
         starttime => $vars->{time},
         place     => $vars->{place}
     });
