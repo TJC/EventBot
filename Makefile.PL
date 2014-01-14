@@ -31,6 +31,10 @@ requires 'URI::Escape';
 #requires 'FCGI';
 requires 'Data::ICal';
 requires 'Data::ICal::DateTime';
+requires 'Net::IMAP::Simple';
+requires 'Net::SMTP::SSL';
+requires 'Email::Sender::Simple';
+requires 'Email::Sender::Transport::SMTP';
 
 requires 'XML::RSS';
 requires 'JSON::XS'; # Used for API calls

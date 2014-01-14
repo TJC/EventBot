@@ -1,21 +1,18 @@
-#!/usr/bin/env perl
-use strict;
+#!/usr/local/strategic/perl/bin/perl
+use 5.16.0;
 use warnings;
-use feature ':5.10';
+use Getopt::Long;
+use DateTime;
+use Email::Simple;
+use Email::Sender::Simple qw(sendmail);
+use Email::Sender::Transport::SMTP qw();
+use Try::Tiny;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use EventBot;
-use EventBot::Schema;
-use Getopt::Long;
-use MIME::Lite;
-use DateTime;
 
-my ($dbname, $user) = qw(eventbot eventbot);
-my $bot = EventBot->new;
 my ($help, $sendmail);
 GetOptions(
-    'database=s' => \$dbname,
-    'user=s' => \$user,
     'sendmail' => \$sendmail,
     'help' => \$help,
 );
@@ -24,13 +21,12 @@ if ($help) {
     print qq{
 Start an election.
 Params:
-  --database=eventbot  which DB to use.
-  --user=db_user       which DB user.
-  --sendmail       send a mail to the list.
+  --sendmail       Actually send a mail to the list.
     };
     exit 1;
 }
 
+my $bot = EventBot->new;
 my $schema = $bot->schema;
 
 my $thursday = next_thursday();
@@ -89,18 +85,32 @@ VoteBot
 };
 
 
-my $mail = MIME::Lite->new(
-    From => $bot->from_addr,
-    To   => $bot->list_addr,
-    Subject => 'Pub election for ' . $thursday->dmy,
-    Data => $body
+my $email = Email::Simple->create(
+    header => [
+        From => $bot->from_addr,
+        To   => $bot->list_addr,
+        Subject => 'Pub election for ' . $thursday->dmy,
+    ],
+    body => $body,
 );
 if ($sendmail) {
-    $mail->send;
+    sendmail(
+        $email,
+        {
+            from => $bot->config->{imap}{email},
+            transport => Email::Sender::Transport::SMTP->new({
+                host => 'smtp.gmail.com',
+                port => 465,
+                sasl_username => $bot->config->{imap}{email},
+                sasl_password => $bot->config->{imap}{passwd},
+                ssl => $bot->config->{imap}{use_ssl}
+            })
+        }
+    );
 }
 else {
     say " ** TEST MODE ** Not really sending mail to anyone!";
-    say $mail->as_string;
+    say $email->as_string;
 }
 
 

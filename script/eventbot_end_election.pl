@@ -1,19 +1,17 @@
-#!/usr/bin/env perl
-use 5.14.0;
+#!/usr/local/strategic/perl/bin/perl
+use 5.16.0;
 use warnings;
+use Email::Simple;
+use Email::Sender::Simple qw(sendmail);
+use Email::Sender::Transport::SMTP qw();
+use Getopt::Long;
+use DateTime;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use EventBot;
-use Getopt::Long;
-use MIME::Lite;
-use DateTime;
 
-my ($dbname, $user) = qw(eventbot eventbot);
-my $bot = EventBot->new;
 my ($help, $sendmail, $election_id);
 GetOptions(
-    'database=s' => \$dbname,
-    'user=s' => \$user,
     'sendmail' => \$sendmail,
     'election' => \$election_id,
     'help' => \$help,
@@ -23,8 +21,6 @@ if ($help) {
     print qq{
 Start an election.
 Params:
-  --database=eventbot  which DB to use.
-  --user=db_user       which DB user.
   --election=123       Which election to tally up (otherwise latest)
   --sendmail       send a mail to the list.
     };
@@ -33,6 +29,7 @@ Params:
 
 my $thursday = next_thursday();
 
+my $bot = EventBot->new;
 my $schema = $bot->schema;
 
 my $e;
@@ -111,30 +108,52 @@ push @body, sprintf(
     $e->id
 );
 
-my $event_mail = MIME::Lite->new(
-    From => $bot->from_addr,
-    To   => $bot->from_addr,
-    Subject => 'Pub for ' . $thursday->dmy,
-    Data => $event_body,
+my $event_email = Email::Simple->create(
+    header => [
+        From => $bot->from_addr,
+        To   => $bot->list_addr,
+        Subject => 'Pub for ' . $thursday->dmy,
+    ],
+    body => $event_body,
 );
 
-my $mail = MIME::Lite->new(
-    From => $bot->from_addr,
-    To   => $bot->list_addr,
-    Subject => 'Election results for ' . $thursday->dmy,
-    Data => join("\n", @body),
+my $email = Email::Simple->create(
+    header => [
+        From => $bot->from_addr,
+        To   => $bot->list_addr,
+        Subject => 'Election results for ' . $thursday->dmy,
+    ],
+    body => join("\n", @body),
 );
+
 
 if ($sendmail) {
-    $event_mail->send;
-    $mail->send;
+    send_email($event_email);
+    send_email($email);
 }
 else {
     say " ** TEST MODE ** Not really sending mail to anyone!";
-    say $mail->as_string;
+    say $email->as_string;
+    say $event_email->as_string;
 }
 
 
+sub send_email {
+    my $email = shift;
+    sendmail(
+        $email,
+        {
+            from => $bot->config->{imap}{email},
+            transport => Email::Sender::Transport::SMTP->new({
+                host => 'smtp.gmail.com',
+                port => 465,
+                sasl_username => $bot->config->{imap}{email},
+                sasl_password => $bot->config->{imap}{passwd},
+                ssl => $bot->config->{imap}{use_ssl}
+            })
+        }
+    );
+}
 
 sub next_thursday {
     my $date = DateTime->now();
