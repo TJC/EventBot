@@ -10,8 +10,6 @@ use EventBot;
 
 my $bot = EventBot->new;
 
-say "email: " . $bot->config->{imap}{email};
-
 my $imap = Net::IMAP::Simple->new(
     'imap.gmail.com',
     port => $bot->config->{imap}{port},

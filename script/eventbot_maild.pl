@@ -9,6 +9,9 @@ use File::Slurp;
 use File::Spec;
 use File::HomeDir;
 
+warn "This script is deprecated in favour of eventbot_fetchmail.pl\n";
+sleep 5;
+
 # TODO: Move logfile to EventBot::Log or something, and use config file
 # to determine where/what to log to it..
 my $logfile = File::Spec->catfile(File::HomeDir->my_home, 'eventbot.log');
