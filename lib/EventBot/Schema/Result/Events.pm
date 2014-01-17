@@ -64,7 +64,11 @@ sub add_people {
     while (my ($line, $statid) = each %people) {
         my $status = $statusmap{$statid};
         my ($name, $comment) = split_name_comment($line);
-        warn "In add_people, adding $name/$comment=$status\n";
+        warn "In add_people, adding $name=$status\n";
+        if (length($name) > 60) {
+            warn "Skipping person as detected name is too long to be correct\n";
+            next;
+        }
 
         # We have made email a unique, not null field, but we don't have
         # that data right now, right here. Instead, fake it up with an MD5 of
