@@ -34,11 +34,11 @@ requires 'Net::IMAP::Simple';
 requires 'Net::SMTP::SSL';
 requires 'Email::Sender::Simple';
 requires 'Email::Sender::Transport::SMTP';
+requires 'Authen::SASL';
+requires 'MIME::Base64';
 
 requires 'XML::RSS';
 requires 'JSON::XS'; # Used for API calls
-
-catalyst;
 
 install_script glob('script/*.pl');
 
