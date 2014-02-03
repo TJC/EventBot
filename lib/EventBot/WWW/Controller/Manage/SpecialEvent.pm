@@ -1,11 +1,10 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
 package EventBot::WWW::Controller::Manage::SpecialEvent;
-use strict;
+use 5.16.0;
 use warnings;
 use parent 'Catalyst::Controller';
-use MIME::Lite;
 use EventBot::Utils;
-use feature ':5.10';
+use EventBot::Mailer;
 
 =head1 SYNOPSIS
 
@@ -105,15 +104,13 @@ http://eventbot.dryft.net/manage/confirm/' . $conf->code . '
 Thanks,
 EventBot
 ';
-    my $email = MIME::Lite->new(
-        From => 'eventbot@dryft.net',
+
+    $c->log->info('Sending confirmation email to ' . $conf->person->email);
+    my $mailer = EventBot::Mailer->new;
+    $mailer->mailout($body,
         To => $conf->person->email,
-        Bcc => 'dryfter@gmail.com',
         Subject => 'Event nomination confirmation',
-        Data => $body
     );
-    $c->log->info('Sending email to ' . $conf->person->email);
-    $email->send;
 }
 
 

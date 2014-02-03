@@ -8,7 +8,7 @@ use Mail::Address;
 use Config::General;
 use EventBot::Schema;
 use EventBot::MailParser;
-use EventBot::Mailer;
+use EventBot::Mailer; # circular dependency
 
 our $VERSION = '2.00';
 

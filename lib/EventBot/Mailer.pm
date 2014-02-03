@@ -8,16 +8,33 @@ use Email::Simple;
 use Email::Simple::Creator;
 use Email::Sender::Simple qw(sendmail);
 use Email::Sender::Transport::SMTP qw();
-use EventBot (); # required for config; TODO properly
+use EventBot (); # required for config; TODO properly; XXX circular dep
+use Carp qw(croak);
 
 has 'from_addr' => (
     is => 'rw',
     isa => Str,
+    lazy => 1,
+    default => sub {
+        shift->eventbot->from_addr
+    },
 );
 
 has 'list_addr' => (
     is => 'rw',
     isa => Str,
+    lazy => 1,
+    default => sub {
+        shift->eventbot->list_addr
+    },
+);
+
+has 'eventbot' => (
+    is => 'rw',
+    lazy => 1,
+    default => sub {
+        EventBot->new
+    },
 );
 
 
@@ -55,11 +72,23 @@ http://eventbot.dryft.net/
 
 EOM
 
+    $self->mailout($body, Subject => $subject);
+    return;
+}
+
+# Send an email.
+# Mandatory $body parameter, then args are: To, Subject, the former of which is optional and will
+# default to mailing the list.
+sub mailout {
+    my ($self, $body, %args) = @_;
+
+    croak "Missing Subject argument" unless defined $args{Subject};
+
     my $email = Email::Simple->create(
         header => [
             From => $self->from_addr,
-            To   => $self->list_addr,
-            Subject => $subject
+            To   => $args{To} // $self->list_addr,
+            Subject => $args{Subject},
         ],
         body => $body
     );
@@ -67,17 +96,17 @@ EOM
     # Do not *actually* send email if we're testing:
     return if $ENV{EVENTBOT_TEST};
 
-    my $bot = EventBot->new; # TODO get config properly
+    my $botcfg = $self->eventbot->config;
     sendmail(
         $email,
         {
-            from => $bot->config->{imap}{email},
+            from => $botcfg->{imap}{email},
             transport => Email::Sender::Transport::SMTP->new({
                 host => 'smtp.gmail.com',
                 port => 465,
-                sasl_username => $bot->config->{imap}{email},
-                sasl_password => $bot->config->{imap}{passwd},
-                ssl => $bot->config->{imap}{use_ssl}
+                sasl_username => $botcfg->{imap}{email},
+                sasl_password => $botcfg->{imap}{passwd},
+                ssl => $botcfg->{imap}{use_ssl}
             })
         }
     );

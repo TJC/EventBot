@@ -1,10 +1,8 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
 package EventBot::WWW::Controller::Manage;
-use strict;
+use 5.16.0;
 use warnings;
 use parent 'Catalyst::Controller';
-use MIME::Lite;
-use feature ':5.10';
 
 =head1 NAME
 

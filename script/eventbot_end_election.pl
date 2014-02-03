@@ -9,6 +9,7 @@ use DateTime;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use EventBot;
+use EventBot::Mailer;
 
 my ($help, $sendmail, $election_id);
 GetOptions(
@@ -108,52 +109,25 @@ push @body, sprintf(
     $e->id
 );
 
-my $event_email = Email::Simple->create(
-    header => [
-        From => $bot->from_addr,
-        To   => $bot->list_addr,
-        Subject => 'Pub for ' . $thursday->dmy,
-    ],
-    body => $event_body,
-);
-
-my $email = Email::Simple->create(
-    header => [
-        From => $bot->from_addr,
-        To   => $bot->list_addr,
-        Subject => 'Election results for ' . $thursday->dmy,
-    ],
-    body => join("\n", @body),
-);
-
-
 if ($sendmail) {
-    send_email($event_email);
-    send_email($email);
+    my $mailer = EventBot::Mailer->new;
+    $mailer->mailout(
+        $event_body,
+        Subject => 'Pub for ' . $thursday->dmy,
+    );
+
+    $mailer->mailout(
+        join("\n", @body),
+        Subject => 'Election results for ' . $thursday->dmy,
+    );
 }
 else {
     say " ** TEST MODE ** Not really sending mail to anyone!";
-    say $email->as_string;
-    say $event_email->as_string;
+    say $event_body;
+    say "-==================================================-";
+    say join("\n", @body);
 }
 
-
-sub send_email {
-    my $email = shift;
-    sendmail(
-        $email,
-        {
-            from => $bot->config->{imap}{email},
-            transport => Email::Sender::Transport::SMTP->new({
-                host => 'smtp.gmail.com',
-                port => 465,
-                sasl_username => $bot->config->{imap}{email},
-                sasl_password => $bot->config->{imap}{passwd},
-                ssl => $bot->config->{imap}{use_ssl}
-            })
-        }
-    );
-}
 
 sub next_thursday {
     my $date = DateTime->now();

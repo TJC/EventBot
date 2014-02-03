@@ -10,6 +10,7 @@ use Try::Tiny;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use EventBot;
+use EventBot::Mailer;
 
 my ($help, $sendmail);
 GetOptions(
@@ -84,33 +85,16 @@ VoteBot
 
 };
 
-
-my $email = Email::Simple->create(
-    header => [
-        From => $bot->from_addr,
-        To   => $bot->list_addr,
-        Subject => 'Pub election for ' . $thursday->dmy,
-    ],
-    body => $body,
-);
 if ($sendmail) {
-    sendmail(
-        $email,
-        {
-            from => $bot->config->{imap}{email},
-            transport => Email::Sender::Transport::SMTP->new({
-                host => 'smtp.gmail.com',
-                port => 465,
-                sasl_username => $bot->config->{imap}{email},
-                sasl_password => $bot->config->{imap}{passwd},
-                ssl => $bot->config->{imap}{use_ssl}
-            })
-        }
+    my $mailer = EventBot::Mailer->new;
+    $mailer->mailout(
+        $body,
+        Subject => 'Pub election for ' . $thursday->dmy,
     );
 }
 else {
     say " ** TEST MODE ** Not really sending mail to anyone!";
-    say $email->as_string;
+    say $body;
 }
 
 
