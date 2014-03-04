@@ -30,12 +30,23 @@ my $nm = $imap->select('INBOX');
 for my $i (1 .. $nm) {
     my $message = $imap->get($i) or die $imap->errstr;
 
-    my $email = Email::Simple->new("$message");
-    print $email->header('Date') . "\t==\t";
-    say $email->header('Subject');
+    try {
+        my $email = Email::Simple->new("$message");
+        print $email->header('Date') . "\t==\t";
+        say $email->header('Subject');
 
-    $bot->parse_email("$message");
-    $imap->delete($i);
+        $bot->parse_email("$message");
+    }
+    catch {
+        warn "Failed to parse email: $_\n";
+    };
+    try {
+        $imap->delete($i) or die $imap->errstr;
+    }
+    catch {
+        warn "Failed to delete message $i: $_\n";
+    };
+
 }
 
 $imap->quit;
