@@ -27,7 +27,6 @@ requires 'Catalyst::Controller::reCAPTCHA';
 requires 'HTML::FormHandler' => '0.32000';
 requires 'HTML::FormHandler::Model::DBIC' => '0.12000';
 requires 'URI::Escape';
-#requires 'FCGI';
 requires 'Data::ICal';
 requires 'Data::ICal::DateTime';
 requires 'Net::IMAP::Simple';
@@ -36,6 +35,8 @@ requires 'Email::Sender::Simple';
 requires 'Email::Sender::Transport::SMTP';
 requires 'Authen::SASL';
 requires 'MIME::Base64';
+requires 'Plack::Builder';
+requires 'Plack::Middleware::ReverseProxy';
 
 requires 'XML::RSS';
 requires 'JSON::XS'; # Used for API calls
