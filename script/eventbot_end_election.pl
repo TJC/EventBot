@@ -56,26 +56,34 @@ my $birthday = $schema->resultset('SpecialEvents')->search(
     }
 )->next;
 
+my %event_details;
 my @body;
 push @body, 'We have a winner:';
 push @body, sprintf('Place: %s (%s)', $pub->name, $pub->region);
+$event_details{place} = sprintf('Place: %s (%s)', $pub->name, $pub->region);
 if ($pub->name !~ /none of the above/i) {
     push @body, "Date: " . $thursday->dmy;
+    $event_details{date} = $thursday->dmy;
+
     push @body, "Time: Evening";
+    $event_details{time} = "Evening";
+
     push @body, 'Address: ' . $pub->street_address;
+    $event_details{address} = $pub->street_address;
+
     if ($pub->info_uri) {
         push @body, 'URL: ' . $pub->info_uri;
+        $event_details{url} = $pub->info_uri;
     }
 }
 
-# Capture event info so far for email to the eventbot..
-my $event_body = join("\n", @body);
-
 push @body, '';
 if ($birthday) {
-    push @body, sprintf('This is %s\'s special event - %s.',
+    my $comment = sprintf('This is %s\'s special event - %s.',
         $birthday->person->name, $birthday->comment
     );
+    push @body, $comment;
+    $event_details{comment} = $comment;
 }
 push @body, 'If you hate the venue, remember it was endorsed by:';
 push @body, join(' and ', map { $_->name } $pub->nominees);
@@ -111,19 +119,16 @@ push @body, sprintf(
 
 if ($sendmail) {
     my $mailer = EventBot::Mailer->new;
-    $mailer->mailout(
-        $event_body,
-        Subject => 'Pub for ' . $thursday->dmy,
-    );
 
     $mailer->mailout(
         join("\n", @body),
         Subject => 'Election results for ' . $thursday->dmy,
     );
+
+    $bot->do_newevent(\%event_details);
 }
 else {
     say " ** TEST MODE ** Not really sending mail to anyone!";
-    say $event_body;
     say "-==================================================-";
     say join("\n", @body);
 }
