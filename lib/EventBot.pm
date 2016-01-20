@@ -163,6 +163,8 @@ our %keyconv = (
 sub do_newevent {
     my ($self, $vars) = @_;
 
+    my $subject = defined($vars->{subject}) ? $vars->{subject} : $self->build_event_subject;
+
     # Check that these vars are populated!
     unless ($vars->{'date'} and $vars->{'time'} and $vars->{place}) {
         $self->log("Cowardly refusing to create empty event!");
@@ -195,17 +197,30 @@ sub do_newevent {
     $event = $self->schema->resultset('Events')->create(\%new);
     $self->log("Created new event, id " . $event->id);
     # At this point, I should email the list to say..
-    $self->mail_new_event($event);
+    $self->mail_new_event($event, $subject);
     return $event;
 }
 
-sub mail_new_event {
-    my ($self, $event) = @_;
-    my $id = $event->id;
+# If the event was created by receiving an email from the list, then clean
+# it before we turn it into an event-specific subject in mail_new_event.
+sub build_event_subject {
+    my $self = shift;
+    unless ($self->parser) {
+        return "";
+    }
+
     my $subject = $self->parser->subject;
     $subject =~ s/^re:\s+//i;
     $subject =~ s/\s*\[event\s*\d*\s*\]\s*//i;
     $subject =~ s/\s*\[sluts]\s*//;
+
+    return $subject;
+}
+
+sub mail_new_event {
+    my ($self, $event, $subject) = @_;
+    my $id = $event->id;
+
     $subject = "[EVENT $id] " . $subject;
 
     EventBot::Mailer->new(

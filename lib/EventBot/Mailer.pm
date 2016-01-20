@@ -45,10 +45,12 @@ sub new_event {
     my $event = $args{event};
     my $subject = $args{subject};
 
-    my ($date, $time, $place, $url, $id) = (
-        $event->startdate, $event->starttime,
-        $event->place, $event->url, $event->id
-    );
+    my $date = $event->date_obj->strftime('%Y-%m-%d');
+    my $time = $event->starttime;
+    my $place = $event->place;
+    my $url = $event->url;
+    my $id = $event->id;
+
     my $body = <<EOM;
 New event added to database:
 Date: $date

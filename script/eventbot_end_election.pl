@@ -36,7 +36,7 @@ my $schema = $bot->schema;
 
 my $e;
 if ($election_id ) {
-    $e = $schema->resultset('Elections')->get($election_id)
+    $e = $schema->resultset('Elections')->find($election_id)
 }
 else {
     $e = $schema->resultset('Elections')->latest()
@@ -64,7 +64,7 @@ push @body, sprintf('Place: %s (%s)', $pub->name, $pub->region);
 $event_details{place} = sprintf('Place: %s (%s)', $pub->name, $pub->region);
 if ($pub->name !~ /none of the above/i) {
     push @body, "Date: " . $thursday->dmy;
-    $event_details{date} = $thursday->dmy;
+    $event_details{date} = $thursday->iso8601;
 
     push @body, "Time: Evening";
     $event_details{time} = "Evening";
@@ -77,6 +77,11 @@ if ($pub->name !~ /none of the above/i) {
         $event_details{url} = $pub->info_uri;
     }
 }
+
+$event_details{subject} = join(" ",
+    $thursday->day, $thursday->month_abbr,
+    $pub->name
+);
 
 push @body, '';
 if ($birthday) {
