@@ -2,15 +2,15 @@
 <html>
   <head>
     <title>[% title || 'EventBot' %]</title>
-    <link href='http://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css' />
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Nobile" />
+    <link href='//fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Nobile" />
     <link href="[% base %]static/main.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
 
     [% IF need_gmaps %]
     <script type="text/javascript"
-      src="http://maps.google.com/maps/api/js?sensor=false">
+      src="//maps.google.com/maps/api/js?sensor=false">
     </script>
     [% END %]
 
@@ -25,10 +25,10 @@
     <meta property="fb:admins" content="536696491" />
     <meta property="og:title" content="EventBot" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="http://eventbot.dryft.net" />
+    <meta property="og:url" content="https://eventbot.dryft.net" />
     <meta property="og:site_name" content="EventBot" />
     <meta property="og:image"
-          content="http://eventbot.dryft.net/static/eventbot_icon.png" />
+          content="https://eventbot.dryft.net/static/eventbot_icon.png" />
   </head>
   <body>
     <div class="wrapper">
