@@ -1,9 +1,3 @@
 [% INCLUDE header.tt %]
 
-<script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
-
-<div class="bottom_left">
-<fb:like href="http://eventbot.dryft.net" show_faces="true" width="450" font="verdana" colorscheme="dark"></fb:like>
-</div>
-
 [% INCLUDE footer.tt %]
