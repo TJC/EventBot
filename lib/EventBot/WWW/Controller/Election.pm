@@ -1,10 +1,10 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
 package EventBot::WWW::Controller::Election;
-
+use 5.18.0;
 use strict;
 use warnings;
 use base 'Catalyst::Controller';
-use feature ':5.10';
+use experimental qw(switch);
 
 =head1 NAME
 

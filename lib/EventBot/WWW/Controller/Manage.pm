@@ -1,8 +1,10 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
 package EventBot::WWW::Controller::Manage;
-use 5.16.0;
+use 5.18.0;
+use strict;
 use warnings;
-use parent 'Catalyst::Controller';
+use base 'Catalyst::Controller';
+use experimental qw(switch);
 
 =head1 NAME
 

@@ -9,6 +9,7 @@ use Config::General;
 use EventBot::Schema;
 use EventBot::MailParser;
 use EventBot::Mailer; # circular dependency
+use experimental qw(switch);
 
 our $VERSION = '2.00';
 

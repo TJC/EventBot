@@ -1,4 +1,5 @@
-#!/usr/local/strategic/perl/bin/perl
+#!/usr/bin/env perl
+##!/usr/local/strategic/perl/bin/perl
 use 5.16.0;
 use warnings;
 use Email::Simple;
