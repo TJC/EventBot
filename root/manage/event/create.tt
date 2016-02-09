@@ -40,7 +40,7 @@
          value="[% c.request.params.date %]" /><br/>
   <em>Use DD/MM/YYYY or YYYY-MM-DD date formats.</em><br/>
 
-  [% recaptcha %]<br/>
+  [% nocaptcha.html %]<br/>
   <input type="submit" value="Create"/>
 </div>
 </form>

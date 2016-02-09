@@ -1,9 +1,27 @@
 # vim: sw=4 sts=4 et tw=75 wm=5
 package EventBot::WWW::Controller::Manage::Event;
-use strict;
+use 5.18.0;
+use Moose;
 use warnings;
-use parent 'Catalyst::Controller::reCAPTCHA';
 use EventBot::Mailer;
+use Captcha::noCAPTCHA;
+
+BEGIN { extends 'Catalyst::Controller'; }
+
+has 'nocaptcha' => (
+  is => 'rw',
+  lazy => 1,
+  default => sub {
+    Captcha::noCAPTCHA->new(
+      {
+        site_key => $ENV{NOCAPTCHA_KEY} // "6LdFHwETAAAAAE0ov1UHCw_7XmhEiUGE85G0j2Oe",
+        secret_key => $ENV{NOCAPTCHA_SECRET} // "6LdFHwETAAAAAE8NT51uXrlTHFH-6_SEdWHLHK9-",
+        # default keys above are valid for localhost
+      }
+    );
+  }
+);
+
 
 # This module should contain methods to create a one-off event for eventbot,
 # which dispatches a confirmation email, and after that immediately submits the
@@ -61,9 +79,7 @@ sub create :Chained('event') PathPart Args(0) {
             die("$field is too long!\n") if (length($event{$field}) > 200);
         }
 
-        $c->forward('captcha_check');
-        die("Failed CAPTCHA: " . $c->stash->{recaptcha_error} .  "\n")
-            unless ($c->stash->{recaptcha_ok});
+        $self->captcha_check($c); # Dies if it fails
 
         $c->stash->{event} = $c->model('DB::Events')->create(\%event);
     };
@@ -87,5 +103,35 @@ sub create :Chained('event') PathPart Args(0) {
         $c->response->redirect('/event/view/' . $c->stash->{event}->id);
     }
 }
+
+=head2 captcha_get
+
+Catalyst action to put a noCAPTCHA object into the stash.
+
+=cut
+
+sub captcha_get : Private {
+    my ($self, $c) = @_;
+    $c->stash->{nocaptcha} = $self->nocaptcha;
+}
+
+=head2 captcha_check
+
+Verify the g-recaptcha-response with Google's API
+
+=cut
+
+sub captcha_check {
+    my ($self, $c) = @_;
+    my $response = $c->request->params->{"g-recaptcha-response"};
+    my $result = $self->nocaptcha->verify($response);
+    return 1 if $result;
+    my $errors = $self->nocaptcha->errors;
+    if ($errors and ref $errors) {
+        $c->log->warn("CAPTCHA failure code: $_") for (@$errors);
+    }
+    die "Failed noCAPTCHA test.\n";
+}
+
 
 1;
