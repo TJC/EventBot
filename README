@@ -16,4 +16,7 @@ Please raise any issues (or wishlists) at http://github.com/TJC/EventBot/issues
 
 A wiki is also available at: http://wiki.github.com/TJC/EventBot
 
+Don't forget to set the NOCAPTCHA_KEY and NOCAPTCHA_SECRET environment variables.
+The defaults only work for localhost.
+
 -Toby
