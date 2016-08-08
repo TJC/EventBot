@@ -17,7 +17,7 @@ What a stupid subroutine name I gave this.
 it's supposed to take a string, and figure out what format it was written in,
 and return that as a DateTime object.
 
-It dies if it can't figure anything out! Perhaps it should just return undef?
+It dies if it can't figure anything out.
 
 =cut
 
@@ -42,6 +42,21 @@ sub figure_date {
     }
 
     die("Invalid date: $date");
+}
+
+=head2 next_thursday
+
+Returns a DateTime object pointing to the next thursday to occur
+in the GB timezone.
+
+=cut
+
+sub next_thursday {
+    my $date = DateTime->now(time_zone => "GB");
+    while ($date->day_of_week != 4) {
+        $date->add(days => 1);
+    }
+    return $date;
 }
 
 1;

@@ -12,6 +12,7 @@ use FindBin;
 use lib "$FindBin::Bin/../lib";
 use EventBot;
 use EventBot::Mailer;
+use EventBot::Utils;
 
 my ($help, $sendmail);
 GetOptions(
@@ -31,7 +32,7 @@ Params:
 my $bot = EventBot->new;
 my $schema = $bot->schema;
 
-my $thursday = next_thursday();
+my $thursday = EventBot::Utils->next_thursday;
 my @specEvents = $schema->resultset('SpecialEvents')
     ->search(
         {
@@ -97,14 +98,3 @@ else {
     say " ** TEST MODE ** Not really sending mail to anyone!";
     say $body;
 }
-
-
-
-sub next_thursday {
-    my $date = DateTime->now();
-    while ($date->day_of_week != 4) {
-        $date->add(days => 1);
-    }
-    return $date;
-}
-
