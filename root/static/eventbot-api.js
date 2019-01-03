@@ -3,7 +3,7 @@
  * Version 0.1
  */
 
-var eventbot_base_url = 'http://eventbot.dryft.net';
+var eventbot_base_url = 'https://eventbot.dryft.net';
 
 var eventbot = {
   current_events: function(callback) {
