@@ -92,7 +92,7 @@ if ($birthday) {
     push @body, $comment;
     $event_details{comment} = $comment;
 }
-push @body, 'If you hate the venue, remember it was endorsed by:';
+push @body, 'If you love the venue, give thanks to these fine people:';
 push @body, join(' and ', map { $_->name } $pub->nominees);
 
 push @body, '';
