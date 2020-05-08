@@ -21,7 +21,7 @@ __PACKAGE__->add_columns(
     # Terribly denormalised, but eh, should be good for now..
     candidate_list => {
         data_type => 'VARCHAR',
-        size => 32,
+        size => 128,
         is_nullable => 1,
     },
     winner => {
